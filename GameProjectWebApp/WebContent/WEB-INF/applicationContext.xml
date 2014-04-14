@@ -33,12 +33,9 @@
 
 	<authentication-manager>
 		<authentication-provider user-service-ref="gameProjectJndiUserService">
-			<!-- <password-encoder hash="md5"/> -->
+            <!-- For hashing and salting user passwords -->
+			<password-encoder hash="bcrypt"/>
 		</authentication-provider>
-		<!-- <authentication-provider> <user-service> <user name="admin" password="gmuswe" 
-			authorities="admin" /> <user name="mfadoul" password="gmuswe" authorities="admin" 
-			/> <user name="jdoe" password="gmuswe" authorities="reader" /> </user-service> 
-			</authentication-provider> -->
 	</authentication-manager>
 
 
@@ -54,5 +51,4 @@
 		class="org.springframework.jndi.JndiObjectFactoryBean">
 		<beans:property name="jndiName" value="java:/GameWebsiteDS" />
 	</beans:bean>
-
 </beans:beans>

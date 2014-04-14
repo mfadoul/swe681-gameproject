@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import edu.gmu.swe.gameproj.ejb.GameProjectRemote;
 import edu.gmu.swe.gameproj.jpa.User;
 import edu.gmu.swe.gameproj.jpa.UserRole;
+import edu.gmu.swe.gameproj.util.PasswordHelper;
 import edu.gmu.swe.gameproj.util.SessionBeanHelper;
 import edu.gmu.swe.gameproj.validator.UserValidator;
 
@@ -61,6 +62,10 @@ public class UserController {
 				// Attempt to add the user
 				GameProjectRemote gameProject = 
 						SessionBeanHelper.getGameProjectSessionBean();
+				
+				// Encrypt the password before persisting!
+				user.setPassword(PasswordHelper.getEncryptedPassword(user.getPassword()));
+				
 				if (gameProject.addUser(user)) {
 					// Successfully added user.
 					model.addAttribute("infoMessage", "Successfully added user " + user.getEmail());

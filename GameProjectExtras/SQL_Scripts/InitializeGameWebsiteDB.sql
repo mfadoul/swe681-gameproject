@@ -18,7 +18,7 @@ INSERT INTO `UserRoles` (`id`,`description`) VALUES ('player','registered user')
 CREATE TABLE IF NOT EXISTS `Users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `email` varchar(128) NOT NULL COMMENT 'User''s E-mail Address.',
-  `password` varchar(45) NOT NULL COMMENT 'Salted hash representation of the user''s password',
+  `password` varchar(128) NOT NULL COMMENT 'Salted hash representation of the user''s password',
   `role` varchar(10) DEFAULT NULL,
   `salutation` varchar(8) DEFAULT NULL COMMENT 'Mr., Mrs., Dr., etc.',
   `firstname` varchar(32) DEFAULT NULL,

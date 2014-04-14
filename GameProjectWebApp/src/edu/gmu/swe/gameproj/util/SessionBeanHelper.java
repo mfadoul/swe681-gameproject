@@ -16,10 +16,10 @@ public class SessionBeanHelper {
 	public static GameProjectRemote getGameProjectSessionBean() {
 		Context ctx;
 		GameProjectRemote gameProject = null;
-		System.out.println("BEGIN TEST:");
-		System.out.println("-----------");
-		testEjbs();
-		System.out.println("-----------");
+		//System.out.println("BEGIN TEST:");
+		//System.out.println("-----------");
+		//testEjbs();
+		//System.out.println("-----------");
 		
 		try {
 			Properties p = new Properties();
@@ -36,6 +36,7 @@ public class SessionBeanHelper {
 		return gameProject;
 	}
 	
+	// This is a test method to see which versions of the JNDI name can be found by the Context.
 	public static void testEjbs () {
 		Context ctx = null;
 		GameProjectRemote gameProject = null;
