@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/GameProjectEar/GameProjectEar.iml" filepath="$PROJECT_DIR$/GameProjectEar/GameProjectEar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GameProjectEjb/GameProjectEjb.iml" filepath="$PROJECT_DIR$/GameProjectEjb/GameProjectEjb.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GameProjectExtras/GameProjectExtras.iml" filepath="$PROJECT_DIR$/GameProjectExtras/GameProjectExtras.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GameProjectJpa/GameProjectJpa.iml" filepath="$PROJECT_DIR$/GameProjectJpa/GameProjectJpa.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GameProjectWebApp/GameProjectWebApp.iml" filepath="$PROJECT_DIR$/GameProjectWebApp/GameProjectWebApp.iml" />
+    </modules>
+  </component>
+</project>
+

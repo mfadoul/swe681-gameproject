@@ -1,0 +1,27 @@
+<component name="libraryTable">
+  <library name="Spring-4.0.3.RELEASE" type="spring">
+    <properties version="4.0.3.RELEASE" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/GameProjectWebApp/lib/spring-instrument-4.0.3.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GameProjectWebApp/lib/spring-aspects-4.0.3.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GameProjectWebApp/lib/spring-instrument-tomcat-4.0.3.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GameProjectWebApp/lib/spring-context-support-4.0.3.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GameProjectWebApp/lib/spring-aop-4.0.3.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GameProjectWebApp/lib/spring-expression-4.0.3.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GameProjectWebApp/lib/spring-jms-4.0.3.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GameProjectWebApp/lib/spring-beans-4.0.3.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GameProjectWebApp/lib/spring-jdbc-4.0.3.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GameProjectWebApp/lib/spring-oxm-4.0.3.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GameProjectWebApp/lib/aopalliance-1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GameProjectWebApp/lib/spring-messaging-4.0.3.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GameProjectWebApp/lib/spring-orm-4.0.3.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GameProjectWebApp/lib/spring-tx-4.0.3.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GameProjectWebApp/lib/spring-context-4.0.3.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GameProjectWebApp/lib/commons-logging-1.1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GameProjectWebApp/lib/spring-core-4.0.3.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GameProjectWebApp/lib/spring-test-4.0.3.RELEASE.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

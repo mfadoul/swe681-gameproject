@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component inheritJdk="true">
+	<exclude-output/>
+	<contentEntry url="file://$MODULE_DIR$"/>
+	<lib name="JBoss 8.0.0.Final" scope="PROVIDED"/>
+	<levels>
+		<level name="Spring-4.0.3.RELEASE" value="project"/>
+		<level name="javax.validation:com.springsource.javax.validation:1.0.0.CR3" value="project"/>
+		<level name="JBoss 8.0.0.Final" value="application_server_libraries"/>
+		<level name="org.springframework.security:org.springframework.security.web:3.0.3.RELEASE" value="project"/>
+		<level name="org.springframework:org.springframework.web.servlet:3.0.3.RELEASE" value="project"/>
+		<level name="org.springframework:org.springframework.web:3.0.3.RELEASE" value="project"/>
+	</levels>
+</component>
