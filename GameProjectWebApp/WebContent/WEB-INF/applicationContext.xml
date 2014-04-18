@@ -9,10 +9,10 @@
 		<!-- Actions: Admin login logout User add delete info edit list Book add 
 			delete info edit list rate unrate -->
 		<!-- Books -->
-		<intercept-url pattern="/GameProject/book/**" access="permitAll" />
-		<intercept-url pattern="/GameProject/book/delete/**"
-			access="hasRole('admin')" />
-		<intercept-url pattern="/GameProject/book/add" access="isAuthenticated()" />
+		<!--<intercept-url pattern="/GameProject/book/**" access="permitAll" />-->
+		<!--<intercept-url pattern="/GameProject/book/delete/**"-->
+			<!--access="hasRole('admin')" />-->
+		<!--<intercept-url pattern="/GameProject/book/add" access="isAuthenticated()" />-->
 
 		<!-- users -->
 		<intercept-url pattern="/GameProject/user/**"
