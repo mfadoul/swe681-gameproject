@@ -18,6 +18,10 @@
 		<intercept-url pattern="/GameProject/user/**"
 			access="permitAll" />
 
+		<!-- Sample Get -->
+		<intercept-url pattern="/GameProject/sample/**"
+			access="permitAll" />
+
 		<!-- <intercept-url pattern="/GameProject/**" access="isAuthenticated()" />  -->
 		<intercept-url pattern="/GameProject/**" access="permitAll" />
 		<intercept-url pattern="/**" access="permitAll" />
@@ -25,20 +29,17 @@
 		<logout />
 		<remember-me />
 		<!-- limit the number of sessions a user can have -->
-		<session-management>
-			<concurrency-control max-sessions="1"
-				error-if-maximum-exceeded="true" />
+		<session-management session-authentication-strategy-ref="sas">
+<!-- 			<concurrency-control max-sessions="1" -->
+<!-- 				error-if-maximum-exceeded="true" /> -->
 		</session-management>
 	</http>
 
 	<authentication-manager>
 		<authentication-provider user-service-ref="gameProjectJndiUserService">
-			<!-- <password-encoder hash="md5"/> -->
+            <!-- For hashing and salting user passwords -->
+			<password-encoder hash="bcrypt"/>
 		</authentication-provider>
-		<!-- <authentication-provider> <user-service> <user name="admin" password="gmuswe" 
-			authorities="admin" /> <user name="mfadoul" password="gmuswe" authorities="admin" 
-			/> <user name="jdoe" password="gmuswe" authorities="reader" /> </user-service> 
-			</authentication-provider> -->
 	</authentication-manager>
 
 
@@ -54,5 +55,28 @@
 		class="org.springframework.jndi.JndiObjectFactoryBean">
 		<beans:property name="jndiName" value="java:/GameWebsiteDS" />
 	</beans:bean>
+	
+	<!-- More Session management stuff -->
+	<beans:bean id="concurrencyFilter"
+      class="org.springframework.security.web.session.ConcurrentSessionFilter">
+      <beans:property name="sessionRegistry" ref="sessionRegistry" />
+      <beans:property name="expiredUrl" value="/session-expired.htm" />
+    </beans:bean>
 
+<!-- 
+    <beans:bean id="myAuthFilter" class=
+        "org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
+        <beans:property name="sessionAuthenticationStrategy" ref="sas" />
+        <beans:property name="authenticationManager" ref="gameProjectJndiUserService" />
+    </beans:bean>
+ -->
+    <beans:bean id="sas" class=
+        "org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy">
+        <beans:constructor-arg name="sessionRegistry" ref="sessionRegistry" />
+        <beans:property name="maximumSessions" value="1" />
+    </beans:bean>
+
+    <beans:bean id="sessionRegistry"
+        class="org.springframework.security.core.session.SessionRegistryImpl" />
+	
 </beans:beans>
