@@ -18,6 +18,10 @@
 		<intercept-url pattern="/GameProject/user/**"
 			access="permitAll" />
 
+		<!-- Sample Get -->
+		<intercept-url pattern="/GameProject/sample/**"
+			access="permitAll" />
+
 		<!-- <intercept-url pattern="/GameProject/**" access="isAuthenticated()" />  -->
 		<intercept-url pattern="/GameProject/**" access="permitAll" />
 		<intercept-url pattern="/**" access="permitAll" />
