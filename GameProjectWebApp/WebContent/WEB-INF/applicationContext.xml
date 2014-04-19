@@ -29,9 +29,9 @@
 		<logout />
 		<remember-me />
 		<!-- limit the number of sessions a user can have -->
-		<session-management>
-			<concurrency-control max-sessions="1"
-				error-if-maximum-exceeded="true" />
+		<session-management session-authentication-strategy-ref="sas">
+<!-- 			<concurrency-control max-sessions="1" -->
+<!-- 				error-if-maximum-exceeded="true" /> -->
 		</session-management>
 	</http>
 
@@ -55,4 +55,28 @@
 		class="org.springframework.jndi.JndiObjectFactoryBean">
 		<beans:property name="jndiName" value="java:/GameWebsiteDS" />
 	</beans:bean>
+	
+	<!-- More Session management stuff -->
+	<beans:bean id="concurrencyFilter"
+      class="org.springframework.security.web.session.ConcurrentSessionFilter">
+      <beans:property name="sessionRegistry" ref="sessionRegistry" />
+      <beans:property name="expiredUrl" value="/session-expired.htm" />
+    </beans:bean>
+
+<!-- 
+    <beans:bean id="myAuthFilter" class=
+        "org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
+        <beans:property name="sessionAuthenticationStrategy" ref="sas" />
+        <beans:property name="authenticationManager" ref="gameProjectJndiUserService" />
+    </beans:bean>
+ -->
+    <beans:bean id="sas" class=
+        "org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy">
+        <beans:constructor-arg name="sessionRegistry" ref="sessionRegistry" />
+        <beans:property name="maximumSessions" value="1" />
+    </beans:bean>
+
+    <beans:bean id="sessionRegistry"
+        class="org.springframework.security.core.session.SessionRegistryImpl" />
+	
 </beans:beans>

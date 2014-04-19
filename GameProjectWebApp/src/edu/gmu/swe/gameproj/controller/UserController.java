@@ -10,6 +10,8 @@ import edu.gmu.swe.gameproj.util.SessionBeanHelper;
 import edu.gmu.swe.gameproj.validator.UserValidator;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,6 +29,9 @@ import javax.annotation.Resource;
 @RequestMapping(value="/user/*")
 public class UserController {
 	protected final Log logger = LogFactory.getLog(getClass());
+
+    @Resource(name="sessionRegistry")
+    private SessionRegistryImpl sessionRegistry;
 
 	@InitBinder
     protected void initBinder(WebDataBinder binder) {
@@ -133,4 +138,24 @@ public class UserController {
 		return mav;
 	}
 
+	// This is an example of accessing session information from Spring.
+	// We'll be using something like this to figure out what other players
+	// are online.
+	@SuppressWarnings("unused")
+	private String printUsersLoggedIn () {
+		sessionRegistry.getAllPrincipals();
+		System.out.println("------------");
+		System.out.println("Received request to show users page");
+
+		System.out.println("Total logged-in users: " + sessionRegistry.getAllPrincipals().size());
+		System.out.println("List of logged-in users: ");
+		for (Object username: sessionRegistry.getAllPrincipals()) {
+			System.out.println(" * " + username);
+		}
+		System.out.println("Total sessions including expired ones: " + sessionRegistry.getAllSessions(sessionRegistry.getAllPrincipals().get(0), true).size());
+		System.out.println("Total sessions: " + sessionRegistry.getAllSessions(sessionRegistry.getAllPrincipals().get(0), false).size());
+		System.out.println("------------");
+
+		return "";
+	}
 }

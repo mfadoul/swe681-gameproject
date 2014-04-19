@@ -80,5 +80,4 @@ public class SessionBeanHelper {
 		GameProjectRemote gameProject = getGameProjectSessionBean();
 		return gameProject.getUserByEmail(getLoggedInUsername());
 	}
-
 }
