@@ -1,10 +1,10 @@
 package edu.gmu.swe.gameproj.ejb.cards.action;
 
-import edu.gmu.swe.gameproj.ejb.NotValidatedException;
-import edu.gmu.swe.gameproj.ejb.cards.dtos.ActionDto;
 import edu.gmu.swe.gameproj.ejb.command.AddActionsCommand;
 import edu.gmu.swe.gameproj.ejb.command.DrawCommand;
 import edu.gmu.swe.gameproj.ejb.command.ICommand;
+
+import java.security.InvalidParameterException;
 
 public class Village extends Action{
 
@@ -15,8 +15,8 @@ public class Village extends Action{
     }
 
     @Override
-    public void Act(ActionDto dto) throws NotValidatedException {
-        if(!Validate(dto)) throw new NotValidatedException();
+    public void Act(ActionDto dto) {
+        if(!Validate(dto)) throw new InvalidParameterException("dto");
 
         ICommand addActions = new AddActionsCommand(dto.player, actionCount);
         ICommand draw = new DrawCommand(dto.player, drawCount);

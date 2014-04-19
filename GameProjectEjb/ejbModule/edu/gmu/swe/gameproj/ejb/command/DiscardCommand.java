@@ -1,24 +1,23 @@
 package edu.gmu.swe.gameproj.ejb.command;
 
-import edu.gmu.swe.gameproj.ejb.Player;
-import edu.gmu.swe.gameproj.ejb.cards.Card;
+import edu.gmu.swe.gameproj.jpa.Player;
 
 import java.util.ArrayList;
 
 public class DiscardCommand implements ICommand{
 
-    private ArrayList<Card> discards;
+    private ArrayList<String> discardNames;
     private Player player;
-    public DiscardCommand(Player _player, ArrayList<Card> _discards)
+    public DiscardCommand(Player _player, ArrayList<String> _discardNames)
     {
         if(_player == null) throw new NullPointerException("_player");
-        if(_discards == null) throw new NullPointerException("_discards");
+        if(_discardNames == null) throw new NullPointerException("_discardNames");
 
         player = _player;
-        this.discards = _discards;
+        this.discardNames = _discardNames;
     }
     @Override
     public void Execute() {
-        player.discard(discards);
+        player.discard(discardNames);
     }
 }

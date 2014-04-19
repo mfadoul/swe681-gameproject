@@ -1,8 +1,6 @@
 package edu.gmu.swe.gameproj.ejb.cards.action;
 
-import edu.gmu.swe.gameproj.ejb.NotValidatedException;
 import edu.gmu.swe.gameproj.ejb.cards.Card;
-import edu.gmu.swe.gameproj.ejb.cards.dtos.ActionDto;
 
 
 public abstract class Action extends Card {
@@ -11,6 +9,6 @@ public abstract class Action extends Card {
         super(_name, _cost);
     }
 
-    public abstract void Act(ActionDto dto) throws NotValidatedException;
+    public abstract void Act(ActionDto dto);
     protected abstract boolean Validate(ActionDto dto);
 }

@@ -1,9 +1,5 @@
 package edu.gmu.swe.gameproj.ejb.cards.action;
 
-import edu.gmu.swe.gameproj.ejb.NotValidatedException;
-import edu.gmu.swe.gameproj.ejb.cards.Card;
-import edu.gmu.swe.gameproj.ejb.cards.dtos.ActionDto;
-import edu.gmu.swe.gameproj.ejb.cards.dtos.CellarDto;
 import edu.gmu.swe.gameproj.ejb.command.AddActionsCommand;
 import edu.gmu.swe.gameproj.ejb.command.DiscardCommand;
 import edu.gmu.swe.gameproj.ejb.command.DrawCommand;
@@ -21,16 +17,14 @@ public class Cellar extends Action {
 
     }
     @Override
-    public void Act(ActionDto dto) throws NotValidatedException{
+    public void Act(ActionDto dto) {
         if(!Validate(dto)){
-            throw new NotValidatedException();
+            throw new InvalidParameterException("dto");
         }
 
-        CellarDto cellarDto = (CellarDto) dto;
-
-        ICommand addActions = new AddActionsCommand(cellarDto.player, addActionsCount);
-        ICommand draw = new DrawCommand(cellarDto.player, cellarDto.discardCards.size());
-        ICommand discard = new DiscardCommand(cellarDto.player, cellarDto.discardCards);
+        ICommand addActions = new AddActionsCommand(dto.player, addActionsCount);
+        ICommand draw = new DrawCommand(dto.player, dto.discardCardNames.size());
+        ICommand discard = new DiscardCommand(dto.player, dto.discardCardNames);
 
         addActions.Execute();
         discard.Execute();
@@ -41,16 +35,13 @@ public class Cellar extends Action {
     @Override
     protected boolean Validate(ActionDto dto) {
         if(dto == null) throw new NullPointerException("dto");
-        if(!(dto instanceof CellarDto)) throw new InvalidParameterException("CellarDto expected");
 
-        CellarDto cellarDto = (CellarDto) dto;
+        if(dto.player == null) throw new NullPointerException("dto.Player");
+        if(dto.discardCardNames == null) throw new NullPointerException("dto.discardCardNames");
 
-        if(cellarDto.player == null) throw new NullPointerException("dto.Player");
-        if(cellarDto.discardCards == null) throw new NullPointerException("dto.discardCards");
-
-        for(Card c : cellarDto.discardCards)
+        for(String s : dto.discardCardNames)
         {
-            if(!cellarDto.player.hasCard(c)) {
+            if(!dto.player.hasCard(s)) {
                 return false;
             }
 

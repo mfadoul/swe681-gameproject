@@ -1,9 +1,9 @@
 package edu.gmu.swe.gameproj.ejb.cards.action;
 
-import edu.gmu.swe.gameproj.ejb.NotValidatedException;
-import edu.gmu.swe.gameproj.ejb.cards.dtos.ActionDto;
 import edu.gmu.swe.gameproj.ejb.command.AddCoinsCommand;
 import edu.gmu.swe.gameproj.ejb.command.ICommand;
+
+import java.security.InvalidParameterException;
 
 public class Militia extends Action{
 
@@ -14,8 +14,8 @@ public class Militia extends Action{
     }
 
     @Override
-    public void Act(ActionDto dto) throws NotValidatedException {
-        if(!Validate(dto)) throw new NotValidatedException();
+    public void Act(ActionDto dto) {
+        if(!Validate(dto)) throw new InvalidParameterException("dto");
 
         ICommand addCoins = new AddCoinsCommand(dto.player, addCoinsCount);
         addCoins.Execute();

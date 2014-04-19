@@ -1,8 +1,7 @@
 package edu.gmu.swe.gameproj.ejb.cards.action;
 
-import edu.gmu.swe.gameproj.ejb.NotValidatedException;
-import edu.gmu.swe.gameproj.ejb.cards.dtos.ActionDto;
-import edu.gmu.swe.gameproj.ejb.cards.dtos.RemodelDto;
+import edu.gmu.swe.gameproj.ejb.cards.Card;
+import edu.gmu.swe.gameproj.ejb.cards.CardFactory;
 import edu.gmu.swe.gameproj.ejb.command.AddCardCommand;
 import edu.gmu.swe.gameproj.ejb.command.ICommand;
 import edu.gmu.swe.gameproj.ejb.command.TrashCardCommand;
@@ -16,13 +15,11 @@ public class Remodel extends Action {
     }
 
     @Override
-    public void Act(ActionDto dto) throws NotValidatedException {
-        if(!Validate(dto)) throw new NotValidatedException();
+    public void Act(ActionDto dto) {
+        if(!Validate(dto)) throw new InvalidParameterException("dto");
 
-        RemodelDto remodelDto = (RemodelDto) dto;
-
-        ICommand trash = new TrashCardCommand(remodelDto.player, remodelDto.OldCard);
-        ICommand add = new AddCardCommand(remodelDto.player, remodelDto.NewCard);
+        ICommand trash = new TrashCardCommand(dto.player, dto.oldCardName);
+        ICommand add = new AddCardCommand(dto.player, dto.newCardName);
 
         trash.Execute();
         add.Execute();
@@ -32,15 +29,15 @@ public class Remodel extends Action {
     @Override
     protected boolean Validate(ActionDto dto) {
         if(dto == null) throw new NullPointerException("dto");
-        if(!(dto instanceof RemodelDto)) throw new InvalidParameterException("RemodelDto expected");
+        
+        if(dto.player == null) throw new NullPointerException("dto.Player");
+        if(dto.oldCardName == null) throw new NullPointerException("dto.oldCardName");
+        if(dto.newCardName == null) throw new NullPointerException("dto.newCardName");
 
-        RemodelDto remodelDto = (RemodelDto) dto;
+        Card newCard = CardFactory.buildCard(dto.newCardName);
+        Card oldCard = CardFactory.buildCard(dto.oldCardName);
 
-        if(remodelDto.player == null) throw new NullPointerException("dto.Player");
-        if(remodelDto.OldCard == null) throw new NullPointerException("dto.OldCard");
-        if(remodelDto.NewCard == null) throw new NullPointerException("dto.NewCard");
-
-        if(remodelDto.NewCard.getCost() > (remodelDto.OldCard.getCost() + 3))
+        if(newCard.getCost() > (oldCard.getCost() + 3))
             return false;
 
         return true;

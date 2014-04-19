@@ -1,7 +1,7 @@
 package edu.gmu.swe.gameproj.ejb.command;
 
 
-import edu.gmu.swe.gameproj.ejb.Player;
+import edu.gmu.swe.gameproj.jpa.Player;
 
 public class AddCoinsCommand implements ICommand {
     private int coinCount;

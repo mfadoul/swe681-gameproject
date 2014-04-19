@@ -1,25 +1,24 @@
 package edu.gmu.swe.gameproj.ejb.command;
 
 
-import edu.gmu.swe.gameproj.ejb.Player;
-import edu.gmu.swe.gameproj.ejb.cards.Card;
+import edu.gmu.swe.gameproj.jpa.Player;
 
 public class AddCardCommand implements ICommand {
 
     private Player player;
-    private Card card;
+    private String cardName;
 
-    public AddCardCommand(Player _player, Card _card)
+    public AddCardCommand(Player _player, String _cardName)
     {
         if(_player == null) throw new NullPointerException("_player");
-        if(_card == null) throw new NullPointerException("_card");
+        if(_cardName == null) throw new NullPointerException("_cardname");
 
         player = _player;
-        card = _card;
+        cardName = _cardName;
     }
 
     @Override
     public void Execute() {
-        player.addCard(card);
+        player.addCard(cardName);
     }
 }

@@ -1,8 +1,7 @@
 package edu.gmu.swe.gameproj.ejb.cards.action;
 
-import edu.gmu.swe.gameproj.ejb.NotValidatedException;
-import edu.gmu.swe.gameproj.ejb.cards.dtos.ActionDto;
-import edu.gmu.swe.gameproj.ejb.cards.dtos.WorkshopDto;
+import edu.gmu.swe.gameproj.ejb.cards.Card;
+import edu.gmu.swe.gameproj.ejb.cards.CardFactory;
 import edu.gmu.swe.gameproj.ejb.command.AddCardCommand;
 import edu.gmu.swe.gameproj.ejb.command.ICommand;
 
@@ -15,12 +14,10 @@ public class Workshop extends Action{
     }
 
     @Override
-    public void Act(ActionDto dto) throws NotValidatedException {
-        if(!Validate(dto)) throw new NotValidatedException();
+    public void Act(ActionDto dto) {
+        if(!Validate(dto)) throw new InvalidParameterException("dto");
 
-        WorkshopDto workshopDto = (WorkshopDto) dto;
-
-        ICommand addCard = new AddCardCommand(workshopDto.player, workshopDto.NewCard);
+        ICommand addCard = new AddCardCommand(dto.player, dto.newCardName);
 
         addCard.Execute();
     }
@@ -30,13 +27,11 @@ public class Workshop extends Action{
         if(dto == null) throw new NullPointerException("dto");
         if(dto.player == null) throw new NullPointerException("dto.player");
 
-        if(!(dto instanceof WorkshopDto)) throw new InvalidParameterException("WorkshopDto expected");
+        if(dto.newCardName == null) throw new NullPointerException("dto.newCardName");
 
-        WorkshopDto workshopDto = (WorkshopDto) dto;
+        Card newCard = CardFactory.buildCard(dto.newCardName);
 
-        if(workshopDto.NewCard == null) throw new NullPointerException("dto.NewCard");
-
-        if(workshopDto.NewCard.getCost() > 4)
+        if(newCard.getCost() > 4)
             return false;
 
         return true;

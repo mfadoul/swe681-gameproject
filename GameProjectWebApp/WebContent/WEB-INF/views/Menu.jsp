@@ -9,8 +9,8 @@
   
   <sec:authorize access="isAuthenticated()">
       <li><a href="/GameProjectWebApp/GameProject/user/myProfile" title="My personal profile"><span class="ui-icon ui-icon-info"></span>My Profile</a></li>
-      <li><a href="/GameProjectWebApp/GameProject/game/newgame" title="Open a new table and wait for another player"><span class="ui-icon ui-icon-play"></span>New Game</a></li>
-      <li><a href="/GameProjectWebApp/GameProject/game/openGames" title="A list of the players waiting to play"><span class="ui-icon ui-icon-link"></span>Open Games</a></li>
+      <li><a href="/GameProjectWebApp/GameProject/game/newgame" title="Open a new table and wait for another player"><span class="ui-icon ui-icon-actionVm"></span>New Game</a></li>
+      <li><a href="/GameProjectWebApp/GameProject/game/openGames" title="A list of the players waiting to action"><span class="ui-icon ui-icon-link"></span>Open Games</a></li>
       <li><a href="/GameProjectWebApp/GameProject/game/gamesInProgress" title="A list of the games in progress"><span class="ui-icon ui-icon-note"></span>Games in Progress</a></li>
       
 <!--       

@@ -1,6 +1,6 @@
 package edu.gmu.swe.gameproj.ejb.cards.treasure;
 
-import edu.gmu.swe.gameproj.ejb.Player;
+import edu.gmu.swe.gameproj.jpa.Player;
 import edu.gmu.swe.gameproj.ejb.cards.Card;
 
 public abstract class Treasure extends Card {
