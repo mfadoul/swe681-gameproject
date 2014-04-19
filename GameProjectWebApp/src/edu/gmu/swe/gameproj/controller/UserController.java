@@ -1,12 +1,17 @@
 package edu.gmu.swe.gameproj.controller;
 
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import edu.gmu.swe.gameproj.ejb.GameProjectRemote;
 import edu.gmu.swe.gameproj.jpa.User;
 import edu.gmu.swe.gameproj.jpa.UserRole;
+import edu.gmu.swe.gameproj.util.PasswordHelper;
 import edu.gmu.swe.gameproj.util.SessionBeanHelper;
 import edu.gmu.swe.gameproj.validator.UserValidator;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,14 +21,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import javax.annotation.Resource;
 
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
+
 
 @Controller
 @RequestMapping(value="/user/*")
 public class UserController {
 	protected final Log logger = LogFactory.getLog(getClass());
+
+    @Resource(name="sessionRegistry")
+    private SessionRegistryImpl sessionRegistry;
 
 	@InitBinder
     protected void initBinder(WebDataBinder binder) {
@@ -60,6 +68,10 @@ public class UserController {
 				// Attempt to add the user
 				GameProjectRemote gameProject = 
 						SessionBeanHelper.getGameProjectSessionBean();
+				
+				// Encrypt the password before persisting!
+				user.setPassword(PasswordHelper.getEncryptedPassword(user.getPassword()));
+				
 				if (gameProject.addUser(user)) {
 					// Successfully added user.
 					model.addAttribute("infoMessage", "Successfully added user " + user.getEmail());
@@ -126,4 +138,24 @@ public class UserController {
 		return mav;
 	}
 
+	// This is an example of accessing session information from Spring.
+	// We'll be using something like this to figure out what other players
+	// are online.
+	@SuppressWarnings("unused")
+	private String printUsersLoggedIn () {
+		sessionRegistry.getAllPrincipals();
+		System.out.println("------------");
+		System.out.println("Received request to show users page");
+
+		System.out.println("Total logged-in users: " + sessionRegistry.getAllPrincipals().size());
+		System.out.println("List of logged-in users: ");
+		for (Object username: sessionRegistry.getAllPrincipals()) {
+			System.out.println(" * " + username);
+		}
+		System.out.println("Total sessions including expired ones: " + sessionRegistry.getAllSessions(sessionRegistry.getAllPrincipals().get(0), true).size());
+		System.out.println("Total sessions: " + sessionRegistry.getAllSessions(sessionRegistry.getAllPrincipals().get(0), false).size());
+		System.out.println("------------");
+
+		return "";
+	}
 }

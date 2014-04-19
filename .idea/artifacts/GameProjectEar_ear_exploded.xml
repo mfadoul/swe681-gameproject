@@ -13,6 +13,7 @@
         <element id="library" level="project" name="org.springframework.security:org.springframework.security.web:3.0.3.RELEASE" />
         <element id="library" level="project" name="org.springframework:org.springframework.web.servlet:3.0.3.RELEASE" />
         <element id="library" level="project" name="org.springframework:org.springframework.web:3.0.3.RELEASE" />
+        <element id="library" level="project" name="org.springframework.security:spring-security-crypto:3.1.4.RELEASE" />
       </element>
       <element id="directory" name="GameProjectWebApp.war">
         <element id="artifact" artifact-name="GameProjectWebApp:war exploded" />

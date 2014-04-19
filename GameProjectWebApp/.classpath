@@ -15,5 +15,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/org.springframework.security:org.springframework.security.web:3.0.3.RELEASE"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/org.springframework:org.springframework.web.servlet:3.0.3.RELEASE"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/org.springframework:org.springframework.web:3.0.3.RELEASE"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/org.springframework.security:spring-security-crypto:3.1.4.RELEASE"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

@@ -25,17 +25,32 @@
             <file leaf-file-name="UserController.java" pinned="false" current="false" current-in-tab="false">
               <entry file="file://$PROJECT_DIR$/GameProjectWebApp/src/edu/gmu/swe/gameproj/controller/UserController.java">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1755">
-                    <caret line="30" column="13" selection-start-line="30" selection-start-column="13" selection-end-line="30" selection-end-column="54" />
-                    <folding />
+                  <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3173">
+                    <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+                    <folding>
+                      <element signature="imports" expanded="true" />
+                      <element signature="e#5053#5080#0" expanded="true" />
+                    </folding>
                   </state>
                 </provider>
               </entry>
             </file>
-            <file leaf-file-name="ActionDto.java" pinned="false" current="false" current-in-tab="true">
+            <file leaf-file-name="PasswordHelper.java" pinned="false" current="true" current-in-tab="true">
+              <entry file="file://$PROJECT_DIR$/GameProjectWebApp/src/edu/gmu/swe/gameproj/util/PasswordHelper.java">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state vertical-scroll-proportion="0.2835821" vertical-offset="0" max-vertical-offset="1340">
+                    <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+                    <folding>
+                      <element signature="imports" expanded="true" />
+                    </folding>
+                  </state>
+                </provider>
+              </entry>
+            </file>
+            <file leaf-file-name="ActionDto.java" pinned="false" current="false" current-in-tab="false">
               <entry file="file://$PROJECT_DIR$/GameProjectEjb/ejbModule/edu/gmu/swe/gameproj/ejb/cards/action/ActionDto.java">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state vertical-scroll-proportion="0.15620328" vertical-offset="0" max-vertical-offset="1338">
+                  <state vertical-scroll-proportion="-104.5" vertical-offset="0" max-vertical-offset="1026">
                     <caret line="11" column="25" selection-start-line="11" selection-start-column="25" selection-end-line="11" selection-end-column="25" />
                     <folding>
                       <element signature="imports" expanded="true" />
@@ -101,10 +116,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BuyVm.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="BuyVm.java" pinned="false" current="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GameProjectWebApp/src/edu/gmu/swe/gameproj/models/BuyVm.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.08656036" vertical-offset="0" max-vertical-offset="1317">
+            <state vertical-scroll-proportion="0.13380282" vertical-offset="0" max-vertical-offset="852">
               <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
               <folding />
             </state>
@@ -219,13 +234,14 @@
         <option value="$PROJECT_DIR$/GameProjectWebApp/src/edu/gmu/swe/gameproj/models/BuyVm.java" />
         <option value="$PROJECT_DIR$/GameProjectEjb/ejbModule/edu/gmu/swe/gameproj/ejb/command/BuyCommand.java" />
         <option value="$PROJECT_DIR$/GameProjectJpa/src/edu/gmu/swe/gameproj/jpa/Player.java" />
+        <option value="$PROJECT_DIR$/GameProjectWebApp/src/edu/gmu/swe/gameproj/controller/UserController.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="-355" />
     <option name="y" value="-1440" />
-    <option name="width" value="2560" />
+    <option name="width" value="1279" />
     <option name="height" value="1440" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
@@ -386,6 +402,10 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="gameproj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="controller" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -558,7 +578,7 @@
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
     <property name="FullScreen" value="false" />
-    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.34122288" />
     <property name="Repository.Attach.JavaDocs" value="false" />
@@ -938,15 +958,15 @@
       <workItem from="1397837085599" duration="10000" />
       <workItem from="1397838978439" duration="6573000" />
       <workItem from="1397852696044" duration="5316000" />
-      <workItem from="1397862486684" duration="12798000" />
+      <workItem from="1397862486684" duration="13834000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="55577000" />
+    <option name="totallyTimeSpent" value="56613000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-355" y="-1440" width="2560" height="1440" extended-state="0" />
+    <frame x="-355" y="-1440" width="1279" height="1440" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -962,7 +982,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32937685" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.13860206" sideWeight="0.8402235" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2821342" sideWeight="0.8402235" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3360534" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -970,7 +990,7 @@
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32937685" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.328635" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3281366" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24959612" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1296,17 +1316,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/GameProjectWebApp/src/edu/gmu/swe/gameproj/controller/UserController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1755">
-          <caret line="30" column="13" selection-start-line="30" selection-start-column="13" selection-end-line="30" selection-end-column="54" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/GameProjectEjb/ejbModule/edu/gmu/swe/gameproj/ejb/cards/action/ActionDto.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.15620328" vertical-offset="0" max-vertical-offset="1338">
+        <state vertical-scroll-proportion="-104.5" vertical-offset="0" max-vertical-offset="1026">
           <caret line="11" column="25" selection-start-line="11" selection-start-column="25" selection-end-line="11" selection-end-column="25" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -1455,9 +1467,30 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/GameProjectWebApp/src/edu/gmu/swe/gameproj/models/BuyVm.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.08656036" vertical-offset="0" max-vertical-offset="1317">
+        <state vertical-scroll-proportion="0.13380282" vertical-offset="0" max-vertical-offset="852">
           <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GameProjectWebApp/src/edu/gmu/swe/gameproj/controller/UserController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3173">
+          <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#5053#5080#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GameProjectWebApp/src/edu/gmu/swe/gameproj/util/PasswordHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.2835821" vertical-offset="0" max-vertical-offset="1340">
+          <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1546,7 +1579,7 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
-          <last-edited>Spring-4.0.3.RELEASE</last-edited>
+          <last-edited>org.springframework.security:spring-security-crypto:3.1.4.RELEASE</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

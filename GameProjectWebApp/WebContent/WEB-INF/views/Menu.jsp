@@ -19,6 +19,8 @@
       <li></li>
  -->
    </sec:authorize>
+     <li><a href="/GameProjectWebApp/GameProject/sample/sampleGet" title="Sample Get"><span class="ui-icon ui-icon-star"></span>Sample Get</a></li>
+   
 <!--   
   <li><a href="/GameProjectWebApp/BookRatingSystem/book/topRated" title="View the highest-rated books"><span class="ui-icon ui-icon-star"></span>Top Rated Books</a></li>
   <li><a href="/GameProjectWebApp/BookRatingSystem/book/mostRated"title="View the books with the most ratings"><span class="ui-icon ui-icon-comment"></span>Most Rated</a></li>
