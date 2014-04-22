@@ -20,9 +20,4 @@ public class ExtraStringUtils {
 
 		return matcher.matches();
 	}
-
-    //Check if string is null or only contains whitespace
-    public static boolean isNullOrBlank(String s){
-        return s == null || s.trim().isEmpty();
-    }
 }

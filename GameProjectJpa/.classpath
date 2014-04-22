@@ -15,7 +15,5 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/javax.persistence:com.springsource.javax.persistence:2.0.0"/>
-	<classpathentry kind="var" path="USER_HOME/Library/Preferences/IntelliJIdea13/jdbc-drivers/mysql-connector-java-5.1.29-bin.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

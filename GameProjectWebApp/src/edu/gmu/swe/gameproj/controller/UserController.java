@@ -1,13 +1,9 @@
 package edu.gmu.swe.gameproj.controller;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import edu.gmu.swe.gameproj.ejb.GameProjectRemote;
-import edu.gmu.swe.gameproj.jpa.User;
-import edu.gmu.swe.gameproj.jpa.UserRole;
-import edu.gmu.swe.gameproj.util.PasswordHelper;
-import edu.gmu.swe.gameproj.util.SessionBeanHelper;
-import edu.gmu.swe.gameproj.validator.UserValidator;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,9 +17,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import javax.annotation.Resource;
 
-
+import edu.gmu.swe.gameproj.ejb.GameProjectRemote;
+import edu.gmu.swe.gameproj.jpa.User;
+import edu.gmu.swe.gameproj.jpa.UserRole;
+import edu.gmu.swe.gameproj.util.PasswordHelper;
+import edu.gmu.swe.gameproj.util.SessionBeanHelper;
+import edu.gmu.swe.gameproj.validator.UserValidator;
 
 @Controller
 @RequestMapping(value="/user/*")
@@ -72,6 +72,7 @@ public class UserController {
 				// Encrypt the password before persisting!
 				user.setPassword(PasswordHelper.getEncryptedPassword(user.getPassword()));
 				
+
 				if (gameProject.addUser(user)) {
 					// Successfully added user.
 					model.addAttribute("infoMessage", "Successfully added user " + user.getEmail());

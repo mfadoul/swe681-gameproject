@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<component inheritJdk="true">
-	<exclude-output/>
-	<contentEntry url="file://$MODULE_DIR$"/>
-	<levels>
-		<level name="EclipseLink 2.5.0 - Kepler" value="project"/>
-		<level name="javax.persistence:com.springsource.javax.persistence:2.0.0" value="project"/>
-	</levels>
-</component>
