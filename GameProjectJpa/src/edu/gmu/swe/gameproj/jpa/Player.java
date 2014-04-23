@@ -16,8 +16,7 @@ public class Player implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private String id;
+	private long id;
 
 	private int actionCount;
 
@@ -31,24 +30,24 @@ public class Player implements Serializable {
 	@OneToMany(mappedBy="player")
 	private List<Card> cards;
 
-	//bi-directional many-to-one association to User
-	@ManyToOne
-	@JoinColumn(name="userId")
-	private User user;
-
 	//bi-directional many-to-one association to GameState
 	@ManyToOne
 	@JoinColumn(name="gameStateId")
 	private GameState gameState;
 
+	//bi-directional many-to-one association to User
+	@ManyToOne
+	@JoinColumn(name="userId")
+	private User user;
+
 	public Player() {
 	}
 
-	public String getId() {
+	public long getId() {
 		return this.id;
 	}
 
-	public void setId(String id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -106,20 +105,20 @@ public class Player implements Serializable {
 		return card;
 	}
 
-	public User getUser() {
-		return this.user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
 	public GameState getGameState() {
 		return this.gameState;
 	}
 
 	public void setGameState(GameState gameState) {
 		this.gameState = gameState;
+	}
+
+	public User getUser() {
+		return this.user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 }

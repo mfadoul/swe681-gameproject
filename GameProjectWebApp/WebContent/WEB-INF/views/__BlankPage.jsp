@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Book Rating System - BLANK_PAGE</title>
+<title>Dominion Game Website - BLANK_PAGE</title>
 <jsp:include page="HeadForJQuery.jsp" flush="true" />
 </head>
 <body>

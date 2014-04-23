@@ -80,7 +80,7 @@ public class UserController {
 				} else {
 					// Couldn't add user
 					model.addAttribute("errorMessage", 
-							"A user with that e-mail has already registered in the Book Rating System.");
+							"A user with that e-mail has already registered in the Dominion Game Website.");
 				} 
 			} catch (Exception e) {
 				e.printStackTrace();

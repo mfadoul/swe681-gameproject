@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Book Rating System - User Info</title>
+<title>Dominion Game Website - User Info</title>
 <jsp:include page="HeadForJQuery.jsp" flush="true" />
 </head>
 <body>

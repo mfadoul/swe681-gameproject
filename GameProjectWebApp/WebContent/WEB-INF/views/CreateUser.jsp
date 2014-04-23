@@ -9,7 +9,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Book Rating System - Create User</title>
+<title>Dominion Game Website - Create User</title>
 <jsp:include page="HeadForJQuery.jsp" flush="true" />
 </head>
 <body>

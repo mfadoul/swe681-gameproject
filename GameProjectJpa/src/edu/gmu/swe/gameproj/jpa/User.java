@@ -17,10 +17,8 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
 
-	@Lob
 	private String aboutme;
 
 	private String email;
@@ -43,14 +41,14 @@ public class User implements Serializable {
 
 	private String salutation;
 
+	//bi-directional many-to-one association to Player
+	@OneToMany(mappedBy="user")
+	private List<Player> players;
+
 	//bi-directional many-to-one association to UserRole
 	@ManyToOne
 	@JoinColumn(name="role")
 	private UserRole userRole;
-
-	//bi-directional many-to-one association to Player
-	@OneToMany(mappedBy="user")
-	private List<Player> players;
 
 	public User() {
 	}
@@ -135,14 +133,6 @@ public class User implements Serializable {
 		this.salutation = salutation;
 	}
 
-	public UserRole getUserRole() {
-		return this.userRole;
-	}
-
-	public void setUserRole(UserRole userRole) {
-		this.userRole = userRole;
-	}
-
 	public List<Player> getPlayers() {
 		return this.players;
 	}
@@ -163,6 +153,14 @@ public class User implements Serializable {
 		player.setUser(null);
 
 		return player;
+	}
+
+	public UserRole getUserRole() {
+		return this.userRole;
+	}
+
+	public void setUserRole(UserRole userRole) {
+		this.userRole = userRole;
 	}
 
 }

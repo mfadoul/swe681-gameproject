@@ -4,6 +4,12 @@ CREATE DATABASE IF NOT EXISTS `gamewebsite` /*!40100 DEFAULT CHARACTER SET utf8 
 
 use `gamewebsite`$$
 
+CREATE TABLE IF NOT EXISTS `SEQUENCE_TABLE` (
+  `SEQ_NAME` varchar(20) NOT NULL DEFAULT '',
+  `SEQ_COUNT` int(11) NOT NULL,
+  PRIMARY KEY (`SEQ_NAME`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='For Table ID Generation';
+
 CREATE TABLE IF NOT EXISTS `UserRoles` (
   `id` varchar(10) NOT NULL,
   `description` varchar(45) NOT NULL COMMENT 'A description for the User Role',
@@ -35,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `Users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
 
 CREATE TABLE IF NOT EXISTS `GameStates` (
-  `id` BIGINT(16) unsigned NOT NULL,
+  `id` BIGINT(20) unsigned NOT NULL,
   `beginDate` DATETIME NULL COMMENT 'When the game started',
   `endDate` DATETIME NULL COMMENT 'When game finished',
   `completed` TINYINT(1) NULL COMMENT 'Whether the game completed normally (1=True, 0=False)',

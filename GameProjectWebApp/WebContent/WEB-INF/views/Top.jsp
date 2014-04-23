@@ -17,20 +17,6 @@
 		</td>
 		<td>
 			<h1 class="title">Dominion Game Website</h1>
-			<!--  
-			<form action="/GameProjectWebApp/GameProject/book/search" 
-			    name="search_form" id="searchForm" method="post">
-			    <div>
-			    	<input type="text" id="searchString" name="searchString" size="40" title="Enter your search string here" />
-			    	<select id="searchType" name="searchType" title="Select what you would like to search by">
-						<option value="title" selected="selected">Title</option>
-						<option value="author">Author</option>
-						<option value="description">Description</option>
-					</select>
-			    	<input id="search_button" type="submit" value="Search" title="Click to execute your search" />
-                </div>
-			</form>
-			-->
 		</td>
 		<td align="center" width="100px">
 			<sec:authorize access="isAuthenticated()">
