@@ -17,6 +17,7 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
 
 	@Lob
@@ -47,17 +48,9 @@ public class User implements Serializable {
 	@JoinColumn(name="role")
 	private UserRole userRole;
 
-	//bi-directional many-to-one association to GamePurchas
+	//bi-directional many-to-one association to Player
 	@OneToMany(mappedBy="user")
-	private List<GamePurchases> gamePurchases;
-
-	//bi-directional many-to-one association to GameResult
-	@OneToMany(mappedBy="user1")
-	private List<GameResult> gameResults1;
-
-	//bi-directional many-to-one association to GameResult
-	@OneToMany(mappedBy="user2")
-	private List<GameResult> gameResults2;
+	private List<Player> players;
 
 	public User() {
 	}
@@ -150,70 +143,26 @@ public class User implements Serializable {
 		this.userRole = userRole;
 	}
 
-	public List<GamePurchases> getGamePurchases() {
-		return this.gamePurchases;
+	public List<Player> getPlayers() {
+		return this.players;
 	}
 
-	public void setGamePurchases(List<GamePurchases> gamePurchases) {
-		this.gamePurchases = gamePurchases;
+	public void setPlayers(List<Player> players) {
+		this.players = players;
 	}
 
-	public GamePurchases addGamePurchas(GamePurchases gamePurchas) {
-		getGamePurchases().add(gamePurchas);
-		gamePurchas.setUser(this);
+	public Player addPlayer(Player player) {
+		getPlayers().add(player);
+		player.setUser(this);
 
-		return gamePurchas;
+		return player;
 	}
 
-	public GamePurchases removeGamePurchas(GamePurchases gamePurchas) {
-		getGamePurchases().remove(gamePurchas);
-		gamePurchas.setUser(null);
+	public Player removePlayer(Player player) {
+		getPlayers().remove(player);
+		player.setUser(null);
 
-		return gamePurchas;
-	}
-
-	public List<GameResult> getGameResults1() {
-		return this.gameResults1;
-	}
-
-	public void setGameResults1(List<GameResult> gameResults1) {
-		this.gameResults1 = gameResults1;
-	}
-
-	public GameResult addGameResults1(GameResult gameResults1) {
-		getGameResults1().add(gameResults1);
-		gameResults1.setUser1(this);
-
-		return gameResults1;
-	}
-
-	public GameResult removeGameResults1(GameResult gameResults1) {
-		getGameResults1().remove(gameResults1);
-		gameResults1.setUser1(null);
-
-		return gameResults1;
-	}
-
-	public List<GameResult> getGameResults2() {
-		return this.gameResults2;
-	}
-
-	public void setGameResults2(List<GameResult> gameResults2) {
-		this.gameResults2 = gameResults2;
-	}
-
-	public GameResult addGameResults2(GameResult gameResults2) {
-		getGameResults2().add(gameResults2);
-		gameResults2.setUser2(this);
-
-		return gameResults2;
-	}
-
-	public GameResult removeGameResults2(GameResult gameResults2) {
-		getGameResults2().remove(gameResults2);
-		gameResults2.setUser2(null);
-
-		return gameResults2;
+		return player;
 	}
 
 }

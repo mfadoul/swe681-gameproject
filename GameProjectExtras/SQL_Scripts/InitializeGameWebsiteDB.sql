@@ -34,29 +34,38 @@ CREATE TABLE IF NOT EXISTS `Users` (
   CONSTRAINT `role` FOREIGN KEY (`role`) REFERENCES `UserRoles` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
 
-CREATE TABLE IF NOT EXISTS `GameResults` (
-  `id` INT(10) unsigned NOT NULL,
-  `winner` INT(10) unsigned NULL COMMENT 'Player who won.',
-  `loser` INT(10) unsigned NULL COMMENT 'Player who lost.',
+CREATE TABLE IF NOT EXISTS `GameStates` (
+  `id` BIGINT(16) unsigned NOT NULL,
   `beginDate` DATETIME NULL COMMENT 'When the game started',
   `endDate` DATETIME NULL COMMENT 'When game finished',
   `completed` TINYINT(1) NULL COMMENT 'Whether the game completed normally (1=True, 0=False)',
-  PRIMARY KEY (`id`),
-  key `winner_idx` (`winner`),
-  key `loser_idx` (`loser`),
-  CONSTRAINT FK_WINNER_ID FOREIGN KEY (`winner`) REFERENCES `Users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT FK_LOSER_ID FOREIGN KEY (`loser`) REFERENCES `Users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8$$
 
-CREATE TABLE IF NOT EXISTS `GamePurchases` (
-  `id` INT(10) unsigned NOT NULL,
-  `package` VARCHAR(45) NULL COMMENT 'Name of the package that the player purchased.',
-  `purchaseDate` DATETIME NOT NULL COMMENT 'When transaction was executed.',
-  `playerId` INT(10) unsigned NOT NULL COMMENT 'Player who made the purchase.',
-  `coinsPurchased` VARCHAR(45) NOT NULL COMMENT 'How many game coins did the player purchase.',
-  `price` INT UNSIGNED NOT NULL COMMENT 'Cost of the transaction (USD).',
+CREATE TABLE IF NOT EXISTS `Players` (
+  `id` BIGINT(20) unsigned NOT NULL COMMENT 'Player id is unique for each game',
+  `gameStateId` BIGINT(20) unsigned NOT NULL COMMENT 'GameState id is unique for each game',
+  `userId` INT(10) unsigned NOT NULL COMMENT 'User id is unique for each game',
+  `actionCount` INT(10) unsigned NOT NULL COMMENT 'Action count',
+  `buyCount` INT(10) unsigned NOT NULL COMMENT 'Buy count',
+  `coinCount` INT(10) unsigned NOT NULL COMMENT 'Coin count',
+  `treasure` INT(10) unsigned NOT NULL COMMENT 'Treasure',
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id`),
+  key `gameState_idx` (`gameStateId`),
+  key `user_idx` (`userId`),
+  CONSTRAINT FK_USER_ID_FOR_PLAYERS FOREIGN KEY (`userId`) REFERENCES `Users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT FK_GAMESTATE_ID_FOR_PLAYERS FOREIGN KEY (`gameStateId`) REFERENCES `GameStates` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+)ENGINE=InnoDB DEFAULT CHARSET=utf8$$
+
+CREATE TABLE IF NOT EXISTS `Cards` (
+  `id` BIGINT(20) unsigned NOT NULL COMMENT 'Card id is unique for each game',
+  `gameStateId` BIGINT(20) unsigned NOT NULL COMMENT 'GameState id is unique for each game',
+  `playerId` BIGINT(20) unsigned NOT NULL COMMENT 'Player id is unique for each game',
+  `location` INT(10) unsigned NOT NULL COMMENT 'Location (e.g. discard, in hand, deck.)',
+  `cardType` INT(10) unsigned NOT NULL COMMENT 'Type of card (e.g. mine, gold, etc)',
+  PRIMARY KEY (`id`),
+  key `gameState_idx` (`gameStateId`),
   key `player_idx` (`playerId`),
-  CONSTRAINT FK_PLAYER_ID FOREIGN KEY (`playerId`) REFERENCES `Users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT FK_PLAYER_ID_FOR_CARDS FOREIGN KEY (`playerId`) REFERENCES `Players` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT FK_GAMESTATE_ID_FOR_CARDS FOREIGN KEY (`gameStateId`) REFERENCES `GameStates` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 )ENGINE=InnoDB DEFAULT CHARSET=utf8$$
