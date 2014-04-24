@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `Players` (
 CREATE TABLE IF NOT EXISTS `Cards` (
   `id` BIGINT(20) unsigned NOT NULL COMMENT 'Card id is unique for each game',
   `gameStateId` BIGINT(20) unsigned NOT NULL COMMENT 'GameState id is unique for each game',
-  `playerId` BIGINT(20) unsigned NOT NULL COMMENT 'Player id is unique for each game (TODO: how to handle an unassigned card)',
+  `playerId` BIGINT(20) unsigned NULL COMMENT 'Player id is unique for each game (Set to NULL for an unassigned card)',
   `location` INT(10) unsigned NOT NULL COMMENT 'Location (e.g. discard, in hand, deck.)',
   `cardType` INT(10) unsigned NOT NULL COMMENT 'Type of card (e.g. mine, gold, etc)',
   PRIMARY KEY (`id`),
