@@ -1,5 +1,9 @@
 package edu.gmu.swe.gameproj.controller;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -136,13 +140,54 @@ public class UserController {
 		
 		mav.setViewName("UserInfo");
 		
+		this.printUsersLoggedIn();
+		
+		return mav;
+	}
+
+	// Display who is online
+	@RequestMapping(value="activeUsers", method=RequestMethod.GET)
+	public ModelAndView activeUsers (HttpSession httpSession) {
+		ModelAndView mav = new ModelAndView();
+		printUsersLoggedIn();
+
+		User user = SessionBeanHelper.getLoggedInUser();
+		if (user != null) {
+			mav.addObject("user", user);
+			mav.addObject("infoMessage", "This is your personal profile.");
+		} else {
+			mav.addObject("user", null);
+			mav.addObject("errorMessage", "Your profile could not be found in our database.");			
+		}
+
+		mav.addObject("loggedInUser", SessionBeanHelper.getLoggedInUser());
+		
+		// Find the users who are logged in:
+		List<String> activeUsernames = this.getActiveUsernames();
+		
+//		// Remove the username of the current user.
+//		Iterator<String> it = activeUsernames.iterator();
+//		
+//		while (it.hasNext()) {
+//			String username = it.next();
+//			if (username.equals(user.getEmail())) {
+//				activeUsernames.remove(username);
+//			}
+//		}
+
+		mav.addObject("activeUsernames", activeUsernames);
+		
+		mav.setViewName("ActiveUsers");
+		
+		this.printUsersLoggedIn();
+		
 		return mav;
 	}
 
 	// This is an example of accessing session information from Spring.
 	// We'll be using something like this to figure out what other players
 	// are online.
-	@SuppressWarnings("unused")
+	//@SuppressWarnings("unused")
 	private String printUsersLoggedIn () {
 		sessionRegistry.getAllPrincipals();
 		System.out.println("------------");
@@ -150,13 +195,40 @@ public class UserController {
 
 		System.out.println("Total logged-in users: " + sessionRegistry.getAllPrincipals().size());
 		System.out.println("List of logged-in users: ");
+/*		for (Object principal: sessionRegistry.getAllPrincipals()) {
+		    if (principal instanceof User) {
+		    	System.out.println(" * " + ((User) principal).getUsername());
+		    }
+			//System.out.println(" * " + username);
+		}*/
+		
 		for (Object username: sessionRegistry.getAllPrincipals()) {
 			System.out.println(" * " + username);
+			System.out.println("    * Package = " + username.getClass().getPackage());
+			System.out.println("    * Class   = " + username.getClass().getName());
 		}
+
 		System.out.println("Total sessions including expired ones: " + sessionRegistry.getAllSessions(sessionRegistry.getAllPrincipals().get(0), true).size());
 		System.out.println("Total sessions: " + sessionRegistry.getAllSessions(sessionRegistry.getAllPrincipals().get(0), false).size());
 		System.out.println("------------");
 
 		return "";
+	}
+	
+	// Return a list of user names that have active sessions
+	public List<String> getActiveUsernames() {
+		List<String> activeUsernames = new ArrayList<String>();
+		sessionRegistry.getAllPrincipals();
+
+		for (Object principal: sessionRegistry.getAllPrincipals()) {
+		    if (principal instanceof org.springframework.security.core.userdetails.User) {
+		    	activeUsernames.add(
+		    			((org.springframework.security.core.userdetails.User) principal).getUsername()
+		    			);
+		    } else {
+		    	System.err.println ("Unexpected class type in UserController.getActiveUsernames()");
+		    }
+		}
+		return activeUsernames;
 	}
 }
