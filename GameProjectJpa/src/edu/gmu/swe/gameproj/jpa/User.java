@@ -19,6 +19,7 @@ public class User implements Serializable {
 	@Id
 	private int id;
 
+	@Lob
 	private String aboutme;
 
 	private String email;
@@ -42,7 +43,7 @@ public class User implements Serializable {
 	private String salutation;
 
 	//bi-directional many-to-one association to Player
-	@OneToMany(mappedBy="user")
+	@OneToMany(mappedBy="user", fetch=FetchType.EAGER)
 	private List<Player> players;
 
 	//bi-directional many-to-one association to UserRole

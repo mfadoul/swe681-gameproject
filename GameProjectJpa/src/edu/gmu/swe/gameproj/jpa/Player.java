@@ -26,8 +26,10 @@ public class Player implements Serializable {
 
 	private int treasure;
 
+	private int turn;
+
 	//bi-directional many-to-one association to Card
-	@OneToMany(mappedBy="player")
+	@OneToMany(mappedBy="player", fetch=FetchType.EAGER)
 	private List<Card> cards;
 
 	//bi-directional many-to-one association to GameState
@@ -81,6 +83,14 @@ public class Player implements Serializable {
 
 	public void setTreasure(int treasure) {
 		this.treasure = treasure;
+	}
+
+	public int getTurn() {
+		return this.turn;
+	}
+
+	public void setTurn(int turn) {
+		this.turn = turn;
 	}
 
 	public List<Card> getCards() {

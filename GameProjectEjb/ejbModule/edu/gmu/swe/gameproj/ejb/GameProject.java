@@ -1,5 +1,7 @@
 package edu.gmu.swe.gameproj.ejb;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,6 +12,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import edu.gmu.swe.gameproj.jpa.GameState;
+import edu.gmu.swe.gameproj.jpa.Player;
 import edu.gmu.swe.gameproj.jpa.User;
 import edu.gmu.swe.gameproj.jpa.UserRole;
 
@@ -115,4 +119,141 @@ public class GameProject implements GameProjectRemote {
 		return resultSet;
 	}
 
+	@Override
+	public GameState getActiveGameStateByUser(User user) {
+		Player player = this.getActivePlayerByUser(user);
+		if (player==null) {
+			return null;
+		}
+		return player.getGameState();
+	}
+
+	@Override
+	public Player getActivePlayerByUser(User user) {
+		if (user == null) {
+			return null;
+		}
+		
+		for (Player player: user.getPlayers()) {
+			// If 'completed' is zero, the game is active
+			if ((player.getGameState() != null) && (player.getGameState().getCompleted() == 0)) {
+				return player;
+			}
+		}
+
+		// If we are here, the game couldn't be found.
+		return null;		
+	}
+
+	// Return true if there was a game to forfeit.
+	// Return false if there was not a game to forfeit.
+	@Override
+	public boolean forfeitActiveGameByUser(User user) {
+		GameState gameState = this.getActiveGameStateByUser(user);
+		
+		if (gameState == null) {
+			return false;
+		}
+		
+		// Close out the game:
+		gameState.setCompleted((byte) 1);
+		gameState.setEndDate(new Date());
+		
+		// Preserve the rest of the game state.
+		return true;
+	}
+
+	@Override
+	public GameState createGameStateByUser(User user) {
+		GameState gameState = null;
+		if (user == null) {
+	 		return gameState;			
+		}
+		
+		gameState = this.getActiveGameStateByUser(user);
+		
+		// If an active gamestate already exists, don't create a new one!
+		if (gameState != null) {
+			return gameState;
+		}
+		
+		gameState = new GameState ();
+		entityManager.persist(gameState);
+		
+		return gameState;
+	}
+
+	@Override
+	public GameState getGameStateById(long gameStateId) {
+		try {
+			return entityManager.find(GameState.class, gameStateId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public Player joinGameState(long gameStateId, int userId) {
+		System.out.println("GameProject.joinGameState(" + gameStateId + ", " + userId + ")");
+		
+		GameState gameState = this.getGameStateById(gameStateId);
+		User user = this.getUserById(userId);
+
+		// 1. Failure to find GameState
+		if (gameState == null) {
+			System.out.println("Could not find GameStateId (" + gameStateId + ")");
+			return null;
+		}
+		
+		// 2. Failure to find User
+		if (user == null) {
+			System.out.println("Could not find UserId (" + userId + ")");
+			return null;
+		}
+		
+		// 3. Player already exists in the game
+		for (Player player: gameState.getPlayers()) {
+			if ((player.getUser()!=null) && (player.getUser().getId() == userId)) {
+				return player;
+			}
+		}
+		
+		if (gameState.getPlayers().size() >= 2) {
+			// Only allow two players.  Fail if there are more.
+			return null;
+		}
+		
+		// 5. Create a new Player
+		Player player = new Player();
+		user.addPlayer(player); // Create the connection on both sides.
+
+		// 5a.  Add the new player to the GameState.
+		gameState.addPlayer(player);
+		
+		// Persist the changes
+		entityManager.persist(player);
+		
+		return player;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<GameState> getOpenGames() {
+		List<GameState> gameStateList = null;
+		
+		// Games that are not completed and have one player waiting to play.
+		final String jpaQlQuery = " from GameState gs where gs.completed=0 and gs.players.size=1 ";
+		Query query = entityManager.createQuery(jpaQlQuery);
+
+		try {
+			gameStateList = (List<GameState>) query.getResultList();
+			if (gameStateList != null) {
+				System.out.println("GameProject.getOpenGames(): Found " + gameStateList.size() + " open games.");
+			} 
+		} catch (Exception e) {
+				System.err.println("Exception: " + e);
+		}
+		return gameStateList;
+	}
 }

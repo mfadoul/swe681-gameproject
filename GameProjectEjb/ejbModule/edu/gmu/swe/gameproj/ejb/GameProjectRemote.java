@@ -1,9 +1,12 @@
 package edu.gmu.swe.gameproj.ejb;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.ejb.Remote;
 
+import edu.gmu.swe.gameproj.jpa.GameState;
+import edu.gmu.swe.gameproj.jpa.Player;
 import edu.gmu.swe.gameproj.jpa.User;
 import edu.gmu.swe.gameproj.jpa.UserRole;
 
@@ -19,5 +22,15 @@ public interface GameProjectRemote {
 	// User Role
 	public abstract UserRole getUserRoleById (String userRoleId);
 	public abstract Set<UserRole> getAllUserRoles();  // For debug...
+	
+	// Games
+	public abstract GameState createGameStateByUser (User user);
+	public abstract GameState getActiveGameStateByUser(User user);
+	public abstract GameState getGameStateById(long gameStateId);
+	public abstract Player getActivePlayerByUser(User user);
+	public abstract boolean forfeitActiveGameByUser (User user);
 
+	public abstract List<GameState> getOpenGames();
+	
+	public abstract Player joinGameState(long gameStateId, int userId);
 }

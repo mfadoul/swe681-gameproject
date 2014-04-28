@@ -16,6 +16,10 @@
 		<intercept-url pattern="/GameProject/user/**"
 			access="permitAll" />
 
+		<!-- games -->
+		<intercept-url pattern="/GameProject/game/**"
+			access="hasRole('player')" />
+
 		<intercept-url pattern="/GameProject/**" access="permitAll" />
 		<intercept-url pattern="/**" access="permitAll" />
 		<form-login login-page="/login.jsp"/>

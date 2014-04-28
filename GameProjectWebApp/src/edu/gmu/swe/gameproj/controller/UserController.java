@@ -154,7 +154,7 @@ public class UserController {
 		User user = SessionBeanHelper.getLoggedInUser();
 		if (user != null) {
 			mav.addObject("user", user);
-			mav.addObject("infoMessage", "This is your personal profile.");
+			mav.addObject("infoMessage", "This is the list of active users.");
 		} else {
 			mav.addObject("user", null);
 			mav.addObject("errorMessage", "Your profile could not be found in our database.");			

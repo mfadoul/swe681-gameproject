@@ -27,12 +27,14 @@ public class GameState implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date endDate;
 
+	private int turn;
+
 	//bi-directional many-to-one association to Card
-	@OneToMany(mappedBy="gameState")
+	@OneToMany(mappedBy="gameState", fetch=FetchType.EAGER)
 	private List<Card> cards;
 
 	//bi-directional many-to-one association to Player
-	@OneToMany(mappedBy="gameState")
+	@OneToMany(mappedBy="gameState", fetch=FetchType.EAGER)
 	private List<Player> players;
 
 	public GameState() {
@@ -68,6 +70,14 @@ public class GameState implements Serializable {
 
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+	}
+
+	public int getTurn() {
+		return this.turn;
+	}
+
+	public void setTurn(int turn) {
+		this.turn = turn;
 	}
 
 	public List<Card> getCards() {

@@ -5,10 +5,10 @@ CREATE DATABASE IF NOT EXISTS `gamewebsite` /*!40100 DEFAULT CHARACTER SET utf8 
 use `gamewebsite`$$
 
 CREATE TABLE IF NOT EXISTS `SEQUENCE_TABLE` (
-  `SEQ_NAME` varchar(20) NOT NULL DEFAULT '',
+  `SEQ_NAME` varchar(20) NOT NULL DEFAULT '' COMMENT 'For Table ID Generation',
   `SEQ_COUNT` int(11) NOT NULL,
   PRIMARY KEY (`SEQ_NAME`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='For Table ID Generation';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
 
 CREATE TABLE IF NOT EXISTS `UserRoles` (
   `id` varchar(10) NOT NULL,
@@ -44,6 +44,7 @@ CREATE TABLE IF NOT EXISTS `GameStates` (
   `id` BIGINT(20) unsigned NOT NULL,
   `beginDate` DATETIME NULL COMMENT 'When the game started',
   `endDate` DATETIME NULL COMMENT 'When game finished',
+  `turn` INT(10) unsigned NOT NULL COMMENT 'The game turn.  Advance so that players can act.  Initialize to zero, meaning the game has not started.',
   `completed` TINYINT(1) NULL COMMENT 'Whether the game completed normally (1=True, 0=False)',
   PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8$$
@@ -52,6 +53,7 @@ CREATE TABLE IF NOT EXISTS `Players` (
   `id` BIGINT(20) unsigned NOT NULL COMMENT 'Player id is unique for each game',
   `gameStateId` BIGINT(20) unsigned NOT NULL COMMENT 'GameState id is unique for each game',
   `userId` INT(10) unsigned NOT NULL COMMENT 'User id is unique for each game',
+  `turn` INT(10) unsigned NOT NULL COMMENT 'The player turn.  Player can only act when the game turn is equal to the player turn.  Initialize to 1.',
   `actionCount` INT(10) unsigned NOT NULL COMMENT 'Action count',
   `buyCount` INT(10) unsigned NOT NULL COMMENT 'Buy count',
   `coinCount` INT(10) unsigned NOT NULL COMMENT 'Coin count',
