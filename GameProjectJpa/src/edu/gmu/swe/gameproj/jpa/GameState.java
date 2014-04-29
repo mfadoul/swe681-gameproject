@@ -1,7 +1,9 @@
 package edu.gmu.swe.gameproj.jpa;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +19,9 @@ public class GameState implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+    @TableGenerator(name="TABLE_GEN_GAMESTATE", table="SEQUENCE_TABLE", pkColumnName="SEQ_NAME",
+    valueColumnName="SEQ_COUNT", pkColumnValue="GAMESTATE_SEQ")
+	@GeneratedValue(strategy=GenerationType.TABLE, generator="TABLE_GEN_GAMESTATE")
 	private long id;
 
 	@Temporal(TemporalType.TIMESTAMP)

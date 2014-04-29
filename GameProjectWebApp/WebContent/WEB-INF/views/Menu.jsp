@@ -9,10 +9,19 @@
   
   <sec:authorize access="isAuthenticated()">
       <li><a href="/GameProjectWebApp/GameProject/user/myProfile" title="My personal profile"><span class="ui-icon ui-icon-info"></span>My Profile</a></li>
-      <li><a href="/GameProjectWebApp/GameProject/game/play" title="Open a new table and wait for another player"><span class="ui-icon ui-icon-play"></span>New Game</a></li>
+      <c:if test="${player eq null}">
+            <li><a href="/GameProjectWebApp/GameProject/game/play" title="Open a new table and wait for another player"><span class="ui-icon ui-icon-play"></span>New Game</a></li>
+      </c:if>
+      
+      <c:if test="${player ne null}">
+          <li><a href="/GameProjectWebApp/GameProject/game/play" title="Go to current game"><span class="ui-icon ui-icon-play"></span>Current Game</a></li>
+          <li><a href="/GameProjectWebApp/GameProject/game/quit" title="Quit current game"><span class="ui-icon ui-icon-quit"></span>Quit Game</a></li>      
+      </c:if>
+      <li></li>
+      
       <li><a href="/GameProjectWebApp/GameProject/game/openGames" title="A list of the players waiting to play"><span class="ui-icon ui-icon-link"></span>Open Games</a></li>
-      <li><a href="/GameProjectWebApp/GameProject/game/gamesInProgress" title="A list of the games in progress"><span class="ui-icon ui-icon-note"></span>Games in Progress</a></li>
       <li><a href="/GameProjectWebApp/GameProject/user/activeUsers" title="A list of users who are online"><span class="ui-icon ui-icon-note"></span>Players Online</a></li>
+
    </sec:authorize>
    <sec:authorize access="!isAuthenticated()">
       <li><a href="<c:url value="/login.jsp" />" title="Sign in to my existing account"><span class="ui-icon ui-icon-key"></span>Sign in</a></li>

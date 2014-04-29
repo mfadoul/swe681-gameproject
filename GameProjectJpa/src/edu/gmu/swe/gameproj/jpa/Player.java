@@ -1,7 +1,9 @@
 package edu.gmu.swe.gameproj.jpa;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.util.List;
 
 
@@ -16,6 +18,9 @@ public class Player implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+    @TableGenerator(name="TABLE_GEN_PLAYER", table="SEQUENCE_TABLE", pkColumnName="SEQ_NAME",
+    valueColumnName="SEQ_COUNT", pkColumnValue="PLAYER_SEQ")
+	@GeneratedValue(strategy=GenerationType.TABLE, generator="TABLE_GEN_PLAYER")
 	private long id;
 
 	private int actionCount;

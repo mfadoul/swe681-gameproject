@@ -71,7 +71,7 @@ public class GameController {
 				// Nothing to do...
 				mav.addObject("infoMessage", "Existing game.");
 			}
-			mav.addObject(player);
+			mav.addObject("player", player);
 		} else {
 			mav.addObject("errorMessage", "Your account could not be found in our database.");
 			mav.addObject("player", null);
@@ -138,4 +138,42 @@ public class GameController {
 		mav.setViewName("Game_Play");
 		return mav;
 	}
+	
+	// This allows a user to quit their current game
+	@RequestMapping(value="quit", method=RequestMethod.GET)
+	public ModelAndView quit() {
+		ModelAndView mav = new ModelAndView();
+		
+		Player player = null;
+		
+		// See if the user exists
+		User user = SessionBeanHelper.getLoggedInUser();
+		mav.addObject("user", user);
+		mav.addObject("loggedInUser", SessionBeanHelper.getLoggedInUser());  // Yep, it's the same as user...
+		
+		// 1. If the user is not found, provide a message that it failed
+		// 2. If the user isn't in a game, inform them that they are not currently playing.
+		// 3. If the user is already in a game, quit the game
+		
+		if (user != null) {
+			GameProjectRemote gameProject = 
+					SessionBeanHelper.getGameProjectSessionBean();
+
+			player = gameProject.getActivePlayerByUser(user);
+			
+			if (player != null) {
+				mav.addObject("infoMessage", "You forfeited the game.");
+				gameProject.forfeitActiveGameByUser(user);
+			} else {
+				mav.addObject("errorMessage", "You aren't playing a game!");
+			} 
+		} else {
+			mav.addObject("errorMessage", "Your account could not be found in our database.");
+			mav.addObject("player", null);
+		}
+		
+		mav.setViewName("UserInfo");
+		return mav;
+	}
+
 }

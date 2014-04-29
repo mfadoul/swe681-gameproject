@@ -1,6 +1,7 @@
 package edu.gmu.swe.gameproj.jpa;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
 
 
@@ -15,6 +16,9 @@ public class Card implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+    @TableGenerator(name="TABLE_GEN_XXXX", table="SEQUENCE_TABLE", pkColumnName="SEQ_NAME",
+    valueColumnName="SEQ_COUNT", pkColumnValue="XXXXX_SEQ")
+	@GeneratedValue(strategy=GenerationType.TABLE, generator="TABLE_GEN_XXXX")
 	private long id;
 
 	private int cardType;

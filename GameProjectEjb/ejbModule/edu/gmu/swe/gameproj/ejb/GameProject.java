@@ -152,6 +152,7 @@ public class GameProject implements GameProjectRemote {
 		GameState gameState = this.getActiveGameStateByUser(user);
 		
 		if (gameState == null) {
+			System.err.println("forfeitActiveGameByUser: Failed to find GameState.");
 			return false;
 		}
 		
@@ -159,7 +160,10 @@ public class GameProject implements GameProjectRemote {
 		gameState.setCompleted((byte) 1);
 		gameState.setEndDate(new Date());
 		
+		System.out.println("User " + user.getId() + "(" + user.getEmail() + ") is forfeiting game " + gameState.getId() + ".");
+		
 		// Preserve the rest of the game state.
+		entityManager.merge(gameState);
 		return true;
 	}
 
@@ -178,8 +182,10 @@ public class GameProject implements GameProjectRemote {
 		}
 		
 		gameState = new GameState ();
+		gameState.setBeginDate(new Date());
 		entityManager.persist(gameState);
 		
+		System.out.println ("Created game ID " + gameState.getId());
 		return gameState;
 	}
 
@@ -215,12 +221,14 @@ public class GameProject implements GameProjectRemote {
 		// 3. Player already exists in the game
 		for (Player player: gameState.getPlayers()) {
 			if ((player.getUser()!=null) && (player.getUser().getId() == userId)) {
+				System.out.println ("Player " + player.getId() + " is already in game " + gameState.getId());
 				return player;
 			}
 		}
 		
 		if (gameState.getPlayers().size() >= 2) {
 			// Only allow two players.  Fail if there are more.
+			System.out.println ("Two players are already in game " + gameState.getId());
 			return null;
 		}
 		
@@ -233,6 +241,8 @@ public class GameProject implements GameProjectRemote {
 		
 		// Persist the changes
 		entityManager.persist(player);
+		entityManager.merge(gameState); // Is this required?
+		System.out.println("Game " + gameState.getId() + ": player " + player.getId() + " is joining.");
 		
 		return player;
 	}
