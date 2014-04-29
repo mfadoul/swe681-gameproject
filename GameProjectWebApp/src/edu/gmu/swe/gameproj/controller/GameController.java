@@ -3,11 +3,13 @@ package edu.gmu.swe.gameproj.controller;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -79,6 +81,7 @@ public class GameController {
 		return mav;
 	}
 	
+	
 	// This allows a user to play a game
 	@RequestMapping(value="openGames", method=RequestMethod.GET)
 	public ModelAndView openGames() {
@@ -104,6 +107,35 @@ public class GameController {
 			mav.addObject("errorMessage", "Your account could not be found in our database.");
 		}
 		mav.setViewName("Game_OpenGames");
+		return mav;
+	}
+	
+	// Attempt to join a game.
+	@RequestMapping(value = "play/{gameStateId}", method = RequestMethod.GET)
+	public ModelAndView info (@PathVariable("gameStateId") int gameStateId,
+			HttpSession httpSession) {
+		ModelAndView mav = new ModelAndView();
+		
+		User user = SessionBeanHelper.getLoggedInUser();
+		mav.addObject("user", user);
+		mav.addObject("loggedInUser", SessionBeanHelper.getLoggedInUser());  // Yep, it's the same as user...
+
+		if (user != null) {
+			GameProjectRemote gameProject = 
+					SessionBeanHelper.getGameProjectSessionBean();
+			
+			Player player = gameProject.joinGameState(gameStateId, user.getId());
+			mav.addObject("player", player);
+
+			if (player == null) {
+				mav.addObject("errorMessage", "Failed to join game.");
+			} else {
+				mav.addObject("infoMessage", "Joined game # " + player.getGameState().getId() + ".");
+			}
+		} else {
+			mav.addObject("errorMessage", "Your account could not be found in our database.");
+		}
+		mav.setViewName("Game_Play");
 		return mav;
 	}
 }

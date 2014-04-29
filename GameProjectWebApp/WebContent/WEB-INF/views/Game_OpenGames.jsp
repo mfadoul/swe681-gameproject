@@ -40,9 +40,11 @@
 					<h3>(Found <c:out value="${fn:length(gameStates)}" /> open games)</h3>
 					<div id="accordion">
 						<c:forEach items="${gameStates}" var="gameState">
+						<c:url value="/GameProject/game/play/${gameState.id}" var="gamePlayLink" />
 				        <h3><c:out value="${gameState.id}" /></h3>
 						<div>
-							<p>TODO: Link to play with this player</p>
+							<p>TODO: Play a game with a waiting player!</p>
+							<p><a href="<c:out value="${gamePlayLink}" />">Joint game #<c:out value="${gameState.id}" /></a></p>
 						</div>
 						</c:forEach>
 					</div>
