@@ -38,19 +38,35 @@
 					<p>
 						<c:out value="${user.aboutme}" />
 					</p>
-		        	<p> 
-		        		<c:if test="${user.id ne loggedInUser.id}">
-			        	    <a type=detailed_info_link href="/GameProjectWebApp/GameProject/review/list/${user.id}">
-			        	        <c:out value="${user.salutation}" /> <c:out value="${user.lastname}" />'s Reviews</a>
+						<h3> Statistics</h3>
+						<h4>Wins: <c:out value="${gamesWonCount}" /></h4>
+		        		<c:if test="${gamesWonList ne null}">
+			        		<c:forEach items="${gamesWonList}" var="gameStateWon">
+								<c:url value="/GameProject/game/info/${gameStateLost.id}" var="gameWonInfoLink" />
+						        <h5><c:out value="${gameStateWon.id}" /></h5>
+								<div>
+									<p>TODO: Display the results of a game.</p>
+									<p><a href="<c:out value="${gameWonInfoLink}" />">Results for Game #<c:out value="${gameStateWon.id}" />
+									</a></p>
+								</div>
+							</c:forEach>
 		        	    </c:if>
-		        		<c:if test="${user.id eq loggedInUser.id}">
-			        	    <a type=detailed_info_link href="/GameProjectWebApp/GameProject/review/list/${user.id}">
-			        	        My Reviews</a>
+						<h4>Losses: <c:out value="${gamesLostCount}" /></h4>
+		        		<c:if test="${gamesLostList ne null}">
+			        		<c:forEach items="${gamesLostList}" var="gameStateLost">
+								<c:url value="/GameProject/game/info/${gameStateLost.id}" var="gameLostInfoLink" />
+						        <h5><c:out value="${gameStateLost.id}" /></h5>
+								<div>
+									<p>TODO: Display the results of a game.</p>
+									<p>
+										<a href="<c:out value="${gameLostInfoLink}" />">Results for Game #<c:out value="${gameStateLost.id}" />
+										</a>
+									</p>
+								</div>
+							</c:forEach>
 		        	    </c:if>
-		        	</p>
-					
-					</c:if>				
-					<c:if test="${user eq null}">
+					</c:if>
+    				<c:if test="${user eq null}">
 					<h1>Unfortunately, I could not find that user.</h1>
 					</c:if>				
 				</td>

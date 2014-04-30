@@ -32,5 +32,8 @@ public interface GameProjectRemote {
 
 	public abstract List<GameState> getOpenGames();
 	
+	public abstract List<GameState> getGamesWonByUser(User user);
+	public abstract List<GameState> getGamesLostByUser(User user);
+	
 	public abstract Player joinGameState(long gameStateId, int userId);
 }

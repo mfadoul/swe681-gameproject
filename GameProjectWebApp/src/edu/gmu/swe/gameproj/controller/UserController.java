@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.gmu.swe.gameproj.ejb.GameProjectRemote;
+import edu.gmu.swe.gameproj.jpa.GameState;
 import edu.gmu.swe.gameproj.jpa.User;
 import edu.gmu.swe.gameproj.jpa.UserRole;
 import edu.gmu.swe.gameproj.util.PasswordHelper;
@@ -107,16 +108,34 @@ public class UserController {
 				SessionBeanHelper.getGameProjectSessionBean();
 
 		User user = gameProject.getUserById(userId);
+		
+		User loggedInUser = SessionBeanHelper.getLoggedInUser();
+		mav.addObject("loggedInUser", loggedInUser);
+
 		if (user != null) {
+			if ((loggedInUser != null) && (loggedInUser.getId()==user.getId())){
+				mav.addObject("infoMessage", "This is your personal profile");
+			} else {
+				mav.addObject("infoMessage", "Queried info for user " + userId);
+			}
+			
 			mav.addObject("user", user);
-			mav.addObject("infoMessage", "Queried info for user " + userId);
+			
+			List<GameState> gamesWonList = gameProject.getGamesWonByUser(user);
+			List<GameState> gamesLostList = gameProject.getGamesLostByUser(user);
+			
+			// Special info for the profile.
+			mav.addObject("gamesWonCount", gamesWonList.size());
+			mav.addObject("gamesLostCount", gamesLostList.size());
+
+			mav.addObject("gamesWonList", gamesWonList);
+			mav.addObject("gamesLostList", gamesLostList);
+
 		} else {
 			mav.addObject("user", null);
 			mav.addObject("errorMessage", "User " + userId + " does not exist.");			
 		}
 
-		mav.addObject("loggedInUser", SessionBeanHelper.getLoggedInUser());
-		
 		mav.setViewName("UserInfo");
 		
 		return mav;
@@ -126,8 +145,14 @@ public class UserController {
 	@RequestMapping(value="myProfile", method=RequestMethod.GET)
 	public ModelAndView myProfile (HttpSession httpSession) {
 		ModelAndView mav = new ModelAndView();
+		GameProjectRemote gameProject = 
+				SessionBeanHelper.getGameProjectSessionBean();
 
 		User user = SessionBeanHelper.getLoggedInUser();
+		
+		User loggedInUser = SessionBeanHelper.getLoggedInUser();
+		mav.addObject("loggedInUser", loggedInUser);
+
 		if (user != null) {
 			mav.addObject("user", user);
 			mav.addObject("infoMessage", "This is your personal profile.");
@@ -136,10 +161,19 @@ public class UserController {
 			mav.addObject("errorMessage", "Your profile could not be found in our database.");			
 		}
 
-		mav.addObject("loggedInUser", SessionBeanHelper.getLoggedInUser());
+		List<GameState> gamesWonList = gameProject.getGamesWonByUser(user);
+		List<GameState> gamesLostList = gameProject.getGamesLostByUser(user);
+		
+		// Special info for the profile.
+		mav.addObject("gamesWonCount", gamesWonList.size());
+		mav.addObject("gamesLostCount", gamesLostList.size());
+
+		mav.addObject("gamesWonList", gamesWonList);
+		mav.addObject("gamesLostList", gamesLostList);
 		
 		mav.setViewName("UserInfo");
 		
+		// Just for debug in the log.
 		this.printUsersLoggedIn();
 		
 		return mav;

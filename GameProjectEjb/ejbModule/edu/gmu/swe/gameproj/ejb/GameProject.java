@@ -162,6 +162,13 @@ public class GameProject implements GameProjectRemote {
 		
 		System.out.println("User " + user.getId() + "(" + user.getEmail() + ") is forfeiting game " + gameState.getId() + ".");
 		
+		// Find the winner
+		for (Player player: gameState.getPlayers()) {
+			if (player.getUser().getId() != user.getId()) {
+				gameState.setWinnerId(player.getId()); // The winner is the person who did not forfeit
+			}
+		}
+		
 		// Preserve the rest of the game state.
 		entityManager.merge(gameState);
 		return true;
@@ -264,6 +271,44 @@ public class GameProject implements GameProjectRemote {
 		} catch (Exception e) {
 				System.err.println("Exception: " + e);
 		}
+		return gameStateList;
+	}
+
+	@Override
+	public List<GameState> getGamesWonByUser(User user) {
+		List<GameState> gameStateList = new ArrayList<GameState>();
+		for (Player player: user.getPlayers()) {
+			// Avoid null pointer
+			if (player.getGameState() != null) {
+				// Make sure that the game is complete
+				if (player.getGameState().getCompleted()==1) {
+					// If the player won, add it to the list
+					if (player.getGameState().getWinnerId()==player.getId()) {
+						gameStateList.add(player.getGameState());
+					}	
+				}
+			}
+		}
+		System.out.println("Found " + gameStateList.size() + " games won by " + user.getEmail() + ".");
+		return gameStateList;
+	}
+
+	@Override
+	public List<GameState> getGamesLostByUser(User user) {
+		List<GameState> gameStateList = new ArrayList<GameState>();
+		for (Player player: user.getPlayers()) {
+			// Avoid null pointer
+			if (player.getGameState() != null) {
+				// Make sure that the game is complete
+				if (player.getGameState().getCompleted()==1) {
+					// If the player lost, add it to the list
+					if (player.getGameState().getWinnerId()!=player.getId()) {
+						gameStateList.add(player.getGameState());
+					}	
+				}
+			}
+		}
+		System.out.println("Found " + gameStateList.size() + " games lost by " + user.getEmail() + "."); 
 		return gameStateList;
 	}
 }

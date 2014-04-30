@@ -33,6 +33,8 @@ public class GameState implements Serializable {
 	private Date endDate;
 
 	private int turn;
+	
+	private long winnerId;
 
 	//bi-directional many-to-one association to Card
 	@OneToMany(mappedBy="gameState", fetch=FetchType.EAGER)
@@ -127,6 +129,14 @@ public class GameState implements Serializable {
 		player.setGameState(null);
 
 		return player;
+	}
+
+	public long getWinnerId() {
+		return winnerId;
+	}
+
+	public void setWinnerId(long winnerId) {
+		this.winnerId = winnerId;
 	}
 
 }
