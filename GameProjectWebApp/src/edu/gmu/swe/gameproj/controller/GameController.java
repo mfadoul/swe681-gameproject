@@ -176,4 +176,37 @@ public class GameController {
 		return mav;
 	}
 
+//    @RequestMapping(value="action", method= RequestMethod.POST)
+//    public ModelAndView action(@Valid ActionVm vm, BindingResult result, Model model) {
+//        ModelAndView mav = new ModelAndView();
+//        if(!result.hasErrors()){
+//            //TODO Other validations, like does player have the card
+//
+//            Action playedCard = (Action)CardFactory.buildCard(vm.playedCardName);
+//            ActionDto dto = new ActionDto();
+//            dto.player = new Player();//TODO Replace with session player
+//            dto.oldCardName = vm.oldCardName;
+//            dto.newCardName = vm.newCardName;
+//            dto.discardCardNames = (ArrayList<String>)Arrays.asList(vm.discardCardNames);
+//
+//            try {
+//                playedCard.Act(dto);
+//            }
+//            catch(InvalidParameterException ex){
+//                //TODO
+//            }
+//            catch(NullPointerException ex){
+//                //TODO
+//            }
+//
+//
+//        }
+//        else{
+//            //TODO Add errors
+//        }
+//        //TODO set mav values
+//
+//        return mav;
+//    }
+
 }

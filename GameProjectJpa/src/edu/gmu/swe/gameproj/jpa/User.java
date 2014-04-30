@@ -1,9 +1,7 @@
 package edu.gmu.swe.gameproj.jpa;
 
 import java.io.Serializable;
-
 import javax.persistence.*;
-
 import java.util.Date;
 import java.util.List;
 

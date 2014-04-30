@@ -1,9 +1,7 @@
 package edu.gmu.swe.gameproj.jpa;
 
 import java.io.Serializable;
-
 import javax.persistence.*;
-
 import java.util.List;
 
 
@@ -28,8 +26,6 @@ public class Player implements Serializable {
 	private int buyCount;
 
 	private int coinCount;
-
-	private int treasure;
 
 	private int turn;
 
@@ -80,14 +76,6 @@ public class Player implements Serializable {
 
 	public void setCoinCount(int coinCount) {
 		this.coinCount = coinCount;
-	}
-
-	public int getTreasure() {
-		return this.treasure;
-	}
-
-	public void setTreasure(int treasure) {
-		this.treasure = treasure;
 	}
 
 	public int getTurn() {

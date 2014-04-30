@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `Users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
 
 CREATE TABLE IF NOT EXISTS `GameStates` (
-  `id` BIGINT(20) unsigned NOT NULL,
+  `id` BIGINT(20) unsigned NOT NULL AUTO_INCREMENT,
   `beginDate` DATETIME NULL COMMENT 'When the game started',
   `endDate` DATETIME NULL COMMENT 'When game finished',
   `turn` INT(10) unsigned NOT NULL COMMENT 'The game turn.  Advance so that players can act.  Initialize to zero, meaning the game has not started.',
@@ -51,14 +51,13 @@ CREATE TABLE IF NOT EXISTS `GameStates` (
 )ENGINE=InnoDB DEFAULT CHARSET=utf8$$
 
 CREATE TABLE IF NOT EXISTS `Players` (
-  `id` BIGINT(20) unsigned NOT NULL COMMENT 'Player id is unique for each game',
+  `id` BIGINT(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Player id is unique for each game',
   `gameStateId` BIGINT(20) unsigned NOT NULL COMMENT 'GameState id is unique for each game',
   `userId` INT(10) unsigned NOT NULL COMMENT 'User id is unique for each game',
-  `turn` INT(10) unsigned NOT NULL COMMENT 'The player turn.  Player can only act when the game turn is equal to the player turn.  Initialize to 1.',
+  `turn` INT(10) unsigned NOT NULL COMMENT 'The player turn order (1=first, 2= second).',
   `actionCount` INT(10) unsigned NOT NULL COMMENT 'Action count',
   `buyCount` INT(10) unsigned NOT NULL COMMENT 'Buy count',
-  `coinCount` INT(10) unsigned NOT NULL COMMENT 'Coin count',
-  `treasure` INT(10) unsigned NOT NULL COMMENT 'Treasure',
+  `coinCount` INT(10) unsigned NOT NULL COMMENT 'Coin count, including coins in hand + bonus coins - coins spent',
   PRIMARY KEY (`id`),
   key `gameState_idx` (`gameStateId`),
   key `user_idx` (`userId`),
@@ -67,10 +66,10 @@ CREATE TABLE IF NOT EXISTS `Players` (
 )ENGINE=InnoDB DEFAULT CHARSET=utf8$$
 
 CREATE TABLE IF NOT EXISTS `Cards` (
-  `id` BIGINT(20) unsigned NOT NULL COMMENT 'Card id is unique for each game',
+  `id` BIGINT(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Card id is unique for each game',
   `gameStateId` BIGINT(20) unsigned NOT NULL COMMENT 'GameState id is unique for each game',
   `playerId` BIGINT(20) unsigned NULL COMMENT 'Player id is unique for each game (Set to NULL for an unassigned card)',
-  `location` INT(10) unsigned NOT NULL COMMENT 'Location (e.g. discard, in hand, deck.)',
+  `location` INT(10) unsigned NOT NULL COMMENT 'Location (e.g. deck=1, in hand=2, discard=3)',
   `cardType` INT(10) unsigned NOT NULL COMMENT 'Type of card (e.g. mine, gold, etc)',
   PRIMARY KEY (`id`),
   key `gameState_idx` (`gameStateId`),

@@ -1,7 +1,6 @@
 package edu.gmu.swe.gameproj.jpa;
 
 import java.io.Serializable;
-
 import javax.persistence.*;
 
 

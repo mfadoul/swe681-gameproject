@@ -311,4 +311,5 @@ public class GameProject implements GameProjectRemote {
 		System.out.println("Found " + gameStateList.size() + " games lost by " + user.getEmail() + "."); 
 		return gameStateList;
 	}
+
 }

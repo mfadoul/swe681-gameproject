@@ -1,9 +1,7 @@
 package edu.gmu.swe.gameproj.jpa;
 
 import java.io.Serializable;
-
 import javax.persistence.*;
-
 import java.util.Date;
 import java.util.List;
 
@@ -33,7 +31,7 @@ public class GameState implements Serializable {
 	private Date endDate;
 
 	private int turn;
-	
+
 	private long winnerId;
 
 	//bi-directional many-to-one association to Card
@@ -87,6 +85,14 @@ public class GameState implements Serializable {
 		this.turn = turn;
 	}
 
+	public long getWinnerId() {
+		return this.winnerId;
+	}
+
+	public void setWinnerId(long winnerId) {
+		this.winnerId = winnerId;
+	}
+
 	public List<Card> getCards() {
 		return this.cards;
 	}
@@ -129,14 +135,6 @@ public class GameState implements Serializable {
 		player.setGameState(null);
 
 		return player;
-	}
-
-	public long getWinnerId() {
-		return winnerId;
-	}
-
-	public void setWinnerId(long winnerId) {
-		this.winnerId = winnerId;
 	}
 
 }
