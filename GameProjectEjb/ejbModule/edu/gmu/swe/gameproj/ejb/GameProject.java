@@ -277,15 +277,17 @@ public class GameProject implements GameProjectRemote {
 	@Override
 	public List<GameState> getGamesWonByUser(User user) {
 		List<GameState> gameStateList = new ArrayList<GameState>();
-		for (Player player: user.getPlayers()) {
-			// Avoid null pointer
-			if (player.getGameState() != null) {
-				// Make sure that the game is complete
-				if (player.getGameState().getCompleted()==1) {
-					// If the player won, add it to the list
-					if (player.getGameState().getWinnerId()==player.getId()) {
-						gameStateList.add(player.getGameState());
-					}	
+		if (user != null) {
+			for (Player player: user.getPlayers()) {
+				// Avoid null pointer
+				if (player.getGameState() != null) {
+					// Make sure that the game is complete
+					if (player.getGameState().getCompleted()==1) {
+						// If the player won, add it to the list
+						if (player.getGameState().getWinnerId()==player.getId()) {
+							gameStateList.add(player.getGameState());
+						}	
+					}
 				}
 			}
 		}
@@ -296,15 +298,17 @@ public class GameProject implements GameProjectRemote {
 	@Override
 	public List<GameState> getGamesLostByUser(User user) {
 		List<GameState> gameStateList = new ArrayList<GameState>();
-		for (Player player: user.getPlayers()) {
-			// Avoid null pointer
-			if (player.getGameState() != null) {
-				// Make sure that the game is complete
-				if (player.getGameState().getCompleted()==1) {
-					// If the player lost, add it to the list
-					if (player.getGameState().getWinnerId()!=player.getId()) {
-						gameStateList.add(player.getGameState());
-					}	
+		if (user != null) {
+			for (Player player: user.getPlayers()) {
+				// Avoid null pointer
+				if (player.getGameState() != null) {
+					// Make sure that the game is complete
+					if (player.getGameState().getCompleted()==1) {
+						// If the player lost, add it to the list
+						if (player.getGameState().getWinnerId()!=player.getId()) {
+							gameStateList.add(player.getGameState());
+						}	
+					}
 				}
 			}
 		}

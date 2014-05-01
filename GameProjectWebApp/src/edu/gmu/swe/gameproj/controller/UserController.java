@@ -156,25 +156,25 @@ public class UserController {
 		if (user != null) {
 			mav.addObject("user", user);
 			mav.addObject("infoMessage", "This is your personal profile.");
+			
+			List<GameState> gamesWonList = gameProject.getGamesWonByUser(user);
+			List<GameState> gamesLostList = gameProject.getGamesLostByUser(user);
+			
+			// Special info for the profile.
+			mav.addObject("gamesWonCount", gamesWonList.size());
+			mav.addObject("gamesLostCount", gamesLostList.size());
+
+			mav.addObject("gamesWonList", gamesWonList);
+			mav.addObject("gamesLostList", gamesLostList);
 		} else {
 			mav.addObject("user", null);
 			mav.addObject("errorMessage", "Your profile could not be found in our database.");			
 		}
-
-		List<GameState> gamesWonList = gameProject.getGamesWonByUser(user);
-		List<GameState> gamesLostList = gameProject.getGamesLostByUser(user);
-		
-		// Special info for the profile.
-		mav.addObject("gamesWonCount", gamesWonList.size());
-		mav.addObject("gamesLostCount", gamesLostList.size());
-
-		mav.addObject("gamesWonList", gamesWonList);
-		mav.addObject("gamesLostList", gamesLostList);
 		
 		mav.setViewName("UserInfo");
 		
 		// Just for debug in the log.
-		this.printUsersLoggedIn();
+		//this.printUsersLoggedIn();
 		
 		return mav;
 	}
@@ -183,7 +183,7 @@ public class UserController {
 	@RequestMapping(value="activeUsers", method=RequestMethod.GET)
 	public ModelAndView activeUsers (HttpSession httpSession) {
 		ModelAndView mav = new ModelAndView();
-		printUsersLoggedIn();
+		//printUsersLoggedIn();
 
 		User user = SessionBeanHelper.getLoggedInUser();
 		if (user != null) {
@@ -213,7 +213,7 @@ public class UserController {
 		
 		mav.setViewName("ActiveUsers");
 		
-		this.printUsersLoggedIn();
+		//this.printUsersLoggedIn();
 		
 		return mav;
 	}
@@ -221,7 +221,7 @@ public class UserController {
 	// This is an example of accessing session information from Spring.
 	// We'll be using something like this to figure out what other players
 	// are online.
-	//@SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private String printUsersLoggedIn () {
 		sessionRegistry.getAllPrincipals();
 		System.out.println("------------");
