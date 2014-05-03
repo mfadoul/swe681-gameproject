@@ -37,7 +37,7 @@
 								<td align="left"><form:password path="password" size="20" maxlength="32" title="This will help protect your account"/> <form:errors path="password" /></td>	
 							</tr>
 							<tr>
-								<td align="right"><form:label for="salutation" path="salutation" cssErrorClass="error">Saluation :</form:label></td>
+								<td align="right"><form:label for="salutation" path="salutation" cssErrorClass="error">Salutation :</form:label></td>
 								<td align="left"><form:input path="salutation" size="5" maxlength="5" title="Examples: Mr., Miss, Mrs., Dr." /> <form:errors path="salutation" /></td>	
 							</tr>
 							<tr>

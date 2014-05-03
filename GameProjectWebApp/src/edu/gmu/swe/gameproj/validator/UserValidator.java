@@ -31,6 +31,7 @@ public class UserValidator implements Validator {
 				} else {
 					if (!ExtraStringUtils.isValidEmail(user.getEmail())) {
 						errors.rejectValue("email", "notvalidemail", "The e-mail does not appear to be valid.");
+						System.err.println("Regex rejected the email field contents.");
 					} else {
 						if (user.getEmail().length() > 128) {
 							errors.rejectValue("email", "stringtoolong", "The e-mail is too long.");							
@@ -45,6 +46,11 @@ public class UserValidator implements Validator {
 		} else {
 			if (user.getLastname().length() > 32) {
 				errors.rejectValue("lastname", "stringtoolong", "The last name is too long.");
+			} else {
+				if (false == ExtraStringUtils.isValidName(user.getLastname())) {
+					errors.rejectValue("lastname", "invalidname", "The last name is not valid.");
+					System.err.println("Regex rejected the lastname field contents.");
+				}
 			}
 		}
 		// First name
@@ -53,9 +59,30 @@ public class UserValidator implements Validator {
 		} else {
 			if (user.getFirstname().length() > 32) {
 				errors.rejectValue("firstname", "stringtoolong", "The first name is too long.");
+			} else {
+				if (false == ExtraStringUtils.isValidName(user.getFirstname())) {
+					errors.rejectValue("firstname", "invalidname", "The first name is not valid.");
+					System.err.println("Regex rejected the firstname field contents.");
+				}
 			}
 		}
 		
+		// Check the salutation
+		if (user.getSalutation() != null) {
+			if (false == ExtraStringUtils.isValidSalutation(user.getSalutation())) {
+				errors.rejectValue("salutation", "invalidsalutation", "The salutation is not valid.");
+				System.err.println("Regex rejected the salutation field contents.");
+			}
+		}
+
+		// Check the "about me" field
+		if (user.getAboutme() != null) {
+			if (false == ExtraStringUtils.isValidTextField(user.getAboutme())) {
+				errors.rejectValue("aboutme", "invalidaboutme", "The contents of about me are not valid.");
+				System.err.println("Regex rejected the aboutme field contents.");
+			}
+		}
+
 		// Password
 		if ((user.getPassword()) == null || (user.getPassword().equals(""))) {
 			errors.rejectValue("password", "requiredvalue", "A password is required is required.");
