@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.ejb.Remote;
 
 import edu.gmu.swe.gameproj.jpa.Card;
+import edu.gmu.swe.gameproj.jpa.CardEvent;
 import edu.gmu.swe.gameproj.jpa.GameState;
 import edu.gmu.swe.gameproj.jpa.Player;
 import edu.gmu.swe.gameproj.jpa.User;
@@ -41,6 +42,7 @@ public interface GameProjectRemote {
 	
 	//Cards
 	public abstract Card getCardById(int cardId);
+
 	public abstract boolean addActions(int playerId, int count);
 	public abstract boolean addBuys(int playerId, int count);
 	public abstract boolean addCoins(int playerId, int count);
@@ -51,4 +53,9 @@ public interface GameProjectRemote {
 	public abstract boolean trash(int playerId, int cardId);
 	
 	public abstract Player getPlayerById(int playerId);
+
+	
+	// Card Events
+	public abstract CardEvent createCardEvent (Card card, GameState gameState, Player player, int location);
+
 }

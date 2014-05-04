@@ -15,6 +15,9 @@ import javax.persistence.Query;
 import javax.persistence.Transient;
 
 import edu.gmu.swe.gameproj.jpa.Card;
+
+import edu.gmu.swe.gameproj.jpa.CardEvent;
+
 import edu.gmu.swe.gameproj.jpa.CardType;
 import edu.gmu.swe.gameproj.jpa.GameState;
 import edu.gmu.swe.gameproj.jpa.Player;
@@ -474,4 +477,37 @@ public class GameProject implements GameProjectRemote {
 		}
 	}
 
+	@Override
+	public CardEvent createCardEvent(Card card, GameState gameState, Player player, int location) {
+		CardEvent cardEvent = new CardEvent();
+		cardEvent.setEventDate(new Date());
+		
+		if (card!=null) {
+			cardEvent.setCardType(card.getCardType());
+		} else {
+			cardEvent.setCardType(CardType.Unknown.cardTypeId);
+		}
+		
+		if (player!=null) {
+			cardEvent.setPlayerId(player.getId());
+		} else {
+			cardEvent.setPlayerId(0);
+		}
+		
+		if (gameState!=null) {
+			cardEvent.setGameStateId(gameState.getId());
+		} else {
+			cardEvent.setGameStateId(0);
+		}
+		
+		cardEvent.setLocation(location);
+	
+		try {
+			entityManager.persist(cardEvent);
+			return cardEvent;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
