@@ -2,24 +2,28 @@ package edu.gmu.swe.gameproj.mechanics.cards.action;
 
 import java.security.InvalidParameterException;
 
+import edu.gmu.swe.gameproj.ejb.GameProjectRemote;
 import edu.gmu.swe.gameproj.jpa.CardType;
-import edu.gmu.swe.gameproj.mechanics.command.*;
+
 
 public class Remodel extends Action {
 
-	public Remodel() {
-		super(CardType.Remodel);
+	public Remodel(GameProjectRemote _gameProject) {
+		super(CardType.Remodel, _gameProject);
 	}
 
 	@Override
     public void act(ActionDto dto) {
         if(!validate(dto)) throw new InvalidParameterException("dto");
+        
+        super.gameProject.trash(dto.oldCard);
+        super.gameProject.addCardToDiscardFromGame(dto.player, dto.oldCard);
 
-        ICommand trash = new TrashCardCommand(dto.player, dto.oldCard);
-        ICommand add = new AddCardCommand(dto.player, dto.newCard);
-
-        trash.Execute();
-        add.Execute();
+//        ICommand trash = new TrashCardCommand(dto.player, dto.oldCard);
+//        ICommand add = new AddCardCommand(dto.player, dto.newCard);
+//
+//        trash.Execute();
+//        add.Execute();
 
     }
 

@@ -2,22 +2,25 @@ package edu.gmu.swe.gameproj.mechanics.cards.action;
 
 import java.security.InvalidParameterException;
 
+import edu.gmu.swe.gameproj.ejb.GameProjectRemote;
 import edu.gmu.swe.gameproj.jpa.CardType;
-import edu.gmu.swe.gameproj.mechanics.command.*;
+
 
 public class Moat extends Action {
 
     private final int drawCount = 2;
     
-	public Moat() {
-		super(CardType.Moat);
+	public Moat(GameProjectRemote _gameProject) {
+		super(CardType.Moat, _gameProject);
 	}
 	@Override
     public void act(ActionDto dto) {
         if(!validate(dto)) throw new InvalidParameterException("dto");
+        
+        super.gameProject.draw(dto.player, drawCount);
 
-        ICommand draw = new DrawCommand(dto.player, drawCount);
-        draw.Execute();
+//        ICommand draw = new DrawCommand(dto.player, drawCount);
+//        draw.Execute();
 
     }
 

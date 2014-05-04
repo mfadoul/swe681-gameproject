@@ -2,23 +2,26 @@ package edu.gmu.swe.gameproj.mechanics.cards.action;
 
 import java.security.InvalidParameterException;
 
+import edu.gmu.swe.gameproj.ejb.GameProjectRemote;
 import edu.gmu.swe.gameproj.jpa.CardType;
-import edu.gmu.swe.gameproj.mechanics.command.*;
+
 
 public class Workshop extends Action {
 
-	public Workshop() {
-		super(CardType.Workshop);
+	public Workshop(GameProjectRemote _gameProject) {
+		super(CardType.Workshop, _gameProject);
 	}
 
 	
     @Override
     public void act(ActionDto dto) {
         if(!validate(dto)) throw new InvalidParameterException("dto");
+        
+        super.gameProject.addCardToDiscardFromGame(dto.player, dto.newCard);
 
-        ICommand addCard = new AddCardCommand(dto.player, dto.newCard);
-
-        addCard.Execute();
+//        ICommand addCard = new AddCardCommand(dto.player, dto.newCard);
+//
+//        addCard.Execute();
     }
 
     @Override

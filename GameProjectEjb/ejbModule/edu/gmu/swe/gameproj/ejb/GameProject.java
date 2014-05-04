@@ -338,9 +338,9 @@ public class GameProject implements GameProjectRemote {
 	}
 
 	@Override
-	public boolean addActions(int playerId, int count) {
+	public boolean addActions(Player player, int count) {
 		try {
-			Player player = this.getPlayerById(playerId);
+			
 			if(player == null) return false;
 			
 			player.addActionCount(count);
@@ -356,9 +356,9 @@ public class GameProject implements GameProjectRemote {
 	}
 
 	@Override
-	public boolean addBuys(int playerId, int count) {
+	public boolean addBuys(Player player, int count) {
 		try {
-			Player player = this.getPlayerById(playerId);
+
 			if(player == null) return false;
 			
 			player.addBuyCount(count);
@@ -374,9 +374,9 @@ public class GameProject implements GameProjectRemote {
 	}
 
 	@Override
-	public boolean addCoins(int playerId, int count) {
+	public boolean addCoins(Player player, int count) {
 		try {
-			Player player = this.getPlayerById(playerId);
+
 			if(player == null) return false;
 			
 			player.addCoinCount(count);
@@ -392,12 +392,11 @@ public class GameProject implements GameProjectRemote {
 	}
 
 	@Override
-	public boolean buy(int playerId, int cardId) {
+	public boolean buy(Player player, Card card) {
 		try {
-			Player player = this.getPlayerById(playerId);
+
 			if(player == null) return false;
 			
-			Card card = this.getCardById(cardId);
 			if(card == null) return false;
 			
 			//Not enough gold
@@ -424,23 +423,23 @@ public class GameProject implements GameProjectRemote {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean discard(int playerId, ArrayList<Integer> cardIds) {
+	public boolean discard(ArrayList<Card> cards) {
 
 		try {
-			Player player = this.getPlayerById(playerId);
-			if(player == null) return false;
+			if (cards == null || cards.size() == 0) return false;
 			
-			final String jpaQlQuery = " from Cards c where c.id IN :cardIds";
+//			final String jpaQlQuery = " from Cards c where c.id IN :cardIds";
+//			
+//			Query query = entityManager.createQuery(jpaQlQuery);
+//			query.setParameter("cardIds", cardIds);
+//			
+//			List<Card> resultList = (List<Card>) query.getResultList();
 			
-			Query query = entityManager.createQuery(jpaQlQuery);
-			query.setParameter("cardIds", cardIds);
 			
-			
-			List<Card> resultList = (List<Card>) query.getResultList();
-			for(Card c : resultList){
+			for(Card c : cards){
 				c.setLocation(DISCARD_LOCATION);
 			}
-			entityManager.merge(resultList);
+			entityManager.merge(cards);
 			
 			return true;
 		}
@@ -451,24 +450,23 @@ public class GameProject implements GameProjectRemote {
 	}
 
 	@Override
-	public List<Card> draw(int playerId, int count) {
+	public List<Card> draw(Player player, int count) {
 		try{
 			
 			//Check to limit potential DOS attack by setting high count value
 			if(count > 10) return null;
 			
-			Player player = this.getPlayerById(playerId);
 			
 			if(player == null) return null;
 			
-			List<Card> deck = getCardsByLocation(playerId, DECK_LOCATION);
+			List<Card> deck = getCardsByPlayerAndLocation(player.getId(), DECK_LOCATION);
 			int i = 0;
 			Random myRandom = new Random();
 			
 			while(i < count){
 				if(deck.size() == 0){
-					shuffle(playerId);
-					deck = getCardsByLocation(playerId, DECK_LOCATION);
+					shuffle(player.getId());
+					deck = getCardsByPlayerAndLocation(player.getId(), DECK_LOCATION);
 				}
 				Card card = deck.get(myRandom.nextInt(deck.size()));
 				deck.remove(card);
@@ -478,7 +476,7 @@ public class GameProject implements GameProjectRemote {
 			}
 			
 			entityManager.merge(deck);
-			return getCardsByLocation(playerId, HAND_LOCATION);
+			return getCardsByPlayerAndLocation(player.getId(), HAND_LOCATION);
 		}
 		catch (Exception e) {
 			System.err.println("Exception: " + e);
@@ -488,9 +486,9 @@ public class GameProject implements GameProjectRemote {
 	
 
 	@Override
-	public boolean trash(int playerId, int cardId) {
+	public boolean trash(Card card) {
 		try{
-			Card card = this.getCardById(cardId);
+
 			if(card == null) return false;
 			
 			card.setPlayer(null);
@@ -508,7 +506,7 @@ public class GameProject implements GameProjectRemote {
 	}
 
 	@Override
-	public Player getPlayerById(int playerId) {
+	public Player getPlayerById(long playerId) {
 		try {
 			return entityManager.find(Player.class, playerId);
 		} catch (Exception e) {
@@ -552,7 +550,7 @@ public class GameProject implements GameProjectRemote {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private List<Card> getCardsByLocation(int playerId, int locationId){
+	private List<Card> getCardsByPlayerAndLocation(long playerId, int locationId){
 		try{
 			final String jpaQlQuery = " from Cards c where c.playerId = :playerId AND c.location = :locationId";
 			
@@ -569,14 +567,14 @@ public class GameProject implements GameProjectRemote {
 		}
 		catch (Exception e) {
 			System.err.println("Exception: " + e);
-			return false;
+			return null;
 		}
 	}
 	
 	@Transient
-    private void shuffle(int playerId)
+    private void shuffle(long playerId)
     {
-		List<Card> cards = getCardsByLocation(playerId, DISCARD_LOCATION);
+		List<Card> cards = getCardsByPlayerAndLocation(playerId, DISCARD_LOCATION);
 		for(Card c : cards){
 			c.setLocation(DECK_LOCATION);
 		}
@@ -588,4 +586,37 @@ public class GameProject implements GameProjectRemote {
 			System.err.println("Exception: " + e);
 		}
     }
+
+	@Override
+	public boolean addCardToHandFromGame(Player player, Card card) {
+		return addCard(player, card, HAND_LOCATION);
+
+	}
+	
+	@Override
+	public boolean addCardToDiscardFromGame(Player player, Card card) {
+		return addCard(player, card, DISCARD_LOCATION);
+
+	}
+	
+	private boolean addCard(Player player, Card card, int locationId){
+		if(player == null) throw new NullPointerException("player");
+		if(card == null) throw new NullPointerException("card");
+
+		//Card needs to be owned by game
+		if(card.getPlayer() != null) return false;
+		if(card.getLocation() != DECK_LOCATION) return false;
+		
+		card.setPlayer(player);
+		card.setLocation(HAND_LOCATION);
+		
+		try{
+			entityManager.merge(card);
+			return true;
+		}
+		catch (Exception e) {
+			System.err.println("Exception: " + e);
+			return false;
+		}
+	}
 }

@@ -134,46 +134,46 @@ public class Player implements Serializable {
 		this.user = user;
 	}
 	
-	@Transient
-	private ArrayList<Card> getDeck(){
-		ArrayList<Card> deck = new ArrayList<Card>();
-		for(Card c : cards){
-			if(c.getLocation() == DECK_LOCATION) deck.add(c);
-		}
-		
-		return deck;
-	}
-	
-	@Transient
-	private ArrayList<Card> getHand(){
-		ArrayList<Card> hand = new ArrayList<Card>();
-		for(Card c : cards){
-			if(c.getLocation() == HAND_LOCATION) hand.add(c);
-		}
-		return hand;
-	}
-	
-	@Transient
-	private ArrayList<Card> getDiscard(){
-		ArrayList<Card> discard = new ArrayList<Card>();
-		for(Card c : cards){
-			if(c.getLocation() == DISCARD_LOCATION) discard.add(c);
-		}
-		
-		return discard;
-	}
-	
-	
-	@Transient
-    private void shuffle()
-    {
-		ArrayList<Card> cards = getDiscard();
-		for(Card c : cards){
-			c.setLocation(DECK_LOCATION);
-		}
-
-        Collections.shuffle(cards);
-    }
+//	@Transient
+//	private ArrayList<Card> getDeck(){
+//		ArrayList<Card> deck = new ArrayList<Card>();
+//		for(Card c : cards){
+//			if(c.getLocation() == DECK_LOCATION) deck.add(c);
+//		}
+//		
+//		return deck;
+//	}
+//	
+//	@Transient
+//	private ArrayList<Card> getHand(){
+//		ArrayList<Card> hand = new ArrayList<Card>();
+//		for(Card c : cards){
+//			if(c.getLocation() == HAND_LOCATION) hand.add(c);
+//		}
+//		return hand;
+//	}
+//	
+//	@Transient
+//	private ArrayList<Card> getDiscard(){
+//		ArrayList<Card> discard = new ArrayList<Card>();
+//		for(Card c : cards){
+//			if(c.getLocation() == DISCARD_LOCATION) discard.add(c);
+//		}
+//		
+//		return discard;
+//	}
+//	
+//	
+//	@Transient
+//    private void shuffle()
+//    {
+//		ArrayList<Card> cards = getDiscard();
+//		for(Card c : cards){
+//			c.setLocation(DECK_LOCATION);
+//		}
+//
+//        Collections.shuffle(cards);
+//    }
 	
 	@Transient
 	public boolean hasCard(Card card){
@@ -195,21 +195,21 @@ public class Player implements Serializable {
 		this.buyCount += count;
 	}
 	
-	@Transient
-	public void draw(int drawCount){
-		int i = 0;
-		ArrayList<Card> deck = getDeck();
-        while(i < drawCount)
-        {
-            if(deck.size() == 0) {
-            	shuffle();
-            	deck = getDeck();
-            }
-            Card card = deck.get(0);
-            card.setLocation(HAND_LOCATION);
-            i++;
-        }
-	}
+//	@Transient
+//	public void draw(int drawCount){
+//		int i = 0;
+//		ArrayList<Card> deck = getDeck();
+//        while(i < drawCount)
+//        {
+//            if(deck.size() == 0) {
+//            	shuffle();
+//            	deck = getDeck();
+//            }
+//            Card card = deck.get(0);
+//            card.setLocation(HAND_LOCATION);
+//            i++;
+//        }
+//	}
 	
 
 	

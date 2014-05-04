@@ -6,23 +6,26 @@ import edu.gmu.swe.gameproj.ejb.GameProject;
 import edu.gmu.swe.gameproj.ejb.GameProjectRemote;
 import edu.gmu.swe.gameproj.jpa.Card;
 import edu.gmu.swe.gameproj.jpa.CardType;
-import edu.gmu.swe.gameproj.mechanics.command.*;
+
 
 public class Mine extends Action {
 
-	public Mine() {
-		super(CardType.Mine);
+	public Mine(GameProjectRemote _gameProject) {
+		super(CardType.Mine, _gameProject);
 	}
 	
     @Override
     public void act(ActionDto dto) {
         if(!validate(dto)) throw new InvalidParameterException("dto");
+        
+        super.gameProject.trash(dto.oldCard);
+        super.gameProject.addCardToHandFromGame(dto.player, dto.newCard);
 
-        ICommand trash =  new TrashCardCommand(dto.player, dto.oldCard);
-        ICommand add = new AddCardCommand(dto.player, dto.newCard);
-
-        trash.Execute();
-        add.Execute();
+//        ICommand trash =  new TrashCardCommand(dto.player, dto.oldCard);
+//        ICommand add = new AddCardCommand(dto.player, dto.newCard);
+//
+//        trash.Execute();
+//        add.Execute();
 
     }
 
@@ -33,6 +36,7 @@ public class Mine extends Action {
         if(dto.player == null) throw new NullPointerException("dto.player");
         if(dto.oldCard == null) throw new NullPointerException("dto.oldCard");
         if(dto.newCard == null) throw new NullPointerException("dto.newCard");
+        
         
         CardType oldCardType = CardType.getCardType(dto.oldCard.getCardType());
         CardType newCardType = CardType.getCardType(dto.newCard.getCardType());

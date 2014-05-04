@@ -8,6 +8,7 @@ import javax.ejb.Remote;
 
 import edu.gmu.swe.gameproj.jpa.Card;
 import edu.gmu.swe.gameproj.jpa.CardEvent;
+import edu.gmu.swe.gameproj.jpa.CardType;
 import edu.gmu.swe.gameproj.jpa.GameState;
 import edu.gmu.swe.gameproj.jpa.Player;
 import edu.gmu.swe.gameproj.jpa.User;
@@ -43,16 +44,17 @@ public interface GameProjectRemote {
 	//Cards
 	public abstract Card getCardById(int cardId);
 
-	public abstract boolean addActions(int playerId, int count);
-	public abstract boolean addBuys(int playerId, int count);
-	public abstract boolean addCoins(int playerId, int count);
-	//public abstract boolean addCard();
-	public abstract boolean buy(int playerId, int cardId);
-	public abstract boolean discard(int playerId, ArrayList<Integer> cardIds);
-	public abstract List<Card> draw(int playerId, int count);
-	public abstract boolean trash(int playerId, int cardId);
+	public abstract boolean addActions(Player player, int count);
+	public abstract boolean addBuys(Player player, int count);
+	public abstract boolean addCoins(Player player, int count);
+	public abstract boolean addCardToHandFromGame(Player player, Card card);
+	public abstract boolean addCardToDiscardFromGame(Player player, Card card);
+	public abstract boolean buy(Player player, Card card);
+	public abstract boolean discard(ArrayList<Card> cards);
+	public abstract List<Card> draw(Player player, int count);
+	public abstract boolean trash(Card card);
 	
-	public abstract Player getPlayerById(int playerId);
+	public abstract Player getPlayerById(long playerId);
 
 	
 	// Card Events

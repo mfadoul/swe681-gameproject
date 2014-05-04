@@ -2,23 +2,25 @@ package edu.gmu.swe.gameproj.mechanics.cards.action;
 
 import java.security.InvalidParameterException;
 
+import edu.gmu.swe.gameproj.ejb.GameProjectRemote;
 import edu.gmu.swe.gameproj.jpa.CardType;
-import edu.gmu.swe.gameproj.mechanics.command.*;
 
 public class Militia extends Action {
 
     private final int addCoinsCount = 2;
     
-	public Militia() {
-		super(CardType.Militia);
+	public Militia(GameProjectRemote _gameProject) {
+		super(CardType.Militia, _gameProject);
 	}
 	
     @Override
     public void act(ActionDto dto) {
         if(!validate(dto)) throw new InvalidParameterException("dto");
+        
+        super.gameProject.addCoins(dto.player, addCoinsCount);
 
-        ICommand addCoins = new AddCoinsCommand(dto.player, addCoinsCount);
-        addCoins.Execute();
+//        ICommand addCoins = new AddCoinsCommand(dto.player, addCoinsCount);
+//        addCoins.Execute();
         //TODO: Add observer for card draw down
     }
 

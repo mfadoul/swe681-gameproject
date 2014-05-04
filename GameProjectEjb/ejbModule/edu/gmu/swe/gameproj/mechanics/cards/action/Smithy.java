@@ -2,22 +2,25 @@ package edu.gmu.swe.gameproj.mechanics.cards.action;
 
 import java.security.InvalidParameterException;
 
+import edu.gmu.swe.gameproj.ejb.GameProjectRemote;
 import edu.gmu.swe.gameproj.jpa.CardType;
-import edu.gmu.swe.gameproj.mechanics.command.*;
+
 
 public class Smithy extends Action {
 
     private final int drawCount = 3;
-	public Smithy() {
-		super(CardType.Smithy);
+	public Smithy(GameProjectRemote _gameProject) {
+		super(CardType.Smithy, _gameProject);
 	}
 
     @Override
     public void act(ActionDto dto) {
         if(!validate(dto)) throw new InvalidParameterException("dto");
-
-        ICommand draw = new DrawCommand(dto.player, drawCount);
-        draw.Execute();
+        
+        super.gameProject.draw(dto.player, drawCount);
+//
+//        ICommand draw = new DrawCommand(dto.player, drawCount);
+//        draw.Execute();
     }
 
     @Override
