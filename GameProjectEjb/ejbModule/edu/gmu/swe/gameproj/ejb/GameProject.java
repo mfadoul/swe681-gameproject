@@ -2,9 +2,11 @@ package edu.gmu.swe.gameproj.ejb;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import javax.ejb.LocalBean;
@@ -15,9 +17,7 @@ import javax.persistence.Query;
 import javax.persistence.Transient;
 
 import edu.gmu.swe.gameproj.jpa.Card;
-
 import edu.gmu.swe.gameproj.jpa.CardEvent;
-
 import edu.gmu.swe.gameproj.jpa.CardType;
 import edu.gmu.swe.gameproj.jpa.GameState;
 import edu.gmu.swe.gameproj.jpa.Player;
@@ -435,17 +435,12 @@ public class GameProject implements GameProjectRemote {
 			Query query = entityManager.createQuery(jpaQlQuery);
 			query.setParameter("cardIds", cardIds);
 			
-			try{
-				List<Card> resultList = (List<Card>) query.getResultList();
-				for(Card c : resultList){
-					c.setLocation(DISCARD_LOCATION);
-				}
-				entityManager.merge(resultList);
+			
+			List<Card> resultList = (List<Card>) query.getResultList();
+			for(Card c : resultList){
+				c.setLocation(DISCARD_LOCATION);
 			}
-			catch (Exception e) {
-				System.err.println("Exception: " + e);
-				return false;
-			}
+			entityManager.merge(resultList);
 			
 			return true;
 		}
@@ -456,15 +451,60 @@ public class GameProject implements GameProjectRemote {
 	}
 
 	@Override
-	public boolean draw(int playerId, int count) {
-		// TODO Auto-generated method stub
-		return false;
+	public List<Card> draw(int playerId, int count) {
+		try{
+			
+			//Check to limit potential DOS attack by setting high count value
+			if(count > 10) return null;
+			
+			Player player = this.getPlayerById(playerId);
+			
+			if(player == null) return null;
+			
+			List<Card> deck = getCardsByLocation(playerId, DECK_LOCATION);
+			int i = 0;
+			Random myRandom = new Random();
+			
+			while(i < count){
+				if(deck.size() == 0){
+					shuffle(playerId);
+					deck = getCardsByLocation(playerId, DECK_LOCATION);
+				}
+				Card card = deck.get(myRandom.nextInt(deck.size()));
+				deck.remove(card);
+				card.setLocation(HAND_LOCATION);
+				
+				i++;
+			}
+			
+			entityManager.merge(deck);
+			return getCardsByLocation(playerId, HAND_LOCATION);
+		}
+		catch (Exception e) {
+			System.err.println("Exception: " + e);
+			return null;
+		}
 	}
+	
 
 	@Override
 	public boolean trash(int playerId, int cardId) {
-		// TODO Auto-generated method stub
-		return false;
+		try{
+			Card card = this.getCardById(cardId);
+			if(card == null) return false;
+			
+			card.setPlayer(null);
+			card.setLocation(DISCARD_LOCATION);
+			
+			entityManager.merge(card);
+			
+			return true;
+			
+		}
+		catch (Exception e) {
+			System.err.println("Exception: " + e);
+			return false;
+		}
 	}
 
 	@Override
@@ -510,4 +550,42 @@ public class GameProject implements GameProjectRemote {
 			return null;
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	private List<Card> getCardsByLocation(int playerId, int locationId){
+		try{
+			final String jpaQlQuery = " from Cards c where c.playerId = :playerId AND c.location = :locationId";
+			
+			Query query = entityManager.createQuery(jpaQlQuery);
+			query.setParameter("playerId", playerId);
+			query.setParameter("locationId", locationId);
+			
+			
+			List<Card> resultList = (List<Card>) query.getResultList();
+			
+			return resultList;
+			
+			
+		}
+		catch (Exception e) {
+			System.err.println("Exception: " + e);
+			return false;
+		}
+	}
+	
+	@Transient
+    private void shuffle(int playerId)
+    {
+		List<Card> cards = getCardsByLocation(playerId, DISCARD_LOCATION);
+		for(Card c : cards){
+			c.setLocation(DECK_LOCATION);
+		}
+		
+		try{
+			entityManager.merge(cards);
+		}
+		catch (Exception e) {
+			System.err.println("Exception: " + e);
+		}
+    }
 }

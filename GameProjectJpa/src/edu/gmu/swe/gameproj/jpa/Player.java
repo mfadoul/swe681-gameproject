@@ -211,19 +211,8 @@ public class Player implements Serializable {
         }
 	}
 	
-	@Transient
-	public void discard(ArrayList<Card> cards){
-		for(Card c : cards){
-			c.setLocation(DISCARD_LOCATION);
-		}
-	}
+
 	
-	@Transient
-	public void buyCard(Card card){
-		if(card == null) throw new NullPointerException("card");
-		if(buyCount <= 0) throw new IllegalStateException("buy count exceeded");
-		CardType cardType = CardType.getCardType(card.getCardType());
-		
-	}
+	
 
 }

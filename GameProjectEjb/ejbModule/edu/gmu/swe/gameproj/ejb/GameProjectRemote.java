@@ -49,7 +49,7 @@ public interface GameProjectRemote {
 	//public abstract boolean addCard();
 	public abstract boolean buy(int playerId, int cardId);
 	public abstract boolean discard(int playerId, ArrayList<Integer> cardIds);
-	public abstract boolean draw(int playerId, int count);
+	public abstract List<Card> draw(int playerId, int count);
 	public abstract boolean trash(int playerId, int cardId);
 	
 	public abstract Player getPlayerById(int playerId);
