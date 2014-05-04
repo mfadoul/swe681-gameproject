@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.ejb.Remote;
 
 import edu.gmu.swe.gameproj.jpa.Card;
+import edu.gmu.swe.gameproj.jpa.CardEvent;
 import edu.gmu.swe.gameproj.jpa.GameState;
 import edu.gmu.swe.gameproj.jpa.Player;
 import edu.gmu.swe.gameproj.jpa.User;
@@ -40,4 +41,7 @@ public interface GameProjectRemote {
 	
 	//Cards
 	public abstract Card getCardById(int cardId);
+	
+	// Card Events
+	public abstract CardEvent createCardEvent (Card card, GameState gameState, Player player, int location);
 }

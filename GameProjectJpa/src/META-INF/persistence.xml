@@ -7,5 +7,6 @@
 		    <class>edu.gmu.swe.gameproj.jpa.Player</class>
 		    <class>edu.gmu.swe.gameproj.jpa.UserRole</class>
 		    <class>edu.gmu.swe.gameproj.jpa.User</class>
+		    <class>edu.gmu.swe.gameproj.jpa.CardEvent</class>
 	</persistence-unit>
 </persistence>

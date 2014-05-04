@@ -81,12 +81,13 @@ CREATE TABLE IF NOT EXISTS `Cards` (
 CREATE TABLE IF NOT EXISTS `CardEvents` (
   `id` BIGINT(20) unsigned NOT NULL COMMENT 'Card Event id is unique for each card action',
   `eventDate` DATETIME NULL COMMENT 'When the event occurred',
-  `cardId` BIGINT(20) unsigned NOT NULL COMMENT 'Card id is unique for each card',
+  `cardType` INT(10) unsigned NOT NULL COMMENT 'Card type for the card played (e.g. woodcutter = 109)',
+  `gameStateId` BIGINT(20) unsigned NOT NULL COMMENT 'GameState id is unique for each game',
   `playerId` BIGINT(20) unsigned NULL COMMENT 'Destination Player id',
   `location` INT(10) unsigned NOT NULL COMMENT 'Destination Location (e.g. deck=1, in hand=2, discard=3)',
-  PRIMARY KEY (`id`),
-  key `card_idx` (`cardId`),
-  key `player_idx` (`playerId`),
-  CONSTRAINT FK_CARD_ID_FOR_CARDEVENTS FOREIGN KEY (`cardId`) REFERENCES `Cards` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT FK_PLAYER_ID_FOR_CARDEVENTS FOREIGN KEY (`playerId`) REFERENCES `Players` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  PRIMARY KEY (`id`)
+  -- key `card_idx` (`cardId`),
+  -- key `player_idx` (`playerId`),
+  -- CONSTRAINT FK_CARD_ID_FOR_CARDEVENTS FOREIGN KEY (`cardId`) REFERENCES `Cards` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  -- CONSTRAINT FK_PLAYER_ID_FOR_CARDEVENTS FOREIGN KEY (`playerId`) REFERENCES `Players` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 )ENGINE=InnoDB DEFAULT CHARSET=utf8$$
