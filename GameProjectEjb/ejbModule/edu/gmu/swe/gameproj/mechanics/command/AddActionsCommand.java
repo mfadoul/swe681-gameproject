@@ -1,6 +1,7 @@
 package edu.gmu.swe.gameproj.mechanics.command;
 
-import edu.gmu.swe.gameproj.mechanics.Player;
+import edu.gmu.swe.gameproj.jpa.Player;
+
 
 
 public class AddActionsCommand implements ICommand{

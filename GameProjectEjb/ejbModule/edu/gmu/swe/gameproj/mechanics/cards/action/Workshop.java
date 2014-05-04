@@ -1,6 +1,9 @@
 package edu.gmu.swe.gameproj.mechanics.cards.action;
 
-import edu.gmu.swe.gameproj.mechanics.cards.CardType;
+import java.security.InvalidParameterException;
+
+import edu.gmu.swe.gameproj.jpa.CardType;
+import edu.gmu.swe.gameproj.mechanics.command.*;
 
 public class Workshop extends Action {
 
@@ -8,30 +11,30 @@ public class Workshop extends Action {
 		super(CardType.Workshop);
 	}
 
-	/*
+	
     @Override
-    public void Act(ActionDto dto) {
-        if(!Validate(dto)) throw new InvalidParameterException("dto");
+    public void act(ActionDto dto) {
+        if(!validate(dto)) throw new InvalidParameterException("dto");
 
-        ICommand addCard = new AddCardCommand(dto.player, dto.newCardName);
+        ICommand addCard = new AddCardCommand(dto.player, dto.newCard);
 
         addCard.Execute();
     }
 
     @Override
-    protected boolean Validate(ActionDto dto) {
+    protected boolean validate(ActionDto dto) {
         if(dto == null) throw new NullPointerException("dto");
         if(dto.player == null) throw new NullPointerException("dto.player");
 
-        if(dto.newCardName == null) throw new NullPointerException("dto.newCardName");
+        if(dto.newCard == null) throw new NullPointerException("dto.newCard");
+        
+        CardType newCardType = CardType.getCardType(dto.newCard.getCardType());
 
-        Card newCard = CardFactory.buildCard(dto.newCardName);
-
-        if(newCard.getCost() > 4)
+        if(newCardType.getCost() > 4)
             return false;
 
         return true;
     }
 
-	 */
+	 
 }

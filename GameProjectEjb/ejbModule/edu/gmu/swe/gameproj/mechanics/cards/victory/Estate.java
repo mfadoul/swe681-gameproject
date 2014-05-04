@@ -1,6 +1,6 @@
 package edu.gmu.swe.gameproj.mechanics.cards.victory;
 
-import edu.gmu.swe.gameproj.mechanics.cards.CardType;
+import edu.gmu.swe.gameproj.jpa.CardType;
 
 public class Estate extends Victory {
     private final static Estate INSTANCE = new Estate();

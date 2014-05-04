@@ -1,4 +1,4 @@
-package edu.gmu.swe.gameproj.mechanics.cards;
+package edu.gmu.swe.gameproj.jpa;
 
 public enum CardType {
 	Unknown (0, "unknown", 0),

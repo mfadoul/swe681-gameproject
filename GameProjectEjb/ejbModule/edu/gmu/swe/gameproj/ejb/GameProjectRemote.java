@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.ejb.Remote;
 
+import edu.gmu.swe.gameproj.jpa.Card;
 import edu.gmu.swe.gameproj.jpa.GameState;
 import edu.gmu.swe.gameproj.jpa.Player;
 import edu.gmu.swe.gameproj.jpa.User;
@@ -36,4 +37,7 @@ public interface GameProjectRemote {
 	public abstract List<GameState> getGamesLostByUser(User user);
 
 	public abstract Player joinGameState(long gameStateId, int userId);
+	
+	//Cards
+	public abstract Card getCardById(int cardId);
 }

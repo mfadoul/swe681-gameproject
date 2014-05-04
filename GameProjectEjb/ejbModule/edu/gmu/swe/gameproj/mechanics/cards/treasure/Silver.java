@@ -1,6 +1,6 @@
 package edu.gmu.swe.gameproj.mechanics.cards.treasure;
 
-import edu.gmu.swe.gameproj.mechanics.cards.CardType;
+import edu.gmu.swe.gameproj.jpa.CardType;
 
 public class Silver extends Treasure {
 

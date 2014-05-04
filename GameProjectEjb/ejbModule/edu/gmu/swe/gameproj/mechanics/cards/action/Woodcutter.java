@@ -1,16 +1,22 @@
 package edu.gmu.swe.gameproj.mechanics.cards.action;
 
-import edu.gmu.swe.gameproj.mechanics.cards.CardType;
+import java.security.InvalidParameterException;
+
+import edu.gmu.swe.gameproj.jpa.CardType;
+import edu.gmu.swe.gameproj.mechanics.command.*;
 
 public class Woodcutter extends Action {
 
+    private final int buyCount = 1;
+    private final int coinCount = 2;
+    
 	public Woodcutter() {
 		super(CardType.Woodcutter);
 	}
 
-	/*
-    public void Act(ActionDto dto) {
-        if(!Validate(dto)) throw new InvalidParameterException("dto");
+	@Override
+    public void act(ActionDto dto) {
+        if(!validate(dto)) throw new InvalidParameterException("dto");
 
         ICommand addBuys = new AddBuysCommand(dto.player, buyCount);
         ICommand addCoins = new AddCoinsCommand(dto.player, coinCount);
@@ -20,11 +26,11 @@ public class Woodcutter extends Action {
     }
 
     @Override
-    protected boolean Validate(ActionDto dto) {
+    protected boolean validate(ActionDto dto) {
         if(dto == null) throw new NullPointerException("dto");
         if(dto.player == null) throw new NullPointerException("dto.player");
         return true;
     }
 
-	*/
+	
 }

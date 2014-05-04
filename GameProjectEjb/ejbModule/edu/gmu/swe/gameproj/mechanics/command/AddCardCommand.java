@@ -1,24 +1,25 @@
 package edu.gmu.swe.gameproj.mechanics.command;
 
+import edu.gmu.swe.gameproj.jpa.Card;
+import edu.gmu.swe.gameproj.jpa.Player;
 
-import edu.gmu.swe.gameproj.mechanics.Player;
 
 public class AddCardCommand implements ICommand {
 
     private Player player;
-    private String cardName;
+    private Card card;
 
-    public AddCardCommand(Player _player, String _cardName)
+    public AddCardCommand(Player _player, Card _card)
     {
         if(_player == null) throw new NullPointerException("_player");
-        if(_cardName == null) throw new NullPointerException("_cardname");
+        if(_card == null) throw new NullPointerException("_card");
 
         player = _player;
-        cardName = _cardName;
+        card = _card;
     }
 
     @Override
     public void Execute() {
-        player.addCard(cardName);
+        player.addCard(card);
     }
 }

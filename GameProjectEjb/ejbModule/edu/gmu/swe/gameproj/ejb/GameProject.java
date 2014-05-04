@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import edu.gmu.swe.gameproj.jpa.Card;
 import edu.gmu.swe.gameproj.jpa.GameState;
 import edu.gmu.swe.gameproj.jpa.Player;
 import edu.gmu.swe.gameproj.jpa.User;
@@ -314,6 +315,16 @@ public class GameProject implements GameProjectRemote {
 		}
 		System.out.println("Found " + gameStateList.size() + " games lost by " + user.getEmail() + "."); 
 		return gameStateList;
+	}
+
+	@Override
+	public Card getCardById(int cardId) {
+		try {
+			return entityManager.find(Card.class, cardId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }

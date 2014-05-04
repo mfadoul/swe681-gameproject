@@ -1,7 +1,7 @@
 package edu.gmu.swe.gameproj.mechanics.cards.treasure;
 
+import edu.gmu.swe.gameproj.jpa.CardType;
 import edu.gmu.swe.gameproj.mechanics.cards.Card;
-import edu.gmu.swe.gameproj.mechanics.cards.CardType;
 
 public abstract class Treasure extends Card {
 	protected Treasure(CardType cardType, int value) {

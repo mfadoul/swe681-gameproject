@@ -1,7 +1,12 @@
 package edu.gmu.swe.gameproj.jpa;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -14,6 +19,10 @@ import java.util.List;
 @NamedQuery(name="Player.findAll", query="SELECT p FROM Player p")
 public class Player implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	private static final int DECK_LOCATION = 1;
+	private static final int HAND_LOCATION = 2;
+	private static final int DISCARD_LOCATION = 3;
 
 	@Id
     @TableGenerator(name="TABLE_GEN_PLAYER", table="SEQUENCE_TABLE", pkColumnName="SEQ_NAME",
@@ -102,6 +111,7 @@ public class Player implements Serializable {
 	}
 
 	public Card removeCard(Card card) {
+		//TODO need to handle where to remove to (trash, discard)
 		getCards().remove(card);
 		card.setPlayer(null);
 
@@ -122,6 +132,98 @@ public class Player implements Serializable {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+	
+	@Transient
+	private ArrayList<Card> getDeck(){
+		ArrayList<Card> deck = new ArrayList<Card>();
+		for(Card c : cards){
+			if(c.getLocation() == DECK_LOCATION) deck.add(c);
+		}
+		
+		return deck;
+	}
+	
+	@Transient
+	private ArrayList<Card> getHand(){
+		ArrayList<Card> hand = new ArrayList<Card>();
+		for(Card c : cards){
+			if(c.getLocation() == HAND_LOCATION) hand.add(c);
+		}
+		return hand;
+	}
+	
+	@Transient
+	private ArrayList<Card> getDiscard(){
+		ArrayList<Card> discard = new ArrayList<Card>();
+		for(Card c : cards){
+			if(c.getLocation() == DISCARD_LOCATION) discard.add(c);
+		}
+		
+		return discard;
+	}
+	
+	
+	@Transient
+    private void shuffle()
+    {
+		ArrayList<Card> cards = getDiscard();
+		for(Card c : cards){
+			c.setLocation(DECK_LOCATION);
+		}
+
+        Collections.shuffle(cards);
+    }
+	
+	@Transient
+	public boolean hasCard(Card card){
+		return cards.contains(card);
+	}
+	
+	@Transient
+	public void addActionCount(int count){
+		this.actionCount += count;
+	}
+	
+	@Transient
+	public void addCoinCount(int count){
+		this.coinCount += count;
+	}
+	
+	@Transient
+	public void addBuyCount(int count){
+		this.buyCount += count;
+	}
+	
+	@Transient
+	public void draw(int drawCount){
+		int i = 0;
+		ArrayList<Card> deck = getDeck();
+        while(i < drawCount)
+        {
+            if(deck.size() == 0) {
+            	shuffle();
+            	deck = getDeck();
+            }
+            Card card = deck.get(0);
+            card.setLocation(HAND_LOCATION);
+            i++;
+        }
+	}
+	
+	@Transient
+	public void discard(ArrayList<Card> cards){
+		for(Card c : cards){
+			c.setLocation(DISCARD_LOCATION);
+		}
+	}
+	
+	@Transient
+	public void buyCard(Card card){
+		if(card == null) throw new NullPointerException("card");
+		if(buyCount <= 0) throw new IllegalStateException("buy count exceeded");
+		CardType cardType = CardType.getCardType(card.getCardType());
+		
 	}
 
 }

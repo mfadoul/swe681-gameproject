@@ -1,6 +1,6 @@
 package edu.gmu.swe.gameproj.mechanics.cards.victory;
 
-import edu.gmu.swe.gameproj.mechanics.cards.CardType;
+import edu.gmu.swe.gameproj.jpa.CardType;
 
 public class Duchy extends Victory {
     private final static Duchy INSTANCE = new Duchy();
