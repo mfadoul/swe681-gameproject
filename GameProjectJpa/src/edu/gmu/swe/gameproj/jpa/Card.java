@@ -1,6 +1,7 @@
 package edu.gmu.swe.gameproj.jpa;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
 
 
@@ -75,6 +76,17 @@ public class Card implements Serializable {
 
 	public void setPlayer(Player player) {
 		this.player = player;
+	}
+	
+	
+	@Transient
+	public CardType getType(){
+		return CardType.getCardType(this.cardType);
+	}
+	
+	@Transient
+	public int getCost(){
+		return getType().getCost();
 	}
 
 }

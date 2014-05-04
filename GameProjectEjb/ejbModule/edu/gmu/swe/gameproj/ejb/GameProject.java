@@ -1,5 +1,6 @@
 package edu.gmu.swe.gameproj.ejb;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -11,8 +12,10 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.Transient;
 
 import edu.gmu.swe.gameproj.jpa.Card;
+import edu.gmu.swe.gameproj.jpa.CardType;
 import edu.gmu.swe.gameproj.jpa.GameState;
 import edu.gmu.swe.gameproj.jpa.Player;
 import edu.gmu.swe.gameproj.jpa.User;
@@ -26,6 +29,10 @@ import edu.gmu.swe.gameproj.jpa.UserRole;
 public class GameProject implements GameProjectRemote {
 	@PersistenceContext(unitName="GameProjectJpa_pu")
 	private EntityManager entityManager;
+	
+	private static final int DECK_LOCATION = 1;
+	private static final int HAND_LOCATION = 2;
+	private static final int DISCARD_LOCATION = 3;
 	
     /**
      * Default constructor. 
@@ -322,7 +329,147 @@ public class GameProject implements GameProjectRemote {
 		try {
 			return entityManager.find(Card.class, cardId);
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.err.println("Exception: " + e);
+			return null;
+		}
+	}
+
+	@Override
+	public boolean addActions(int playerId, int count) {
+		try {
+			Player player = this.getPlayerById(playerId);
+			if(player == null) return false;
+			
+			player.addActionCount(count);
+			
+			entityManager.merge(player);
+			
+			return true;
+		}
+		catch (Exception e) {
+			System.err.println("Exception: " + e);
+			return false;
+		}
+	}
+
+	@Override
+	public boolean addBuys(int playerId, int count) {
+		try {
+			Player player = this.getPlayerById(playerId);
+			if(player == null) return false;
+			
+			player.addBuyCount(count);
+			
+			entityManager.merge(player);
+			
+			return true;
+		}
+		catch (Exception e) {
+			System.err.println("Exception: " + e);
+			return false;
+		}
+	}
+
+	@Override
+	public boolean addCoins(int playerId, int count) {
+		try {
+			Player player = this.getPlayerById(playerId);
+			if(player == null) return false;
+			
+			player.addCoinCount(count);
+			
+			entityManager.merge(player);
+			
+			return true;
+		}
+		catch (Exception e) {
+			System.err.println("Exception: " + e);
+			return false;
+		}
+	}
+
+	@Override
+	public boolean buy(int playerId, int cardId) {
+		try {
+			Player player = this.getPlayerById(playerId);
+			if(player == null) return false;
+			
+			Card card = this.getCardById(cardId);
+			if(card == null) return false;
+			
+			//Not enough gold
+			if(player.getCoinCount() < card.getCost())
+				return false;
+			
+			//Not enough buys
+			if(player.getBuyCount() <= 0)
+				return false;
+			
+			card.setPlayer(player);
+			card.setLocation(DISCARD_LOCATION);
+			
+			entityManager.merge(card);
+			
+			return true;
+		}
+		catch (Exception e) {
+			System.err.println("Exception: " + e);
+			return false;
+		}
+		
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean discard(int playerId, ArrayList<Integer> cardIds) {
+
+		try {
+			Player player = this.getPlayerById(playerId);
+			if(player == null) return false;
+			
+			final String jpaQlQuery = " from Cards c where c.id IN :cardIds";
+			
+			Query query = entityManager.createQuery(jpaQlQuery);
+			query.setParameter("cardIds", cardIds);
+			
+			try{
+				List<Card> resultList = (List<Card>) query.getResultList();
+				for(Card c : resultList){
+					c.setLocation(DISCARD_LOCATION);
+				}
+				entityManager.merge(resultList);
+			}
+			catch (Exception e) {
+				System.err.println("Exception: " + e);
+				return false;
+			}
+			
+			return true;
+		}
+		catch (Exception e) {
+			System.err.println("Exception: " + e);
+			return false;
+		}
+	}
+
+	@Override
+	public boolean draw(int playerId, int count) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean trash(int playerId, int cardId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Player getPlayerById(int playerId) {
+		try {
+			return entityManager.find(Player.class, playerId);
+		} catch (Exception e) {
+			System.err.println("Exception: " + e);
 			return null;
 		}
 	}
