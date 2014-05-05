@@ -1,7 +1,10 @@
 package edu.gmu.swe.gameproj.jpa;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -145,6 +148,19 @@ public class GameState implements Serializable {
 
 	public void setPhase(int phase) {
 		this.phase = phase;
+	}
+	
+	@Transient
+	public Card getFirstInstanceInDeckByType(CardType cardType){
+
+		for(Card c : getCards()){
+			//Get cards owned by GameState that aren't in trash
+			if(c.getLocation() == 1 && c.getPlayer() == null){
+				if(c.getType() == cardType) return c;
+			}
+		}
+		
+		return null;
 	}
 
 }

@@ -396,12 +396,14 @@ public class GameProject implements GameProjectRemote {
 	}
 
 	@Override
-	public boolean buy(Player player, Card card) {
+	public boolean buy(Player player, Card card, GameState gameState) {
 		try {
 
 			if(player == null) return false;
 			
 			if(card == null) return false;
+			
+			if(gameState == null) return false;
 			
 			//Not enough gold
 			if(player.getCoinCount() < card.getCost())
@@ -411,8 +413,11 @@ public class GameProject implements GameProjectRemote {
 			if(player.getBuyCount() <= 0)
 				return false;
 			
+			player.addCoinCount(card.getCost());
+			player.addBuyCount(-1);
 			card.setPlayer(player);
 			card.setLocation(DISCARD_LOCATION);
+			//TODO change game state
 			
 			entityManager.merge(card);
 			
@@ -848,4 +853,6 @@ public class GameProject implements GameProjectRemote {
 			}
 		}
 	}
+
+
 }

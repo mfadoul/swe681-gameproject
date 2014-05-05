@@ -184,7 +184,31 @@ public class GameController {
 				}
 			}
 			else if(commandAry[0].equals("buy")){
-				//TODO
+				CardType cardType = CardType.getCardType(commandAry[1]);
+				if(cardType == null){
+					isValid = false;
+				}
+				else{
+					//Verify player has enough money
+					if(player.getCoinCount() < cardType.getCost()){
+						isValid = false;
+					}
+					//Verify desired card is available
+					if(gameState.getFirstInstanceInDeckByType(cardType) == null){
+						isValid = false;
+					}
+				}
+				//Verify player has enough buys
+				if(player.getBuyCount() < 1){
+					isValid = false;
+				}
+				
+				if(isValid){
+//					if(!gameProject.buy(player, cardType, gameState))
+				}
+				
+				//Make call
+				
 			}
 			else if(commandAry[0].equals("done")){
 				//TODO

@@ -52,13 +52,14 @@ public interface GameProjectRemote {
 	public abstract boolean addCoins(Player player, int count);
 	public abstract boolean addCardToHandFromGame(Player player, Card card);
 	public abstract boolean addCardToDiscardFromGame(Player player, Card card);
-	public abstract boolean buy(Player player, Card card);
+	public abstract boolean buy(Player player, Card card, GameState gameState);
 	public abstract boolean discard(Player player, ArrayList<CardType> cards);
 	public abstract List<Card> draw(Player player, int count);
 	public abstract boolean trash(Card card);
 	
 	public abstract Player getPlayerById(long playerId);
 
+	
 	// Card Events
 	public abstract CardEvent createCardEvent (Card card, GameState gameState, Player player, int location);
 
