@@ -203,6 +203,7 @@ public class GameProject implements GameProjectRemote {
 		
 		gameState = new GameState ();
 		gameState.setBeginDate(new Date());
+		initializeGameState(gameState);
 		entityManager.persist(gameState);
 		
 		System.out.println ("Created game ID " + gameState.getId());
@@ -254,6 +255,7 @@ public class GameProject implements GameProjectRemote {
 		
 		// 5. Create a new Player
 		Player player = new Player();
+		initializePlayer(player, gameState);
 		user.addPlayer(player); // Create the connection on both sides.
 
 		// 5a.  Add the new player to the GameState.
@@ -719,17 +721,92 @@ public class GameProject implements GameProjectRemote {
 		}
 	}
 	
-	private boolean initializeGameState(GameState gameState){
+	private void initializeGameState(GameState gameState){
 
+		int counter = 1;
+		
 		//8 of each victory
 		int victoryCount = 8;
-		int counter = 0;
+		while(counter < victoryCount){
+			Card estate = new Card();
+			estate.setCardType(CardType.Estate.cardTypeId);
+			estate.setLocation(DECK_LOCATION);
+			gameState.addCard(estate);
+			
+			Card duchy = new Card();
+			duchy.setCardType(CardType.Duchy.cardTypeId);
+			duchy.setLocation(DECK_LOCATION);
+			gameState.addCard(duchy);
+			
+			Card province = new Card();
+			province.setCardType(CardType.Province.cardTypeId);
+			province.setLocation(DECK_LOCATION);
+			gameState.addCard(province);
+			
+			counter++;
+		}
 
 		//10 of each action
+		int actionCount = 10;
+		counter = 1;
+		while(counter <= actionCount){
+			Card cellar = new Card();
+			cellar.setCardType(CardType.Cellar.cardTypeId);
+			cellar.setLocation(DECK_LOCATION);
+			gameState.addCard(cellar);
+
+			Card market = new Card();
+			market.setCardType(CardType.Market.cardTypeId);
+			market.setLocation(DECK_LOCATION);
+			gameState.addCard(market);
+			
+			Card militia = new Card();
+			militia.setCardType(CardType.Militia.cardTypeId);
+			militia.setLocation(DECK_LOCATION);
+			gameState.addCard(militia);
+			
+			Card mine = new Card();
+			mine.setCardType(CardType.Mine.cardTypeId);
+			mine.setLocation(DECK_LOCATION);
+			gameState.addCard(mine);
+			
+			Card moat = new Card();
+			moat.setCardType(CardType.Moat.cardTypeId);
+			moat.setLocation(DECK_LOCATION);
+			gameState.addCard(moat);
+			
+			Card remodel = new Card();
+			remodel.setCardType(CardType.Remodel.cardTypeId);
+			remodel.setLocation(DECK_LOCATION);
+			gameState.addCard(remodel);
+			
+			Card smithy = new Card();
+			smithy.setCardType(CardType.Smithy.cardTypeId);
+			smithy.setLocation(DECK_LOCATION);
+			gameState.addCard(smithy);
+			
+			Card village = new Card();
+			village.setCardType(CardType.Village.cardTypeId);
+			village.setLocation(DECK_LOCATION);
+			gameState.addCard(village);
+			
+			Card woodcutter = new Card();
+			woodcutter.setCardType(CardType.Woodcutter.cardTypeId);
+			woodcutter.setLocation(DECK_LOCATION);
+			gameState.addCard(woodcutter);
+			
+			Card workshop = new Card();
+			workshop.setCardType(CardType.Workshop.cardTypeId);
+			workshop.setLocation(DECK_LOCATION);
+			gameState.addCard(workshop);
+			
+			counter++;
+		}
+		
 		//50 of each treasure
 		int treasureCount = 50;
-		counter = 0;
-		while(counter < treasureCount){
+		counter = 1;
+		while(counter <= treasureCount){
 			Card copper = new Card();
 			copper.setCardType(CardType.Copper.cardTypeId);
 			copper.setLocation(DECK_LOCATION);
@@ -747,6 +824,24 @@ public class GameProject implements GameProjectRemote {
 			counter++;
 		}
 		
-		return true;
+	}
+	
+	private void initializePlayer(Player player, GameState gameState){
+		List<Card> gameCards = gameState.getCards();
+		int maxCopperCount = 7;
+		int maxEstateCount = 3;
+		int currentCopperCount = 0;
+		int currentEstateCount = 0;
+		
+		for(Card c : gameCards){
+			if(c.getType() == CardType.Copper && currentCopperCount <= maxCopperCount){
+				player.addCard(c);
+				currentCopperCount++;
+			}
+			else if(c.getType() == CardType.Estate && currentEstateCount <= maxEstateCount){
+				player.addCard(c);
+				currentEstateCount++;
+			}
+		}
 	}
 }
