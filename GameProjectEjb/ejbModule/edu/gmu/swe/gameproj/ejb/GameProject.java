@@ -567,44 +567,6 @@ public class GameProject implements GameProjectRemote {
 			return null;
 		}
 	}
-	
-	@SuppressWarnings("unchecked")
-	private List<Card> getCardsByPlayerAndLocation(long playerId, int locationId){
-		try{
-			final String jpaQlQuery = " from Cards c where c.playerId = :playerId AND c.location = :locationId";
-			
-			Query query = entityManager.createQuery(jpaQlQuery);
-			query.setParameter("playerId", playerId);
-			query.setParameter("locationId", locationId);
-			
-			
-			List<Card> resultList = (List<Card>) query.getResultList();
-			
-			return resultList;
-			
-			
-		}
-		catch (Exception e) {
-			System.err.println("Exception: " + e);
-			return null;
-		}
-	}
-	
-	@Transient
-    private void shuffle(long playerId)
-    {
-		List<Card> cards = getCardsByPlayerAndLocation(playerId, DISCARD_LOCATION);
-		for(Card c : cards){
-			c.setLocation(DECK_LOCATION);
-		}
-		
-		try{
-			entityManager.merge(cards);
-		}
-		catch (Exception e) {
-			System.err.println("Exception: " + e);
-		}
-    }
 
 	@Override
 	public boolean addCardToHandFromGame(Player player, Card card) {
@@ -617,28 +579,6 @@ public class GameProject implements GameProjectRemote {
 		return addCard(player, card, DISCARD_LOCATION);
 
 	}
-	
-	private boolean addCard(Player player, Card card, int locationId){
-		if(player == null) return false;
-		if(card == null) return false;
-
-		//Card needs to be owned by game
-		if(card.getPlayer() != null) return false;
-		if(card.getLocation() != DECK_LOCATION) return false;
-		
-		card.setPlayer(player);
-		card.setLocation(HAND_LOCATION);
-		
-		try{
-			entityManager.merge(card);
-			return true;
-		}
-		catch (Exception e) {
-			System.err.println("Exception: " + e);
-			return false;
-		}
-	}
-
 	
 	
 
@@ -728,6 +668,41 @@ public class GameProject implements GameProjectRemote {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	@Override
+	public boolean endTurn(Player player, GameState gameState) {
+		
+		if(player == null) return false;
+		if(gameState == null) return false;
+		//Reset Player coins, buys, actions
+		player.setActionCount(1);
+		player.setBuyCount(1);
+		player.setCoinCount(0);
+		//Reset Player cards
+		for(Card c : player.getHand()){
+			c.setLocation(DISCARD_LOCATION);
+		}
+		
+		this.draw(player, 5);
+
+		//Reset GameState phase
+		gameState.setPhase(1);
+		
+		//Reset GameState turn
+		if(gameState.getTurn() == 1) gameState.setTurn(2);
+		else gameState.setTurn(1);
+		
+		try{
+			entityManager.merge(player);
+			entityManager.merge(gameState);
+			return true;
+		}catch (Exception e) {
+			System.err.println("Exception: " + e);
+			return false;
+		}
+		
+		
 	}
 	
 	//TODO need to set additional values like turn, phase
@@ -864,6 +839,67 @@ public class GameProject implements GameProjectRemote {
 			}
 		}
 	}
+	
+	private boolean addCard(Player player, Card card, int locationId){
+		if(player == null) return false;
+		if(card == null) return false;
+
+		//Card needs to be owned by game
+		if(card.getPlayer() != null) return false;
+		if(card.getLocation() != DECK_LOCATION) return false;
+		
+		card.setPlayer(player);
+		card.setLocation(HAND_LOCATION);
+		
+		try{
+			entityManager.merge(card);
+			return true;
+		}
+		catch (Exception e) {
+			System.err.println("Exception: " + e);
+			return false;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<Card> getCardsByPlayerAndLocation(long playerId, int locationId){
+		try{
+			final String jpaQlQuery = " from Cards c where c.playerId = :playerId AND c.location = :locationId";
+			
+			Query query = entityManager.createQuery(jpaQlQuery);
+			query.setParameter("playerId", playerId);
+			query.setParameter("locationId", locationId);
+			
+			
+			List<Card> resultList = (List<Card>) query.getResultList();
+			
+			return resultList;
+			
+			
+		}
+		catch (Exception e) {
+			System.err.println("Exception: " + e);
+			return null;
+		}
+	}
+	
+    private void shuffle(long playerId)
+    {
+		List<Card> cards = getCardsByPlayerAndLocation(playerId, DISCARD_LOCATION);
+		for(Card c : cards){
+			c.setLocation(DECK_LOCATION);
+		}
+		
+		try{
+			entityManager.merge(cards);
+		}
+		catch (Exception e) {
+			System.err.println("Exception: " + e);
+		}
+    }
+	
+
+
 	
 	
 	

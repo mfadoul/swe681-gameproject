@@ -43,7 +43,7 @@ public interface GameProjectRemote {
 	public abstract Player joinGameState(long gameStateId, int userId);
 	//public abstract Player getCurrentTurnPlayer(long gameStateId);
 	
-	//Cards
+	//Actions
 	public abstract Card getCardById(int cardId);
 	//public abstract Card getCardInstanceByTypeByPlayer(Player player, CardType cardType);
 
@@ -52,13 +52,18 @@ public interface GameProjectRemote {
 	public abstract boolean addCoins(Player player, int count);
 	public abstract boolean addCardToHandFromGame(Player player, Card card);
 	public abstract boolean addCardToDiscardFromGame(Player player, Card card);
-	public abstract boolean buy(Player player, Card card, GameState gameState);
+
 	public abstract boolean discard(Player player, ArrayList<CardType> cards);
 	public abstract List<Card> draw(Player player, int count);
 	public abstract boolean trash(Card card);
 	
 	public abstract Player getPlayerById(long playerId);
 
+	//Buy
+	public abstract boolean buy(Player player, Card card, GameState gameState);
+	
+	//End Turn
+	public abstract boolean endTurn(Player player, GameState gameState);
 	
 	// Card Events
 	public abstract CardEvent createCardEvent (Card card, GameState gameState, Player player, int location);

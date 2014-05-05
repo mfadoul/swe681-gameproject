@@ -211,6 +211,7 @@ public class GameController {
 						isValid = false;
 						//TODO: Do I need to do something more drastic here?
 					}
+					//TODO check for game over condition
 					
 				}
 				
@@ -218,7 +219,7 @@ public class GameController {
 				
 			}
 			else if(commandAry[0].equals("done")){
-				//TODO
+				gameProject.endTurn(player, gameState);
 			}
 			else{
 				isValid = false;
