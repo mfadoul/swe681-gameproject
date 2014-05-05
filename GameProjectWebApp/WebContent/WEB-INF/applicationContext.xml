@@ -37,6 +37,9 @@
 		</authentication-provider>
 	</authentication-manager>
 
+    <beans:bean id="userAuthenticationErrorHandler" 
+         class="edu.gmu.swe.gameproj.springlistener.UserAuthenticationErrorHandler">
+    </beans:bean>
 
 	<beans:bean id="gameProjectJndiUserService"
 		class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">
