@@ -185,16 +185,19 @@ public class GameController {
 			}
 			else if(commandAry[0].equals("buy")){
 				CardType cardType = CardType.getCardType(commandAry[1]);
+				Card cardToBuy = null;
 				if(cardType == null){
 					isValid = false;
 				}
 				else{
 					//Verify player has enough money
-					if(player.getCoinCount() < cardType.getCost()){
+					if(player.getTotalCoinsInHand() < cardType.getCost()){
 						isValid = false;
 					}
+					
+					cardToBuy = gameState.getFirstInstanceInDeckByType(cardType);
 					//Verify desired card is available
-					if(gameState.getFirstInstanceInDeckByType(cardType) == null){
+					if( cardToBuy == null){
 						isValid = false;
 					}
 				}
@@ -204,7 +207,11 @@ public class GameController {
 				}
 				
 				if(isValid){
-//					if(!gameProject.buy(player, cardType, gameState))
+					if(!gameProject.buy(player, cardToBuy, gameState)){
+						isValid = false;
+						//TODO: Do I need to do something more drastic here?
+					}
+					
 				}
 				
 				//Make call

@@ -192,6 +192,22 @@ public class Player implements Serializable {
 		return null;
 	}
 	
+	//This includes coins gained by actions and value of treasure cards in hand.
+	@Transient
+	public int getTotalCoinsInHand(){
+		ArrayList<Card> deck = this.getHand();
+		int totalCoins = this.getCoinCount();
+		
+		for(Card c : deck){
+			if(c.getType() == CardType.Copper || c.getType() == CardType.Silver || c.getType() == CardType.Gold){
+				totalCoins += c.getType().cardValue;
+			}
+		}
+		
+		return totalCoins;
+	}
+
+	
 	@Transient
 	public void addActionCount(int count){
 		this.actionCount += count;

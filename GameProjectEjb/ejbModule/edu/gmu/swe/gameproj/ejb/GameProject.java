@@ -394,7 +394,8 @@ public class GameProject implements GameProjectRemote {
 			return false;
 		}
 	}
-
+	
+	//Precondition handling of biz rules handled by calling controller method
 	@Override
 	public boolean buy(Player player, Card card, GameState gameState) {
 		try {
@@ -405,21 +406,15 @@ public class GameProject implements GameProjectRemote {
 			
 			if(gameState == null) return false;
 			
-			//Not enough gold
-			if(player.getCoinCount() < card.getCost())
-				return false;
-			
-			//Not enough buys
-			if(player.getBuyCount() <= 0)
-				return false;
-			
 			player.addCoinCount(card.getCost());
 			player.addBuyCount(-1);
 			card.setPlayer(player);
 			card.setLocation(DISCARD_LOCATION);
-			//TODO change game state
+			gameState.setPhase(2);
 			
 			entityManager.merge(card);
+			entityManager.merge(player);
+			entityManager.merge(gameState);
 			
 			return true;
 		}
@@ -730,6 +725,7 @@ public class GameProject implements GameProjectRemote {
 		}
 	}
 	
+	//TODO need to set additional values like turn, phase
 	private void initializeGameState(GameState gameState){
 
 		int counter = 1;
@@ -834,7 +830,7 @@ public class GameProject implements GameProjectRemote {
 		}
 		
 	}
-	
+	//TODO need to set initial coin, buy, etc.. counts
 	private void initializePlayer(Player player, GameState gameState){
 		List<Card> gameCards = gameState.getCards();
 		int maxCopperCount = 7;
@@ -853,6 +849,9 @@ public class GameProject implements GameProjectRemote {
 			}
 		}
 	}
+	
+	
+	
 
 
 }
