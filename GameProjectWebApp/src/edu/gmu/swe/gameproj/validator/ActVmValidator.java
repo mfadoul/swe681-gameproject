@@ -16,6 +16,12 @@ public class ActVmValidator implements Validator{
     private String[] actionCardNames = new String[] {
 	"Cellar", "Market", "Militia", "Mine", "Moat", "Remodel", "Smithy", "Village", "Woodcutter", "Workshop"
 	};
+    private String[] treasureCardNames = new String[]{
+    		"Copper", "Silver", "Gold"
+    };
+    private String[] victoryCardNames = new String[]{
+    		"Estate", "Duchy", "Province"
+    };
 	
 
 	@Override
@@ -47,7 +53,7 @@ public class ActVmValidator implements Validator{
 			
 			//First input is valid (e.g. "play", "buy", "done")
 			else if(!Arrays.asList(validCommands).contains(commandAry[0])){
-				errors.rejectValue("command", "Unrecognized command");
+				errors.rejectValue("command", "Unknown command");
 			}
 			else{
 				//Play command
@@ -76,7 +82,18 @@ public class ActVmValidator implements Validator{
 	}
 	
 	private void handleBuy(String[] commandAry, Errors errors){
-		
+		//Buy should only have 2 tokens
+		if(commandAry.length != 2){
+			errors.rejectValue("command", "Invalid input");
+		}
+		//Second token must be one of the known cards
+		if(!Arrays.asList(actionCardNames).contains(commandAry[1])){
+			if(!Arrays.asList(treasureCardNames).contains(commandAry[1])){
+				if(!Arrays.asList(victoryCardNames).contains(commandAry[1])){
+					errors.rejectValue("command", "Unknown card");
+				}
+			}
+		}
 	}
 	
 	private void handleDone(String[] commandAry, Errors errors){

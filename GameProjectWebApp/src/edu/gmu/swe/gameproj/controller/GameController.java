@@ -145,12 +145,12 @@ public class GameController {
 				//TODO Do I need to do something more serious here?
 			}
 			
-
-			//TODO need to validate that they are in the right phase.  IE, can't act after buy. No DB field for currently
-			
-			
 			
 			if(commandAry[0].equals("play")){
+				//Check that in play phase. Can't play if not in this phase
+				if(gameState.getPhase() != 1){
+					isValid = false;
+				}
 				//2. Check that they have the card they wish to play in hand
 				CardType cardType = CardType.getCardType(commandAry[1]);
 				if(cardType != null) {
@@ -175,7 +175,7 @@ public class GameController {
 							isValid = false;
 						}
 						catch(Exception e){
-							//TODO This is an unrecoverable exception. Game needs to end
+							//TODO This is an unrecoverable exception. Game probably should end
 						}
 					}
 					else{
