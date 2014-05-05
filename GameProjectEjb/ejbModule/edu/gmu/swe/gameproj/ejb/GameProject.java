@@ -202,7 +202,7 @@ public class GameProject implements GameProjectRemote {
 		}
 		
 		gameState = new GameState ();
-		gameState.setBeginDate(new Date());
+
 		initializeGameState(gameState);
 		entityManager.persist(gameState);
 		
@@ -256,6 +256,11 @@ public class GameProject implements GameProjectRemote {
 		// 5. Create a new Player
 		Player player = new Player();
 		initializePlayer(player, gameState);
+		
+		//Since player has not already been added to gameState, set their turn value to the current number 
+		// of players + 1
+		player.setTurn(gameState.getPlayers().size() + 1);
+		
 		user.addPlayer(player); // Create the connection on both sides.
 
 		// 5a.  Add the new player to the GameState.
@@ -728,6 +733,10 @@ public class GameProject implements GameProjectRemote {
 	//TODO need to set additional values like turn, phase
 	private void initializeGameState(GameState gameState){
 
+		gameState.setPhase(1);
+		gameState.setTurn(1);
+		gameState.setBeginDate(new Date());
+		
 		int counter = 1;
 		
 		//8 of each victory
@@ -832,6 +841,12 @@ public class GameProject implements GameProjectRemote {
 	}
 	//TODO need to set initial coin, buy, etc.. counts
 	private void initializePlayer(Player player, GameState gameState){
+		
+		//Initial values
+		player.setActionCount(1);
+		player.setBuyCount(1);
+		player.setCoinCount(0);
+		
 		List<Card> gameCards = gameState.getCards();
 		int maxCopperCount = 7;
 		int maxEstateCount = 3;
