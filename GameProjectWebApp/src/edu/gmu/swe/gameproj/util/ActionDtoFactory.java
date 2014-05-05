@@ -4,11 +4,13 @@ import java.util.ArrayList;
 
 import edu.gmu.swe.gameproj.mechanics.cards.action.ActionDto;
 import edu.gmu.swe.gameproj.jpa.CardType;
+import edu.gmu.swe.gameproj.jpa.Player;
 
 public class ActionDtoFactory {
-	public static ActionDto buildDto(String[] input){
+	public static ActionDto buildDto(String[] input, Player player){
 		
 	    ActionDto dto = new ActionDto();
+	    dto.player = player;
 	    switch(input[1].toLowerCase()){
 	        case "cellar":
 	        	String[] discardArray = input[2].split(",");
@@ -24,7 +26,6 @@ public class ActionDtoFactory {
 	        	}
 	            break;
 	        case "market":
-	            //No data to add
 	            break;
 	        case "militia":
 	            //No data to add
@@ -85,6 +86,7 @@ public class ActionDtoFactory {
 	            }
 	            break;
 	        default:
+	        	return null;
 	            break;
 	
 	    }

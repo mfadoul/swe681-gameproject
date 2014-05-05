@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import edu.gmu.swe.gameproj.ejb.GameProjectRemote;
 import edu.gmu.swe.gameproj.jpa.Card;
+import edu.gmu.swe.gameproj.jpa.CardType;
 import edu.gmu.swe.gameproj.jpa.GameState;
 import edu.gmu.swe.gameproj.jpa.Player;
 import edu.gmu.swe.gameproj.jpa.User;
@@ -40,38 +41,86 @@ public class GameController {
     private SessionRegistryImpl sessionRegistry;
 
 
+//	// This allows a user to play a game
+//	@RequestMapping(value="play", method=RequestMethod.GET)
+//	public ModelAndView play() {
+//		ModelAndView mav = new ModelAndView();
+//		
+//		Player player = null;
+//		
+//		User user = SessionBeanHelper.getLoggedInUser();
+//		mav.addObject("user", user);
+//		mav.addObject("loggedInUser", SessionBeanHelper.getLoggedInUser());  // Yep, it's the same as user...
+//
+//		GameProjectRemote gameProject = 
+//				SessionBeanHelper.getGameProjectSessionBean();
+//
+//		player = gameProject.getActivePlayerByUser(user);
+//
+//		GameState gameState = gameProject.getActiveGameStateByUser(user);
+//		
+//		if (player == null || gameState == null) {
+//			return new ModelAndView("redirect:/");//TODO Where to redirect them to
+//		}
+//		mav.addObject("actVm", new ActVm());
+//		mav.addObject("player", player);
+//		mav.addObject("gameState", gameState);
+//		
+//		mav.setViewName("Game_Play");
+//		return mav;
+//	}
+	
 	// This allows a user to play a game
-	@RequestMapping(value="play", method=RequestMethod.GET)
-	public ModelAndView play() {
-		ModelAndView mav = new ModelAndView();
-		
-		Player player = null;
-		
-		User user = SessionBeanHelper.getLoggedInUser();
-		mav.addObject("user", user);
-		mav.addObject("loggedInUser", SessionBeanHelper.getLoggedInUser());  // Yep, it's the same as user...
-		
-		// 1. If the user is not found, provide a message that it failed
-		// 2. If the user isn't in a game, create a new game for them, and send them to the game.
-		// 3. If the user is already in a game, send the user to their game
-		
-
-		GameProjectRemote gameProject = 
-				SessionBeanHelper.getGameProjectSessionBean();
-
-		player = gameProject.getActivePlayerByUser(user);
-		GameState gameState = gameProject.createGameStateByUser(user);
-		
-		if (player == null || gameState == null) {
-			return new ModelAndView("redirect:/");//TODO Where to redirect them to
-		}
+		@RequestMapping(value="play", method=RequestMethod.GET)
+		public ModelAndView play() {
+			ModelAndView mav = new ModelAndView();
 			
-		mav.addObject("player", player);
-		mav.addObject("gameState", gameState);
-		
-		mav.setViewName("Game_Play");
-		return mav;
-	}
+			Player player = null;
+			
+			// See if the user exists
+			User user = SessionBeanHelper.getLoggedInUser();
+			mav.addObject("user", user);
+			mav.addObject("loggedInUser", SessionBeanHelper.getLoggedInUser());  // Yep, it's the same as user...
+			
+			// 1. If the user is not found, provide a message that it failed
+			// 2. If the user isn't in a game, create a new game for them, and send them to the game.
+			// 3. If the user is already in a game, send the user to their game
+			
+			if (user != null) {
+				GameProjectRemote gameProject = 
+						SessionBeanHelper.getGameProjectSessionBean();
+
+				player = gameProject.getActivePlayerByUser(user);
+				
+				if (player == null) {
+					// 2. Create a game if there is no existing player.
+					GameState gameState = gameProject.createGameStateByUser(user);
+					if (gameState != null) {
+						// Now, create an instance of player
+						player = gameProject.joinGameState(gameState.getId(), user.getId());
+						if (player == null) {
+							mav.addObject("errorMessage", "Couldn't create a new Player instance!");	
+						} else {
+							mav.addObject("infoMessage", "Created a new Game!");
+						}
+					} else {
+						// Something is busted.
+						mav.addObject("errorMessage", "Couldn't create a new Game!");	
+					}
+				} else {
+					// 3. If the user is already in a game, send the user to their game
+					// Nothing to do...
+					mav.addObject("infoMessage", "Existing game.");
+				}
+				mav.addObject("player", player);
+			} else {
+				mav.addObject("errorMessage", "Your account could not be found in our database.");
+				mav.addObject("player", null);
+			}
+			mav.addObject("actVm", new ActVm());
+			mav.setViewName("Game_Play");
+			return mav;
+		}
 	
 	@RequestMapping(value="play", method=RequestMethod.POST)
 	public ModelAndView play(@Valid ActVm actVm, BindingResult result, Model model){
@@ -92,44 +141,46 @@ public class GameController {
 			//Precondition- THe validator has checked that the input is proper syntax
 			//1. Check that it is this person's turn
 			if(player.getTurn() != gameState.getTurn()){
-				//TODO
+				isValid = false;
+				//TODO Do I need to do something more serious here?
 			}
 			
-			//2. Check that they have the card they wish to play in hand
-			//TODO this only works for Action
-			ArrayList<Card> hand = player.getHand();
-			Boolean hasCard = false;
-			for(Card c : hand){
-				if(c.getType().getName().equals(commandAry[1])); {
-					hasCard = true;
-					break;
-				}
-				
-			}
-			if(!hasCard){
-				isValid = false;
-			}
 
 			//TODO need to validate that they are in the right phase.  IE, can't act after buy. No DB field for currently
 			
 			
-			//Note: Card specific validations deferred to the cards
-			if(commandAry[0].equals("act")){
-				Action action = ActionFactory.buildCard(commandAry, gameProject);
-				ActionDto dto = ActionDtoFactory.buildDto(commandAry);
-				if(action != null && dto != null){
-					try{
-						action.act(dto);
-					}
-					catch(InvalidParameterException e){
+			
+			if(commandAry[0].equals("play")){
+				//2. Check that they have the card they wish to play in hand
+				CardType cardType = CardType.getCardType(commandAry[1]);
+				if(cardType != null) {
+					if(player.getFirstInstanceInHandByType(cardType) == null){
+						//Card not in hand
 						isValid = false;
-					}
-					catch(Exception e){
-						//TODO This is an unrecoverable exception. Game needs to end
 					}
 				}
 				else{
+					//Not a valid card
 					isValid = false;
+				}
+				
+				if(isValid){
+					Action action = ActionFactory.buildCard(commandAry, gameProject);
+					ActionDto dto = ActionDtoFactory.buildDto(commandAry, player);
+					if(action != null && dto != null){
+						try{
+							action.act(dto);
+						}
+						catch(InvalidParameterException e){
+							isValid = false;
+						}
+						catch(Exception e){
+							//TODO This is an unrecoverable exception. Game needs to end
+						}
+					}
+					else{
+						isValid = false;
+					}
 				}
 			}
 			else if(commandAry[0].equals("buy")){
@@ -142,11 +193,14 @@ public class GameController {
 				isValid = false;
 			}
 			
-			
+			if(!isValid){
+				mav.addObject("errorMessage", "Invalid input");
+			}
 			
 		}
 		else{
-			model.addAllAttributes(result.getAllErrors());
+			//model.addAllAttributes(result.getAllErrors());
+			mav.addObject("errorMessage", "Invalid input");
 		}
 		
 		gameState = gameProject.getActiveGameStateByUser(user);
@@ -155,7 +209,8 @@ public class GameController {
 		mav.addObject("loggedInUser", user); 
 		mav.addObject("player", player);
 		mav.addObject("gameState", gameState);
-		
+		mav.addObject("actVm", new ActVm());
+		mav.setViewName("Game_Play");
 		return mav;
 	}
 	

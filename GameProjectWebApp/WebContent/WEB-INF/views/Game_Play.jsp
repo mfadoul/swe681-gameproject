@@ -24,7 +24,10 @@
 				<c:if test="${player ne null}">
 					<h3>In a game.</h3>
 					<!-- ADD CONTENT HERE -->
-					<h1>All of the Game Can be rendered here!</h1>
+					<form:form modelAttribute="actVm" action="play" method="post">
+						<form:label for="command" path="command" cssErrorClass="error">Command</form:label>
+						<form:input path="command" size="40" maxlength="100" title="Enter a command" /> <form:errors path="command" />
+					</form:form>
 					<h2>Players:</h2>
 					<c:forEach items="${player.gameState.players}" var="gamePlayer">
 						<c:if test="${player.id eq gamePlayer.id}">

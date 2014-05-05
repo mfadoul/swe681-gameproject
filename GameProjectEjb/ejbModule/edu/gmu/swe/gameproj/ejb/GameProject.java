@@ -629,6 +629,35 @@ public class GameProject implements GameProjectRemote {
 			return false;
 		}
 	}
+	
+	private boolean initializeGameState(GameState gameState){
+		gameState.addCard()
+		//8 of each victory
+		int victoryCount = 8;
+		int counter = 0;
+
+		//10 of each action
+		//50 of each treasure
+		int treasureCount = 50;
+		counter = 0;
+		while(counter < treasureCount){
+			Card copper = new Card();
+			copper.setCardType(CardType.Copper.cardTypeId);
+			copper.setLocation(DECK_LOCATION);
+			gameState.addCard(copper);
+			
+			Card silver = new Card();
+			silver.setCardType(CardType.Silver.cardTypeId);
+			silver.setLocation(DECK_LOCATION);
+			gameState.addCard(silver);
+			
+			Card gold = new Card();
+			gold.setCardType(CardType.Gold.cardTypeId);
+			gold.setLocation(DECK_LOCATION);
+			
+			counter++;
+		}
+	}
 
 
 }
