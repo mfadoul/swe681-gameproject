@@ -3,6 +3,7 @@ package edu.gmu.swe.gameproj.mechanics.cards.action;
 import java.security.InvalidParameterException;
 
 import edu.gmu.swe.gameproj.ejb.GameProjectRemote;
+import edu.gmu.swe.gameproj.jpa.Card;
 import edu.gmu.swe.gameproj.jpa.CardType;
 
 
@@ -13,11 +14,18 @@ public class Remodel extends Action {
 	}
 
 	@Override
-    public void act(ActionDto dto) {
+    public void act(ActionDto dto) throws Exception {
         if(!validate(dto)) throw new InvalidParameterException("dto");
         
-        super.gameProject.trash(dto.oldCard);
-        super.gameProject.addCardToDiscardFromGame(dto.player, dto.oldCard);
+        Card trashCard = dto.player.getFirstInstanceInHandByType(dto.oldCard);
+        Card newCard = null;//TODO: Retrieve new card from gamestate
+        if(!super.gameProject.trash(trashCard)){
+        	throw new Exception("trash failed");
+        }
+
+        if(!super.gameProject.addCardToDiscardFromGame(dto.player, newCard)){
+        	throw new Exception("discard failed");
+        }
 
 //        ICommand trash = new TrashCardCommand(dto.player, dto.oldCard);
 //        ICommand add = new AddCardCommand(dto.player, dto.newCard);
@@ -29,18 +37,18 @@ public class Remodel extends Action {
 
     @Override
     protected boolean validate(ActionDto dto) {
-        if(dto == null) throw new NullPointerException("dto");
+        if(dto == null) return false;
         
-        if(dto.player == null) throw new NullPointerException("dto.Player");
-        if(dto.oldCard == null) throw new NullPointerException("dto.oldCard");
-        if(dto.newCard == null) throw new NullPointerException("dto.newCard");
+        if(dto.player == null) return false;
+        if(dto.oldCard == null) return false;
+        if(dto.newCard == null) return false;
         
-        CardType oldCardType = CardType.getCardType(dto.oldCard.getCardType());
-        CardType newCardType = CardType.getCardType(dto.newCard.getCardType());
+        //TODO Verify oldcard exists in gamestate to add to hand
+        
+        if(dto.player.getFirstInstanceInHandByType(dto.oldCard) == null) return false;       
 
-        if(newCardType.getCost() > (oldCardType.getCost() + 3))
+        if(dto.newCard.getCost() > (dto.oldCard.getCost() + 3))
             return false;
-
 
         return true;
     }

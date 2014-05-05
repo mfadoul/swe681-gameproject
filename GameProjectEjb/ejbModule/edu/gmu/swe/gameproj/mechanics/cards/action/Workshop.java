@@ -3,6 +3,7 @@ package edu.gmu.swe.gameproj.mechanics.cards.action;
 import java.security.InvalidParameterException;
 
 import edu.gmu.swe.gameproj.ejb.GameProjectRemote;
+import edu.gmu.swe.gameproj.jpa.Card;
 import edu.gmu.swe.gameproj.jpa.CardType;
 
 
@@ -14,10 +15,13 @@ public class Workshop extends Action {
 
 	
     @Override
-    public void act(ActionDto dto) {
+    public void act(ActionDto dto) throws Exception {
         if(!validate(dto)) throw new InvalidParameterException("dto");
         
-        super.gameProject.addCardToDiscardFromGame(dto.player, dto.newCard);
+        Card newCard = null;//TODO get card from gamestate
+        if(!super.gameProject.addCardToDiscardFromGame(dto.player, newCard)){
+        	throw new Exception("add card to discard failed");
+        }
 
 //        ICommand addCard = new AddCardCommand(dto.player, dto.newCard);
 //
@@ -26,14 +30,15 @@ public class Workshop extends Action {
 
     @Override
     protected boolean validate(ActionDto dto) {
-        if(dto == null) throw new NullPointerException("dto");
-        if(dto.player == null) throw new NullPointerException("dto.player");
+        if(dto == null) return false;
+        if(dto.player == null) return false;
 
-        if(dto.newCard == null) throw new NullPointerException("dto.newCard");
+        if(dto.newCard == null) return false;
         
-        CardType newCardType = CardType.getCardType(dto.newCard.getCardType());
+        //TODO Verify card available in gamestate
+        
 
-        if(newCardType.getCost() > 4)
+        if(dto.newCard.getCost() > 4)
             return false;
 
         return true;

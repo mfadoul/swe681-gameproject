@@ -19,13 +19,21 @@ public class Market extends Action {
 	}
 	
     @Override
-    public void act(ActionDto dto) {
+    public void act(ActionDto dto) throws Exception {
         if(!validate(dto)) throw new InvalidParameterException("dto");
         
-        super.gameProject.addActions(dto.player, addActionsCount);
-        super.gameProject.addBuys(dto.player, addBuysCount);
-        super.gameProject.addCoins(dto.player, addCoinsCount);
-        super.gameProject.draw(dto.player, drawCount);
+        if(!super.gameProject.addActions(dto.player, addActionsCount)){
+        	throw new Exception("add actions failed");
+        }
+        if(!super.gameProject.addBuys(dto.player, addBuysCount)){
+        	throw new Exception("add actions failed");
+        }
+        if(super.gameProject.addCoins(dto.player, addCoinsCount)){
+        	throw new Exception("add coins failed");
+        }
+        if(super.gameProject.draw(dto.player, drawCount) == null){
+        	throw new Exception("draw failed");
+        }
 
 //        ICommand addActions= new AddActionsCommand(dto.player, addActionsCount);
 //        ICommand addBuys = new AddBuysCommand(dto.player, addBuysCount);
@@ -40,8 +48,8 @@ public class Market extends Action {
 
     @Override
     protected boolean validate(ActionDto dto) {
-        if(dto == null) throw new NullPointerException("dto");
-        if(dto.player == null) throw new NullPointerException("dto.player");
+        if(dto == null) return false;
+        if(dto.player == null) return false;
 
         return true;
     }

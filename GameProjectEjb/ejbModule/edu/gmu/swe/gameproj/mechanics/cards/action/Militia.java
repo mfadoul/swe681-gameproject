@@ -14,20 +14,23 @@ public class Militia extends Action {
 	}
 	
     @Override
-    public void act(ActionDto dto) {
+    public void act(ActionDto dto) throws Exception {
         if(!validate(dto)) throw new InvalidParameterException("dto");
         
-        super.gameProject.addCoins(dto.player, addCoinsCount);
-
+        if(!super.gameProject.addCoins(dto.player, addCoinsCount)){
+        	throw new Exception("add coins failed");
+        }
+      //TODO: Add observer for card draw down
+        
 //        ICommand addCoins = new AddCoinsCommand(dto.player, addCoinsCount);
 //        addCoins.Execute();
-        //TODO: Add observer for card draw down
+        
     }
 
     @Override
     public boolean validate(ActionDto dto) {
-        if(dto == null) throw new NullPointerException("dto");
-        if(dto.player == null) throw new NullPointerException("dto.player");
+        if(dto == null) return false;
+        if(dto.player == null) return false;
         return true;
     }
 

@@ -134,34 +134,34 @@ public class Player implements Serializable {
 		this.user = user;
 	}
 	
-//	@Transient
-//	private ArrayList<Card> getDeck(){
-//		ArrayList<Card> deck = new ArrayList<Card>();
-//		for(Card c : cards){
-//			if(c.getLocation() == DECK_LOCATION) deck.add(c);
-//		}
-//		
-//		return deck;
-//	}
-//	
-//	@Transient
-//	private ArrayList<Card> getHand(){
-//		ArrayList<Card> hand = new ArrayList<Card>();
-//		for(Card c : cards){
-//			if(c.getLocation() == HAND_LOCATION) hand.add(c);
-//		}
-//		return hand;
-//	}
-//	
-//	@Transient
-//	private ArrayList<Card> getDiscard(){
-//		ArrayList<Card> discard = new ArrayList<Card>();
-//		for(Card c : cards){
-//			if(c.getLocation() == DISCARD_LOCATION) discard.add(c);
-//		}
-//		
-//		return discard;
-//	}
+	@Transient
+	public ArrayList<Card> getDeck(){
+		ArrayList<Card> deck = new ArrayList<Card>();
+		for(Card c : cards){
+			if(c.getLocation() == DECK_LOCATION) deck.add(c);
+		}
+		
+		return deck;
+	}
+	
+	@Transient
+	public ArrayList<Card> getHand(){
+		ArrayList<Card> hand = new ArrayList<Card>();
+		for(Card c : cards){
+			if(c.getLocation() == HAND_LOCATION) hand.add(c);
+		}
+		return hand;
+	}
+	
+	@Transient
+	public ArrayList<Card> getDiscard(){
+		ArrayList<Card> discard = new ArrayList<Card>();
+		for(Card c : cards){
+			if(c.getLocation() == DISCARD_LOCATION) discard.add(c);
+		}
+		
+		return discard;
+	}
 //	
 //	
 //	@Transient
@@ -176,8 +176,20 @@ public class Player implements Serializable {
 //    }
 	
 	@Transient
-	public boolean hasCard(Card card){
-		return cards.contains(card);
+	public boolean hasCardInHand(Card card){
+		ArrayList<Card> hand = getHand();
+		return hand.contains(card);
+	}
+	
+	@Transient
+	public Card getFirstInstanceInHandByType(CardType cardType){
+		ArrayList<Card> hand = getHand();
+		
+		for(Card c : hand){
+			if(c.getType() == cardType) return c;
+		}
+		
+		return null;
 	}
 	
 	@Transient

@@ -15,7 +15,7 @@ public abstract class Action extends Card {
 		gameProject = _gameProject;
 	}
 
-	public abstract void act (ActionDto dto);
+	public abstract void act (ActionDto dto) throws Exception;
 	protected abstract boolean validate(ActionDto dto);
 	
 	

@@ -16,11 +16,15 @@ public class Woodcutter extends Action {
 	}
 
 	@Override
-    public void act(ActionDto dto) {
+    public void act(ActionDto dto) throws Exception {
         if(!validate(dto)) throw new InvalidParameterException("dto");
         
-        super.gameProject.addBuys(dto.player, buyCount);
-        super.gameProject.addCoins(dto.player, coinCount);
+        if(!super.gameProject.addBuys(dto.player, buyCount)){
+        	throw new Exception("add buys failed");
+        }
+        if(!super.gameProject.addCoins(dto.player, coinCount)){
+        	throw new Exception("add coins failed");
+        }
 //
 //        ICommand addBuys = new AddBuysCommand(dto.player, buyCount);
 //        ICommand addCoins = new AddCoinsCommand(dto.player, coinCount);
@@ -31,8 +35,8 @@ public class Woodcutter extends Action {
 
     @Override
     protected boolean validate(ActionDto dto) {
-        if(dto == null) throw new NullPointerException("dto");
-        if(dto.player == null) throw new NullPointerException("dto.player");
+        if(dto == null) return false;
+        if(dto.player == null) return false;
         return true;
     }
 

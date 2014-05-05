@@ -1,6 +1,7 @@
 package edu.gmu.swe.gameproj.mechanics.cards.action;
 
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 
 import edu.gmu.swe.gameproj.ejb.GameProjectRemote;
 import edu.gmu.swe.gameproj.jpa.Card;
@@ -14,14 +15,20 @@ public class Cellar extends Action {
 		super(CardType.Cellar, _gameProject);
 	}
     @Override
-    public void act(ActionDto dto) {
+    public void act(ActionDto dto) throws Exception {
         if(!validate(dto)){
             throw new InvalidParameterException("dto");
         }
         
-        super.gameProject.addActions(dto.player, addActionsCount);
-        super.gameProject.discard(dto.discardCards);
-        super.gameProject.draw(dto.player, dto.discardCards.size());
+        if(!super.gameProject.addActions(dto.player, addActionsCount)){
+        	throw new Exception("add actions failed");
+        }
+        if(!super.gameProject.discard(dto.player, dto.discardCards)){
+        	throw new Exception("discard failed");
+        }
+        if(super.gameProject.draw(dto.player, dto.discardCards.size()) == null){
+        	throw new Exception("draw failed");
+        }
         
 
 //        ICommand addActions = new AddActionsCommand(dto.player, addActionsCount);
@@ -37,20 +44,21 @@ public class Cellar extends Action {
 
     @Override
     protected boolean validate(ActionDto dto) {
-        if(dto == null) throw new NullPointerException("dto");
+        if(dto == null) return false;
 
-        if(dto.player == null) throw new NullPointerException("dto.Player");
-        if(dto.discardCards == null) throw new NullPointerException("dto.discardCards");
-
-        for(Card c : dto.discardCards)
-        {
-        	//TODO test not just precense of card but in correct location (e.g. hand)
-            if(!dto.player.hasCard(c)) {
-                return false;
-            }
-
+        if(dto.player == null) return false;
+        if(dto.discardCards == null) return false;
+        
+        
+        ArrayList<Card> hand = dto.player.getHand();
+        for(CardType ct : dto.discardCards){
+        	if(dto.player.getFirstInstanceInHandByType(ct) == null){
+        		return false;
+        	}
         }
+        
 
         return true;
     }
+    
 }

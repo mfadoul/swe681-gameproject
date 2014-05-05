@@ -423,10 +423,22 @@ public class GameProject implements GameProjectRemote {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean discard(ArrayList<Card> cards) {
+	public boolean discard(Player player, ArrayList<CardType> cards) {
 
 		try {
 			if (cards == null || cards.size() == 0) return false;
+			if(player == null) return false;
+			
+			
+			for(CardType ct : cards){
+				Card card = player.getFirstInstanceInHandByType(ct);
+				if(card == null){
+					return false;
+				}
+				else{
+					card.setLocation(DISCARD_LOCATION);
+				}
+			}
 			
 //			final String jpaQlQuery = " from Cards c where c.id IN :cardIds";
 //			
@@ -436,10 +448,8 @@ public class GameProject implements GameProjectRemote {
 //			List<Card> resultList = (List<Card>) query.getResultList();
 			
 			
-			for(Card c : cards){
-				c.setLocation(DISCARD_LOCATION);
-			}
-			entityManager.merge(cards);
+			
+			entityManager.merge(player);
 			
 			return true;
 		}
@@ -600,8 +610,8 @@ public class GameProject implements GameProjectRemote {
 	}
 	
 	private boolean addCard(Player player, Card card, int locationId){
-		if(player == null) throw new NullPointerException("player");
-		if(card == null) throw new NullPointerException("card");
+		if(player == null) return false;
+		if(card == null) return false;
 
 		//Card needs to be owned by game
 		if(card.getPlayer() != null) return false;
@@ -619,4 +629,6 @@ public class GameProject implements GameProjectRemote {
 			return false;
 		}
 	}
+
+
 }

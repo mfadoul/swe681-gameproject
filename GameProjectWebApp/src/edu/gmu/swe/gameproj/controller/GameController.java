@@ -1,23 +1,33 @@
 package edu.gmu.swe.gameproj.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.gmu.swe.gameproj.ejb.GameProjectRemote;
+import edu.gmu.swe.gameproj.jpa.Card;
 import edu.gmu.swe.gameproj.jpa.GameState;
 import edu.gmu.swe.gameproj.jpa.Player;
 import edu.gmu.swe.gameproj.jpa.User;
+import edu.gmu.swe.gameproj.mechanics.cards.action.Action;
+import edu.gmu.swe.gameproj.mechanics.cards.action.ActionDto;
+import edu.gmu.swe.gameproj.util.ActVm;
+import edu.gmu.swe.gameproj.util.ActionDtoFactory;
+import edu.gmu.swe.gameproj.util.ActionFactory;
 import edu.gmu.swe.gameproj.util.SessionBeanHelper;
 
 @Controller
@@ -175,38 +185,76 @@ public class GameController {
 		mav.setViewName("UserInfo");
 		return mav;
 	}
+	
+	
+//	@RequestMapping(value="act", method=RequestMethod.POST)
+//	public ModelAndView act(@Valid ActVm actVm, BindingResult result, Model model){
+//		boolean isValid = true;
+//		if(!result.hasErrors()){
+//			User user = SessionBeanHelper.getLoggedInUser();
+//			
+//			GameProjectRemote gameProject = SessionBeanHelper.getGameProjectSessionBean();
+//			GameState gameState = gameProject.getActiveGameStateByUser(user);
+//			Player player = gameProject.getActivePlayerByUser(user);
+//			String[] commandAry = actVm.getCommand().split(" ");
+//			
+//
+//			//Precondition- THe validator has checked that the input is proper syntax
+//			//Do I need to check that the user is logged in?
+//			//1. Check that it is this person's turn
+//			if(player.getTurn() != gameState.getTurn()){
+//				//TODO
+//			}
+//			
+//			//2. Check that they have the card they wish to play in hand
+//			ArrayList<Card> hand = player.getHand();
+//			Boolean hasCard = false;
+//			for(Card c : hand){
+//				if(c.getType().getName().equals(commandAry[1])); {
+//					hasCard = true;
+//					break;
+//				}
+//				
+//			}
+//			if(!hasCard){
+//				isValid = false;
+//			}
+//
+//			//TODO need to validate that they are in the right phase.  IE, can't act after buy. No DB field for currently
+//			
+//			
+//			//Note: Card specific validations deferred to the cards
+//			if(commandAry[0].equals("act")){
+//				Action action = ActionFactory.buildCard(commandAry, gameProject);
+//				ActionDto dto = ActionDtoFactory.buildDto(commandAry);
+//				if(action != null && dto != null){
+//					try{
+//						action.act(dto);
+//					}
+//					catch(Exception e){
+//						isValid = false;
+//					}
+//				}
+//				else{
+//					isValid = false;
+//				}
+//			}
+//			else if(commandAry[0].equals("buy")){
+//				//TODO
+//			}
+//			else if(commandAry[0].equals("done")){
+//				//TODO
+//			}
+//			else{
+//				isValid = false;
+//			}
+//			
+//			
+//		}
+//		else{
+//			model.addAllAttributes(result.getAllErrors());
+//		}
+//	}
 
-//    @RequestMapping(value="action", method= RequestMethod.POST)
-//    public ModelAndView action(@Valid ActionVm vm, BindingResult result, Model model) {
-//        ModelAndView mav = new ModelAndView();
-//        if(!result.hasErrors()){
-//            //TODO Other validations, like does player have the card
-//
-//            Action playedCard = (Action)CardFactory.buildCard(vm.playedCardName);
-//            ActionDto dto = new ActionDto();
-//            dto.player = new Player();//TODO Replace with session player
-//            dto.oldCardName = vm.oldCardName;
-//            dto.newCardName = vm.newCardName;
-//            dto.discardCardNames = (ArrayList<String>)Arrays.asList(vm.discardCardNames);
-//
-//            try {
-//                playedCard.Act(dto);
-//            }
-//            catch(InvalidParameterException ex){
-//                //TODO
-//            }
-//            catch(NullPointerException ex){
-//                //TODO
-//            }
-//
-//
-//        }
-//        else{
-//            //TODO Add errors
-//        }
-//        //TODO set mav values
-//
-//        return mav;
-//    }
 
 }

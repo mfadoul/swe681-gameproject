@@ -1,6 +1,7 @@
 package edu.gmu.swe.gameproj.mechanics.cards.action;
 
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 
 import edu.gmu.swe.gameproj.ejb.GameProject;
 import edu.gmu.swe.gameproj.ejb.GameProjectRemote;
@@ -15,11 +16,18 @@ public class Mine extends Action {
 	}
 	
     @Override
-    public void act(ActionDto dto) {
+    public void act(ActionDto dto) throws Exception {
         if(!validate(dto)) throw new InvalidParameterException("dto");
         
-        super.gameProject.trash(dto.oldCard);
-        super.gameProject.addCardToHandFromGame(dto.player, dto.newCard);
+        Card trashCard = dto.player.getFirstInstanceInHandByType(dto.oldCard);
+        Card newCard = null;//TODO Get card from game instance;
+        
+        if(!super.gameProject.trash(trashCard)){
+        	throw new Exception("trash failed");
+        }
+        if(!super.gameProject.addCardToHandFromGame(dto.player, newCard)){
+        	throw new Exception("add card to hand failed");
+        }
 
 //        ICommand trash =  new TrashCardCommand(dto.player, dto.oldCard);
 //        ICommand add = new AddCardCommand(dto.player, dto.newCard);
@@ -31,17 +39,17 @@ public class Mine extends Action {
 
     @Override
     protected boolean validate(ActionDto dto) {
-        if(dto == null) throw new NullPointerException("dto");
+        if(dto == null) return false;
 
-        if(dto.player == null) throw new NullPointerException("dto.player");
-        if(dto.oldCard == null) throw new NullPointerException("dto.oldCard");
-        if(dto.newCard == null) throw new NullPointerException("dto.newCard");
-        
-        
-        CardType oldCardType = CardType.getCardType(dto.oldCard.getCardType());
-        CardType newCardType = CardType.getCardType(dto.newCard.getCardType());
+        if(dto.player == null) return false;
+        if(dto.oldCard == null) return false;
+        if(dto.newCard == null) return false;
+    	
+    	if(dto.player.getFirstInstanceInHandByType(dto.oldCard) == null) return false;
+    	
+        //TODO Verify sufficient cards in game state for newCard
 
-        if(newCardType.getCost() > (oldCardType.getCost() + 3))
+        if(dto.newCard.getCost() > (dto.oldCard.getCost() + 3))
             return false;
 
         return true;

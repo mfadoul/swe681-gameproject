@@ -14,10 +14,12 @@ public class Moat extends Action {
 		super(CardType.Moat, _gameProject);
 	}
 	@Override
-    public void act(ActionDto dto) {
+    public void act(ActionDto dto) throws Exception {
         if(!validate(dto)) throw new InvalidParameterException("dto");
         
-        super.gameProject.draw(dto.player, drawCount);
+        if(super.gameProject.draw(dto.player, drawCount) == null){
+        	throw new Exception("draw failed");
+        }
 
 //        ICommand draw = new DrawCommand(dto.player, drawCount);
 //        draw.Execute();
@@ -26,8 +28,8 @@ public class Moat extends Action {
 
     @Override
     protected boolean validate(ActionDto dto) {
-        if(dto == null) throw new NullPointerException("dto");
-        if(dto.player == null) throw new NullPointerException("dto.player");
+        if(dto == null) return false;
+        if(dto.player == null) return false;
 
         return true;
     }
