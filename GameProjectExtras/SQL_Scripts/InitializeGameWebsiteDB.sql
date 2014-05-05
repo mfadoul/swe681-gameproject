@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS `Users` (
   `email` varchar(128) NOT NULL COMMENT 'User''s E-mail Address.',
   `password` varchar(128) NOT NULL COMMENT 'Salted hash representation of the user''s password',
   `role` varchar(10) DEFAULT NULL,
+  `accountLocked` TINYINT(1) NULL COMMENT 'Whether the account is locked (1=True, 0=False).  Never unlocked!',
   `salutation` varchar(8) DEFAULT NULL COMMENT 'Mr., Mrs., Dr., etc.',
   `firstname` varchar(32) DEFAULT NULL,
   `nickname` varchar(32) DEFAULT NULL,
@@ -45,6 +46,7 @@ CREATE TABLE IF NOT EXISTS `GameStates` (
   `beginDate` DATETIME NULL COMMENT 'When the game started',
   `endDate` DATETIME NULL COMMENT 'When game finished',
   `turn` INT(10) unsigned NOT NULL COMMENT 'The game turn.  Advance so that players can act.  Initialize to zero, meaning the game has not started.',
+  `phase` INT(10) unsigned NOT NULL COMMENT 'The game phase.  1=Action, 2=Buy, 3=Clean-up.',
   `completed` TINYINT(1) NULL COMMENT 'Whether the game completed normally (1=True, 0=False)',
   `winnerId` BIGINT(20) unsigned NOT NULL COMMENT 'Winner ID is the player that won the game (null during game)...Manual JPA connection to Player',
   PRIMARY KEY (`id`)
@@ -91,3 +93,12 @@ CREATE TABLE IF NOT EXISTS `CardEvents` (
   -- CONSTRAINT FK_CARD_ID_FOR_CARDEVENTS FOREIGN KEY (`cardId`) REFERENCES `Cards` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   -- CONSTRAINT FK_PLAYER_ID_FOR_CARDEVENTS FOREIGN KEY (`playerId`) REFERENCES `Players` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 )ENGINE=InnoDB DEFAULT CHARSET=utf8$$
+
+CREATE TABLE IF NOT EXISTS `FailedLogins` (
+  `id` int(10) unsigned NOT NULL COMMENT 'User id is unique for each card action',
+  `lastFailAttemptDate` DATETIME NULL COMMENT 'The last time that a client attempted to login',
+  `failCount` INT(10) unsigned NOT NULL COMMENT 'Number of times the client failed to login (always increasing)',
+  `dailyFailCount` INT(10) unsigned NOT NULL COMMENT 'Number of times the client failed to login (reset each day)',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8$$

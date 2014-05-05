@@ -8,5 +8,6 @@
 		    <class>edu.gmu.swe.gameproj.jpa.UserRole</class>
 		    <class>edu.gmu.swe.gameproj.jpa.User</class>
 		    <class>edu.gmu.swe.gameproj.jpa.CardEvent</class>
+		    <class>edu.gmu.swe.gameproj.jpa.FailedLogin</class>
 	</persistence-unit>
 </persistence>

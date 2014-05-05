@@ -44,6 +44,8 @@ public class User implements Serializable {
 	private String password;
 
 	private String salutation;
+	
+	private byte accountLocked;
 
 	//bi-directional many-to-one association to Player
 	@OneToMany(mappedBy="user", fetch=FetchType.EAGER)
@@ -165,6 +167,14 @@ public class User implements Serializable {
 
 	public void setUserRole(UserRole userRole) {
 		this.userRole = userRole;
+	}
+
+	public byte getAccountLocked() {
+		return this.accountLocked;
+	}
+
+	public void setAccountLocked(byte accountLocked) {
+		this.accountLocked = accountLocked;
 	}
 
 }
