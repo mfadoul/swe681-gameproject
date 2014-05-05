@@ -32,6 +32,8 @@ public class GameState implements Serializable {
 
 	private int turn;
 
+	private int phase;
+
 	private long winnerId;
 
 	//bi-directional many-to-one association to Card
@@ -135,6 +137,14 @@ public class GameState implements Serializable {
 		player.setGameState(null);
 
 		return player;
+	}
+
+	public int getPhase() {
+		return phase;
+	}
+
+	public void setPhase(int phase) {
+		this.phase = phase;
 	}
 
 }

@@ -2,6 +2,7 @@ package edu.gmu.swe.gameproj.ejb;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -19,6 +20,7 @@ import javax.persistence.Transient;
 import edu.gmu.swe.gameproj.jpa.Card;
 import edu.gmu.swe.gameproj.jpa.CardEvent;
 import edu.gmu.swe.gameproj.jpa.CardType;
+import edu.gmu.swe.gameproj.jpa.FailedLogin;
 import edu.gmu.swe.gameproj.jpa.GameState;
 import edu.gmu.swe.gameproj.jpa.Player;
 import edu.gmu.swe.gameproj.jpa.User;
@@ -629,6 +631,87 @@ public class GameProject implements GameProjectRemote {
 			return false;
 		}
 	}
+	@Override
+	public void registerFailedLogin(String email) {
+		if (email == null) throw new NullPointerException();
+		
+		User user = this.getUserByEmail(email);
+		if (user == null) throw new NullPointerException();
+		
+		FailedLogin failedLogin = this.getFailedLogin(email);
 
+		if (failedLogin == null) {
+			// Create a new entry for this ipAddress
+			failedLogin = new FailedLogin();
+			failedLogin.setId(user.getId());
+			failedLogin.setLastFailAttemptDate(new Date());
+			failedLogin.setFailCount(1); // This is the first detected failed login for this IP address
+			failedLogin.setDailyFailCount(1); // This is the first detected failed login for this IP address
+			
+			// Persist to the database
+			try{
+				entityManager.persist(failedLogin);
+			}
+			catch (Exception e) {
+				System.err.println("Exception: " + e);
+			}
+		} else {
+			// Update an existing entry
+			Calendar cal = Calendar.getInstance();
+			
+			cal.setTime(failedLogin.getLastFailAttemptDate());
+			int year1 = cal.get(Calendar.YEAR);
+			int month1 = cal.get(Calendar.MONTH);
+			int day1 = cal.get(Calendar.DAY_OF_MONTH);
+			
+			Date currentDate = new Date();
+			
+			cal.setTime(currentDate);
+			int year2 = cal.get(Calendar.YEAR);
+			int month2 = cal.get(Calendar.MONTH);
+			int day2 = cal.get(Calendar.DAY_OF_MONTH);
+			
+			failedLogin.setLastFailAttemptDate(currentDate);
+			
+			// Check to see if the date has changed.
+			if ((year1==year2) && (month1==month2) && (day1==day2)) {
+				// If the day hasn't changed, update the count by one
+				
+				// Protect against integer overflow
+				if (failedLogin.getDailyFailCount() < Integer.MAX_VALUE) {
+					failedLogin.setDailyFailCount(failedLogin.getDailyFailCount()+1);
+				} else {
+					System.err.println("Someone has brute force attacked 2^31 times in one day.  Account = " + user.getEmail());
+				}
+				
+				if (failedLogin.getDailyFailCount()>10) {
+					// Lock the account
+					user.setAccountLocked((byte) 1);  // 1 == locked
+				}
+			} else {
+				// Day has changed.  Reset the fail count to one
+				failedLogin.setDailyFailCount(1);
+			}
+			
+			// Protect against integer overflow
+			if (failedLogin.getFailCount() < Integer.MAX_VALUE) {
+				failedLogin.setFailCount(failedLogin.getFailCount()+1);
+			} else {
+				System.err.println("Someone has brute force attacked 2^31 times.  Account = " + user.getEmail());
+			}
 
+			entityManager.merge(failedLogin);
+		}
+	}
+
+	@Override
+	public FailedLogin getFailedLogin(String email) {
+		try {
+			User user = this.getUserByEmail(email);
+			return entityManager.find(FailedLogin.class, user.getId());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

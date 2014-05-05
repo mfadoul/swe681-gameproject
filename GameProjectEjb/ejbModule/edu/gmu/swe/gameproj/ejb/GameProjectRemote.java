@@ -9,6 +9,7 @@ import javax.ejb.Remote;
 import edu.gmu.swe.gameproj.jpa.Card;
 import edu.gmu.swe.gameproj.jpa.CardEvent;
 import edu.gmu.swe.gameproj.jpa.CardType;
+import edu.gmu.swe.gameproj.jpa.FailedLogin;
 import edu.gmu.swe.gameproj.jpa.GameState;
 import edu.gmu.swe.gameproj.jpa.Player;
 import edu.gmu.swe.gameproj.jpa.User;
@@ -58,8 +59,10 @@ public interface GameProjectRemote {
 	
 	public abstract Player getPlayerById(long playerId);
 
-	
 	// Card Events
 	public abstract CardEvent createCardEvent (Card card, GameState gameState, Player player, int location);
 
+	// Failed login attempts
+	public abstract void registerFailedLogin(String email);
+	public abstract FailedLogin getFailedLogin(String email);
 }
