@@ -9,7 +9,7 @@ import edu.gmu.swe.gameproj.util.ActVm;
 
 public class ActVmValidator implements Validator{
 	
-	private final String pattern = "[a-zA-Z,]+";
+	private final String pattern = "[a-zA-Z, ]+";
 	private final String[] validCommands = new String[] {
 		"play", "buy", "done"
 	};
