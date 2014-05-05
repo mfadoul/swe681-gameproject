@@ -44,7 +44,8 @@ public class UserAuthenticationErrorHandler implements ApplicationListener<Authe
 	        	FailedLogin failedLogin = gameProject.getFailedLogin(userName.toString());
 	        	System.err.println("Failed Login (" + failedLogin.getId() + ", " + 
 	        			failedLogin.getLastFailAttemptDate() + ", " + 
-	        			failedLogin.getFailCount() + ").");
+	    	        			failedLogin.getDailyFailCount() + ", " + 
+	    	        			failedLogin.getFailCount() + ").");	        	
         	} catch  (NullPointerException npe) {
     			System.err.println("Null Pointer Exception in UserAuthenticationErrorHandler."); // " + npe);
         	}

@@ -77,7 +77,7 @@ public class UserController {
 				// Encrypt the password before persisting!
 				user.setPassword(PasswordHelper.getEncryptedPassword(user.getPassword()));
 				
-
+				user.setAccountLocked((byte) 0); // 0 == the account is not locked
 				if (gameProject.addUser(user)) {
 					// Successfully added user.
 					model.addAttribute("infoMessage", "Successfully added user " + user.getEmail());

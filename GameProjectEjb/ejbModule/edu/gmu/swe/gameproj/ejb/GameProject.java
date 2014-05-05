@@ -690,9 +690,13 @@ public class GameProject implements GameProjectRemote {
 					System.err.println("Someone has brute force attacked 2^31 times in one day.  Account = " + user.getEmail());
 				}
 				
-				if (failedLogin.getDailyFailCount()>10) {
-					// Lock the account
-					user.setAccountLocked((byte) 1);  // 1 == locked
+				if (failedLogin.getDailyFailCount()>7) {
+					// If the account isn't already locked, lock the account
+					if (1 != user.getAccountLocked()) {
+						System.out.println ("LOCKING ACCOUNT: " + user.getEmail());
+						user.setAccountLocked((byte) 1);  // 1 == locked
+						entityManager.merge(user);
+					}
 				}
 			} else {
 				// Day has changed.  Reset the fail count to one

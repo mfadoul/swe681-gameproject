@@ -45,7 +45,7 @@
 		class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">
 		<beans:property name="dataSource" ref="gameProjectJndiDs" />
 		<beans:property name="usersByUsernameQuery"
-			value="select u.email as username, u.password, 1 as enabled from users u where email=?" />
+			value="select u.email as username, u.password, 1 as enabled from users u where accountLocked=0 and email=?" />
 		<beans:property name="authoritiesByUsernameQuery"
 			value="select distinct u.email as username, u.role as authority from users u where email=?" />
 	</beans:bean>
