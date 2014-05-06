@@ -202,9 +202,16 @@ public class GameProject implements GameProjectRemote {
 		}
 		
 		gameState = new GameState ();
+		gameState.setPhase(1);
+		gameState.setTurn(1);
+		gameState.setBeginDate(new Date());
+		gameState.setCards(new ArrayList<Card>());
 
-		initializeGameState(gameState);
 		entityManager.persist(gameState);
+		
+		initializeGameState(gameState);
+		
+		//entityManager.merge(gameState);
 		
 		System.out.println ("Created game ID " + gameState.getId());
 		return gameState;
@@ -708,29 +715,33 @@ public class GameProject implements GameProjectRemote {
 	//TODO need to set additional values like turn, phase
 	private void initializeGameState(GameState gameState){
 
-		gameState.setPhase(1);
-		gameState.setTurn(1);
-		gameState.setBeginDate(new Date());
+
 		
 		int counter = 1;
 		
 		//8 of each victory
 		int victoryCount = 8;
-		while(counter < victoryCount){
+		while(counter <= victoryCount){
 			Card estate = new Card();
 			estate.setCardType(CardType.Estate.cardTypeId);
 			estate.setLocation(DECK_LOCATION);
 			gameState.addCard(estate);
+			entityManager.persist(estate);
+			entityManager.merge(gameState);
 			
 			Card duchy = new Card();
 			duchy.setCardType(CardType.Duchy.cardTypeId);
 			duchy.setLocation(DECK_LOCATION);
 			gameState.addCard(duchy);
+			entityManager.persist(duchy);
+			entityManager.merge(gameState);
 			
 			Card province = new Card();
 			province.setCardType(CardType.Province.cardTypeId);
 			province.setLocation(DECK_LOCATION);
 			gameState.addCard(province);
+			entityManager.persist(province);
+			entityManager.merge(gameState);
 			
 			counter++;
 		}
@@ -743,51 +754,71 @@ public class GameProject implements GameProjectRemote {
 			cellar.setCardType(CardType.Cellar.cardTypeId);
 			cellar.setLocation(DECK_LOCATION);
 			gameState.addCard(cellar);
+			entityManager.persist(cellar);
+			entityManager.merge(gameState);
 
 			Card market = new Card();
 			market.setCardType(CardType.Market.cardTypeId);
 			market.setLocation(DECK_LOCATION);
 			gameState.addCard(market);
+			entityManager.persist(market);
+			entityManager.merge(gameState);
 			
 			Card militia = new Card();
 			militia.setCardType(CardType.Militia.cardTypeId);
 			militia.setLocation(DECK_LOCATION);
 			gameState.addCard(militia);
+			entityManager.persist(militia);
+			entityManager.merge(gameState);
 			
 			Card mine = new Card();
 			mine.setCardType(CardType.Mine.cardTypeId);
 			mine.setLocation(DECK_LOCATION);
 			gameState.addCard(mine);
+			entityManager.persist(mine);
+			entityManager.merge(gameState);
 			
 			Card moat = new Card();
 			moat.setCardType(CardType.Moat.cardTypeId);
 			moat.setLocation(DECK_LOCATION);
 			gameState.addCard(moat);
+			entityManager.persist(moat);
+			entityManager.merge(gameState);
 			
 			Card remodel = new Card();
 			remodel.setCardType(CardType.Remodel.cardTypeId);
 			remodel.setLocation(DECK_LOCATION);
 			gameState.addCard(remodel);
+			entityManager.persist(remodel);
+			entityManager.merge(gameState);
 			
 			Card smithy = new Card();
 			smithy.setCardType(CardType.Smithy.cardTypeId);
 			smithy.setLocation(DECK_LOCATION);
 			gameState.addCard(smithy);
+			entityManager.persist(smithy);
+			entityManager.merge(gameState);
 			
 			Card village = new Card();
 			village.setCardType(CardType.Village.cardTypeId);
 			village.setLocation(DECK_LOCATION);
 			gameState.addCard(village);
+			entityManager.persist(village);
+			entityManager.merge(gameState);
 			
 			Card woodcutter = new Card();
 			woodcutter.setCardType(CardType.Woodcutter.cardTypeId);
 			woodcutter.setLocation(DECK_LOCATION);
 			gameState.addCard(woodcutter);
+			entityManager.persist(woodcutter);
+			entityManager.merge(gameState);
 			
 			Card workshop = new Card();
 			workshop.setCardType(CardType.Workshop.cardTypeId);
 			workshop.setLocation(DECK_LOCATION);
 			gameState.addCard(workshop);
+			entityManager.persist(workshop);
+			entityManager.merge(gameState);
 			
 			counter++;
 		}
@@ -800,15 +831,22 @@ public class GameProject implements GameProjectRemote {
 			copper.setCardType(CardType.Copper.cardTypeId);
 			copper.setLocation(DECK_LOCATION);
 			gameState.addCard(copper);
+			entityManager.persist(copper);
+			entityManager.merge(gameState);
 			
 			Card silver = new Card();
 			silver.setCardType(CardType.Silver.cardTypeId);
 			silver.setLocation(DECK_LOCATION);
 			gameState.addCard(silver);
+			entityManager.persist(silver);
+			entityManager.merge(gameState);
 			
 			Card gold = new Card();
 			gold.setCardType(CardType.Gold.cardTypeId);
 			gold.setLocation(DECK_LOCATION);
+			gameState.addCard(gold);
+			entityManager.persist(gold);
+			entityManager.merge(gameState);
 			
 			counter++;
 		}
