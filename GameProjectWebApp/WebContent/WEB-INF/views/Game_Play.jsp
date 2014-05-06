@@ -28,38 +28,49 @@
 						<form:label for="command" path="command" cssErrorClass="error">Command</form:label>
 						<form:input path="command" size="40" maxlength="100" title="Enter a command" /> <form:errors path="command" />
 					</form:form>
-					Player State: Stats
 					<table>
 						<tr>
-							<td>Buys:</td>
-							<td><c:out value="${player.buyCount }" /></td>
-						</tr>
-						<tr>
-							<td>Actions:</td>
-							<td><c:out value="${player.actionCount }" /></td>
-						</tr>
-						<tr>
-							<td>Treasure:</td>
-							<td><c:out value="${player.coinCount }" /></td>
-						</tr>
-					</table>
-					Player State: Hand
-					<table>
-						<c:forEach items="${player.hand}" var="card">
-							<tr>
-								<td>${card.type.name } </td>
-							</tr>
-						</c:forEach>
+						<td>
 						
-					</table>
-					Game State: Available Cards
-					<table>
-						<c:forEach items="${gameState.availableCards}" var="entry">
+						Player State: Stats
+						<table>
 							<tr>
-								<td>${entry.key } (${entry.value })</td>
+								<td>Buys:</td>
+								<td><c:out value="${player.buyCount }" /></td>
 							</tr>
-						</c:forEach>
-						
+							<tr>
+								<td>Actions:</td>
+								<td><c:out value="${player.actionCount }" /></td>
+							</tr>
+							<tr>
+								<td>Treasure:</td>
+								<td><c:out value="${player.totalCoinsInHand }" /></td>
+							</tr>
+						</table>
+						</td>
+						<td>
+						Player State: Hand
+						<table>
+							<c:forEach items="${player.hand}" var="card">
+								<tr>
+									<td>${card.type.name } </td>
+								</tr>
+							</c:forEach>
+							
+						</table>
+						</td>
+						<td>
+						Game State: Available Cards
+						<table>
+							<c:forEach items="${gameState.availableCards}" var="entry">
+								<tr>
+									<td>${entry.key } (${entry.value })</td>
+								</tr>
+							</c:forEach>
+							
+						</table>
+						</td>
+						</tr>
 					</table>
 					<h2>Players:</h2>
 					<c:forEach items="${player.gameState.players}" var="gamePlayer">
