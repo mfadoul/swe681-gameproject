@@ -371,6 +371,8 @@ public class GameController {
 		mav.addObject("user", user);
 		mav.addObject("loggedInUser", SessionBeanHelper.getLoggedInUser());  // Yep, it's the same as user...
 
+		mav.addObject("title", "Report for Game " + gameStateId);
+
 		if (user != null) {
 			GameProjectRemote gameProject = 
 					SessionBeanHelper.getGameProjectSessionBean();
@@ -406,5 +408,51 @@ public class GameController {
 		return mav;
 	}
 
-	
+	// Attempt to join a game.
+	@RequestMapping(value = "watch/{gameStateId}", method = RequestMethod.GET)
+	public ModelAndView watch (@PathVariable("gameStateId") int gameStateId,
+			HttpSession httpSession) {
+		ModelAndView mav = new ModelAndView();
+		
+		User user = SessionBeanHelper.getLoggedInUser();
+		mav.addObject("user", user);
+		mav.addObject("loggedInUser", SessionBeanHelper.getLoggedInUser());  // Yep, it's the same as user...
+
+		mav.addObject("title", "Watching Game " + gameStateId);
+
+		if (user != null) {
+			GameProjectRemote gameProject = 
+					SessionBeanHelper.getGameProjectSessionBean();
+			
+			GameState gameState = gameProject.getGameStateById(gameStateId);
+
+			mav.addObject("gameState", gameState);
+			
+			if (gameState != null) {
+				// Should not be completed!
+				System.out.println("------ Number of cards in game = " + gameState.getCards().size());
+				List<Player> players = gameProject.getPlayersByGameStateId(gameStateId);
+				
+				if (gameState.getCompleted() != 1)  { 
+					List<CardEvent> cardEvents = gameProject.getCardEventsByGameState(gameState);
+					mav.addObject("cardEvents", cardEvents);
+					mav.addObject("players", players);
+				} else {
+					mav.addObject("errorMessage", "Game is done.  You can look at the report for this game.");
+					mav.addObject("cardEvents", null);
+				}
+			}
+			
+			if (gameState == null) {
+				mav.addObject("errorMessage", "Game could not be found.");
+			} else {
+				mav.addObject("infoMessage", "Report for game # " + gameState.getId() + ".");
+			}
+		} else {
+			mav.addObject("errorMessage", "Your account could not be found in our database.");
+		}
+		mav.setViewName("Game_Report");
+		return mav;
+	}
+
 }
