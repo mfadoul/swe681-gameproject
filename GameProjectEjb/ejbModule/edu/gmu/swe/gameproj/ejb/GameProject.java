@@ -262,19 +262,20 @@ public class GameProject implements GameProjectRemote {
 		
 		// 5. Create a new Player
 		Player player = new Player();
-		initializePlayer(player, gameState);
-		
+		player.setUser(user);// Create the connection on both sides.
 		//Since player has not already been added to gameState, set their turn value to the current number 
 		// of players + 1
 		player.setTurn(gameState.getPlayers().size() + 1);
+		initializePlayer(player, gameState);
 		
-		user.addPlayer(player); // Create the connection on both sides.
+		
 
-		// 5a.  Add the new player to the GameState.
-		gameState.addPlayer(player);
+
+//		// 5a.  Add the new player to the GameState.
+//		gameState.addPlayer(player);
 		
 		// Persist the changes
-		entityManager.persist(player);
+		//entityManager.persist(player);
 		entityManager.merge(gameState); // Is this required?
 		System.out.println("Game " + gameState.getId() + ": player " + player.getId() + " is joining.");
 		
@@ -859,6 +860,10 @@ public class GameProject implements GameProjectRemote {
 		player.setActionCount(1);
 		player.setBuyCount(1);
 		player.setCoinCount(0);
+		player.setCards(new ArrayList<Card>());
+		player.setGameState(gameState);
+		
+		entityManager.persist(player);
 		
 		List<Card> gameCards = gameState.getCards();
 		int maxCopperCount = 7;
@@ -868,11 +873,15 @@ public class GameProject implements GameProjectRemote {
 		
 		for(Card c : gameCards){
 			if(c.getType() == CardType.Copper && currentCopperCount <= maxCopperCount){
+//				c.setPlayer(player);
 				player.addCard(c);
+				entityManager.merge(player);
 				currentCopperCount++;
 			}
 			else if(c.getType() == CardType.Estate && currentEstateCount <= maxEstateCount){
+				
 				player.addCard(c);
+				entityManager.merge(player);
 				currentEstateCount++;
 			}
 		}
