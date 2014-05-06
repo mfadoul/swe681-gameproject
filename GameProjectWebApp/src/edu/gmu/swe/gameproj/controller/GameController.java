@@ -303,7 +303,7 @@ public class GameController {
 		User user = SessionBeanHelper.getLoggedInUser();
 		mav.addObject("user", user);
 		mav.addObject("loggedInUser", SessionBeanHelper.getLoggedInUser());  // Yep, it's the same as user...
-
+		mav.addObject("actVm", new ActVm());
 		if (user != null) {
 			GameProjectRemote gameProject = 
 					SessionBeanHelper.getGameProjectSessionBean();

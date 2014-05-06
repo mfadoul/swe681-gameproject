@@ -460,20 +460,26 @@ public class GameProject implements GameProjectRemote {
 	@Override
 	public List<GameState> getOpenGames() {
 		List<GameState> gameStateList = null;
-		
+		List<GameState> filteredGameStateList = null;
 		// Games that are not completed and have one player waiting to play.
-		final String jpaQlQuery = " from GameState gs where gs.completed=0 and gs.players.size=1 ";
+		final String jpaQlQuery = " from GameState gs where gs.completed=0";
 		Query query = entityManager.createQuery(jpaQlQuery);
 
 		try {
 			gameStateList = (List<GameState>) query.getResultList();
 			if (gameStateList != null) {
+				filteredGameStateList = new ArrayList<GameState>();
+				for(GameState gs : gameStateList){
+					if(this.getPlayersByGameStateId(gs.getId()).size() == 1){
+						filteredGameStateList.add(gs);
+					}
+				}
 				System.out.println("GameProject.getOpenGames(): Found " + gameStateList.size() + " open games.");
 			} 
 		} catch (Exception e) {
 				System.err.println("Exception: " + e);
 		}
-		return gameStateList;
+		return filteredGameStateList;
 	}
 
 	@Override
