@@ -72,17 +72,6 @@
 						</td>
 						</tr>
 					</table>
-					<h2>Players:</h2>
-					<c:forEach items="${player.gameState.players}" var="gamePlayer">
-						<c:if test="${player.id eq gamePlayer.id}">
-							<h3>* Me!</h3>
-						</c:if>	        
-						<c:if test="${player.id ne gamePlayer.id}">
-					        <h3>* <c:out value="${gamePlayer.user.salutation}" /> <c:out value="${gamePlayer.user.firstname}" /> <c:out value="${gamePlayer.user.lastname}" /></h3>
-					    </c:if>
-					</c:forEach>
-					
-					<h3></h3>				
      				<!-- END OF CONTENT HERE -->				
 				</c:if>
 				<c:if test="${player eq null}">

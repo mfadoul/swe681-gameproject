@@ -43,6 +43,8 @@ public interface GameProjectRemote {
 	public abstract Player joinGameState(long gameStateId, int userId);
 	//public abstract Player getCurrentTurnPlayer(long gameStateId);
 	
+	public abstract List<Player> getPlayersByGameStateId(long gameStateId);
+	
 	//Actions
 	public abstract Card getCardById(int cardId);
 	//public abstract Card getCardInstanceByTypeByPlayer(Player player, CardType cardType);

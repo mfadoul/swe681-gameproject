@@ -27,17 +27,20 @@
 					<h3>Time</h3>
 					<p>Game Played from <c:out value="${gameState.beginDate}" /> 
 					to <c:out value="${gameState.endDate}" /></p>
-					<h3>Players</h3>
-					<c:forEach items="${gameState.players}" var="player">
-						<c:url value="/GameProject/user/info/${player.user.id}" var="userInfoLink" />
-						<p><a href="<c:out value="${userInfoLink}" />">User: 
-							<c:out value="${player.user.salutation}" /> <c:out value="${player.user.firstname}" /> <c:out value="${player.user.lastname}" />
-							</a>
-							<c:if test="${gameState.winnerId eq player.id}">
-							(Winner!)
-							</c:if>			
-						</p>
-					</c:forEach>
+					
+					<c:if test="${players ne null}">
+						<h3>Players</h3>
+						<c:forEach items="${players}" var="player">
+							<c:url value="/GameProject/user/info/${player.user.id}" var="userInfoLink" />
+							<p><a href="<c:out value="${userInfoLink}" />">User: 
+								<c:out value="${player.user.salutation}" /> <c:out value="${player.user.firstname}" /> <c:out value="${player.user.lastname}" />
+								</a>
+								<c:if test="${gameState.winnerId eq player.id}">
+								(Winner!)
+								</c:if>			
+							</p>
+						</c:forEach>
+					</c:if>
 			
 					<c:if test="${cardEvents ne null}">
 						<table border="1" width="100%" align="center"

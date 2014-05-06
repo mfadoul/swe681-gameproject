@@ -49,8 +49,8 @@ public class GameState implements Serializable {
 	private List<Card> cards;
 
 	//bi-directional many-to-one association to Player
-	@OneToMany(mappedBy="gameState", fetch=FetchType.EAGER)
-	private List<Player> players;
+	//@OneToMany(mappedBy="gameState", fetch=FetchType.EAGER)
+	//private List<Player> players;
 
 	public GameState() {
 	}
@@ -125,15 +125,17 @@ public class GameState implements Serializable {
 		return card;
 	}
 
-	public List<Player> getPlayers() {
+/*	public List<Player> getPlayers() {
 		return this.players;
 	}
 
 	public void setPlayers(List<Player> players) {
+		System.out.println("GameState.setPlayers()");
 		this.players = players;
 	}
 
 	public Player addPlayer(Player player) {
+		System.out.println("GameState.addPlayer()");
 		getPlayers().add(player);
 		player.setGameState(this);
 
@@ -146,7 +148,7 @@ public class GameState implements Serializable {
 
 		return player;
 	}
-
+*/
 	public int getPhase() {
 		return phase;
 	}
