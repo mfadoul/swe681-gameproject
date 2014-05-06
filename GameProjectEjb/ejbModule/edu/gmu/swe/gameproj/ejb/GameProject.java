@@ -207,6 +207,7 @@ public class GameProject implements GameProjectRemote {
 		gameState.setTurn(1);
 		gameState.setBeginDate(new Date());
 		gameState.setCards(new ArrayList<Card>());
+		gameState.setWinnerId(0);
 
 		entityManager.persist(gameState);
 		

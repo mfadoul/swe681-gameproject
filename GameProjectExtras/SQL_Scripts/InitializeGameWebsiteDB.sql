@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `GameStates` (
   `turn` INT(10) unsigned NOT NULL COMMENT 'The game turn.  Advance so that players can act.  Initialize to zero, meaning the game has not started.',
   `phase` INT(10) unsigned NOT NULL COMMENT 'The game phase.  1=Action, 2=Buy, 3=Clean-up.',
   `completed` TINYINT(1) NULL COMMENT 'Whether the game completed normally (1=True, 0=False)',
-  `winnerId` BIGINT(20) unsigned NOT NULL COMMENT 'Winner ID is the player that won the game (null during game)...Manual JPA connection to Player',
+  `winnerId` BIGINT(20) unsigned NOT NULL COMMENT 'Winner ID is the player that won the game (0 during game)...Manual JPA connection to Player',
   PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8$$
 
