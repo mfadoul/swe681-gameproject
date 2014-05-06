@@ -50,7 +50,7 @@ public class UserAuthenticationErrorHandler implements ApplicationListener<Authe
     			System.err.println("Null Pointer Exception in UserAuthenticationErrorHandler."); // " + npe);
         	}
         	catch  (Exception e) {
-    			System.err.println("Exception: " + e);
+    			// System.err.println("Exception: " + e);
         	}
         } else {
         	// Null pointer...
