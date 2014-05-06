@@ -264,24 +264,21 @@ public class GameProject implements GameProjectRemote {
 		
 		// 5. Create a new Player
 		Player player = new Player();
-		player.setUser(user);// Create the connection on both sides.
-		//Since player has not already been added to gameState, set their turn value to the current number 
-		// of players + 1
-		player.setTurn(gameState.getPlayers().size() + 1);
+		user.addPlayer(player); // Create the connection on both sides.
+		gameState.addPlayer(player);
+
+		entityManager.persist(player);
+		entityManager.merge(user);
+		entityManager.merge(gameState);
+		
 		initializePlayer(player, gameState);
 		
 		//Draw 5 cards
 		this.draw(player, 5);
-		
-		
-
 
 //		// 5a.  Add the new player to the GameState.
-//		gameState.addPlayer(player);
+		//gameState.addPlayer(player);
 		
-		// Persist the changes
-		//entityManager.persist(player);
-		entityManager.merge(gameState); // Is this required?
 		System.out.println("Game " + gameState.getId() + ": player " + player.getId() + " is joining.");
 		
 		return player;
@@ -426,7 +423,7 @@ public class GameProject implements GameProjectRemote {
 			
 			player.addCoinCount(card.getCost());
 			player.addBuyCount(-1);
-			card.setPlayer(player);
+			player.addCard(card);
 			card.setLocation(DISCARD_LOCATION);
 			gameState.setPhase(2);
 			
@@ -459,20 +456,10 @@ public class GameProject implements GameProjectRemote {
 				}
 				else{
 					card.setLocation(DISCARD_LOCATION);
+					entityManager.merge(card);
 				}
 			}
-			
-//			final String jpaQlQuery = " from Cards c where c.id IN :cardIds";
-//			
-//			Query query = entityManager.createQuery(jpaQlQuery);
-//			query.setParameter("cardIds", cardIds);
-//			
-//			List<Card> resultList = (List<Card>) query.getResultList();
-			
-			
-			
-			entityManager.merge(player);
-			
+									
 			return true;
 		}
 		catch (Exception e) {
@@ -503,10 +490,10 @@ public class GameProject implements GameProjectRemote {
 				Card card = deck.get(randomWithRange(0,deck.size()-1));
 				deck.remove(card);
 				card.setLocation(HAND_LOCATION);
-				
+
+				entityManager.merge(card);
 				i++;
 			}
-			entityManager.merge(player);
 			return player.getHand();
 		}
 		catch (Exception e) {
@@ -519,12 +506,17 @@ public class GameProject implements GameProjectRemote {
 	@Override
 	public boolean trash(Card card) {
 		try{
-
 			if(card == null) return false;
 			
-			card.setPlayer(null);
+			Player player = card.getPlayer();
+
+			if (player != null) {
+				player.removeCard(card);
+			}
+			
 			card.setLocation(DISCARD_LOCATION);
 			
+			entityManager.merge(player);
 			entityManager.merge(card);
 			
 			return true;
@@ -694,6 +686,7 @@ public class GameProject implements GameProjectRemote {
 		//Reset Player cards
 		for(Card c : player.getHand()){
 			c.setLocation(DISCARD_LOCATION);
+			entityManager.merge(c);
 		}
 		
 		this.draw(player, 5);
@@ -865,9 +858,12 @@ public class GameProject implements GameProjectRemote {
 		player.setBuyCount(1);
 		player.setCoinCount(0);
 		player.setCards(new ArrayList<Card>());
-		player.setGameState(gameState);
-		
-		entityManager.persist(player);
+
+		//Since player has not already been added to gameState, set their turn value to the current number 
+		// of players
+		player.setTurn(gameState.getPlayers().size());
+			
+		entityManager.merge(player);
 		
 		List<Card> gameCards = gameState.getCards();
 		int maxCopperCount = 7;
@@ -882,12 +878,14 @@ public class GameProject implements GameProjectRemote {
 
 					player.addCard(c);
 					entityManager.merge(player);
+					entityManager.merge(c);
 					currentCopperCount++;
 				}
 				else if(c.getType() == CardType.Estate && currentEstateCount <= maxEstateCount){
 					
 					player.addCard(c);
 					entityManager.merge(player);
+					entityManager.merge(c);
 					currentEstateCount++;
 				}
 			}
@@ -902,11 +900,12 @@ public class GameProject implements GameProjectRemote {
 		if(card.getPlayer() != null) return false;
 		if(card.getLocation() != DECK_LOCATION) return false;
 		
-		card.setPlayer(player);
+		player.addCard(card);
 		card.setLocation(HAND_LOCATION);
 		
 		try{
 			entityManager.merge(card);
+			entityManager.merge(player);
 			return true;
 		}
 		catch (Exception e) {
@@ -942,14 +941,8 @@ public class GameProject implements GameProjectRemote {
 		List<Card> cards = player.getDiscard();
 		for(Card c : cards){
 			c.setLocation(DECK_LOCATION);
-		}
-		
-		try{
-			entityManager.merge(cards);
-		}
-		catch (Exception e) {
-			System.err.println("Exception: " + e);
-		}
+			entityManager.merge(c);
+		}		
     }
     
     private int randomWithRange(int min, int max)
@@ -978,12 +971,5 @@ public class GameProject implements GameProjectRemote {
 		
 		return resultList;
 	}
-	
-
-
-	
-	
-	
-
 
 }
