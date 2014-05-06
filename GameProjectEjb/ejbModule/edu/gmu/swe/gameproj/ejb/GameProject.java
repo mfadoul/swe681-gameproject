@@ -873,17 +873,20 @@ public class GameProject implements GameProjectRemote {
 		int currentEstateCount = 0;
 		
 		for(Card c : gameCards){
-			if(c.getType() == CardType.Copper && currentCopperCount <= maxCopperCount){
-//				c.setPlayer(player);
-				player.addCard(c);
-				entityManager.merge(player);
-				currentCopperCount++;
-			}
-			else if(c.getType() == CardType.Estate && currentEstateCount <= maxEstateCount){
-				
-				player.addCard(c);
-				entityManager.merge(player);
-				currentEstateCount++;
+			//Get cards in deck owned by gameState
+			if(c.getPlayer() == null && c.getLocation() == DECK_LOCATION){
+				if(c.getType() == CardType.Copper && currentCopperCount <= maxCopperCount){
+
+					player.addCard(c);
+					entityManager.merge(player);
+					currentCopperCount++;
+				}
+				else if(c.getType() == CardType.Estate && currentEstateCount <= maxEstateCount){
+					
+					player.addCard(c);
+					entityManager.merge(player);
+					currentEstateCount++;
+				}
 			}
 		}
 	}
