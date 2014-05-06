@@ -126,6 +126,8 @@ public class GameController {
 	@RequestMapping(value="play", method=RequestMethod.POST)
 	public ModelAndView play(@Valid ActVm actVm, BindingResult result, Model model){
 		boolean isValid = true;
+		boolean isTurn = true;
+		boolean isEnoughPlayers = true;
 		GameState gameState = null;
 		Player player = null;
 		User user = SessionBeanHelper.getLoggedInUser();
@@ -142,92 +144,107 @@ public class GameController {
 			//Precondition- THe validator has checked that the input is proper syntax
 			//1. Check that it is this person's turn
 			if(player.getTurn() != gameState.getTurn()){
-				isValid = false;
+				isTurn = false;
 				//TODO Do I need to do something more serious here?
 			}
 			
+			if(gameState.getPlayers().size() != 2){
+				isEnoughPlayers = false;
+			}
 			
-			if(commandAry[0].equals("play")){
-				//Check that in play phase. Can't play if not in this phase
-				if(gameState.getPhase() != 1){
-					isValid = false;
-				}
-				//2. Check that they have the card they wish to play in hand
-				CardType cardType = CardType.getCardType(commandAry[1]);
-				if(cardType != null) {
-					if(player.getFirstInstanceInHandByType(cardType) == null){
-						//Card not in hand
+			if(isTurn && isEnoughPlayers){
+			
+			
+				if(commandAry[0].equals("play")){
+					//Check that in play phase. Can't play if not in this phase
+					if(gameState.getPhase() != 1){
 						isValid = false;
 					}
-				}
-				else{
-					//Not a valid card
-					isValid = false;
-				}
-				
-				if(isValid){
-					Action action = ActionFactory.buildCard(commandAry, gameProject);
-					ActionDto dto = ActionDtoFactory.buildDto(commandAry, player);
-					if(action != null && dto != null){
-						try{
-							action.act(dto);
-						}
-						catch(InvalidParameterException e){
+					//2. Check that they have the card they wish to play in hand
+					CardType cardType = CardType.getCardType(commandAry[1]);
+					if(cardType != null) {
+						if(player.getFirstInstanceInHandByType(cardType) == null){
+							//Card not in hand
 							isValid = false;
-						}
-						catch(Exception e){
-							//TODO This is an unrecoverable exception. Game probably should end
 						}
 					}
 					else{
+						//Not a valid card
 						isValid = false;
 					}
+					
+					if(isValid){
+						Action action = ActionFactory.buildCard(commandAry, gameProject);
+						ActionDto dto = ActionDtoFactory.buildDto(commandAry, player);
+						if(action != null && dto != null){
+							try{
+								action.act(dto);
+							}
+							catch(InvalidParameterException e){
+								isValid = false;
+							}
+							catch(Exception e){
+								//TODO This is an unrecoverable exception. Game probably should end
+							}
+						}
+						else{
+							isValid = false;
+						}
+					}
 				}
-			}
-			else if(commandAry[0].equals("buy")){
-				CardType cardType = CardType.getCardType(commandAry[1]);
-				Card cardToBuy = null;
-				if(cardType == null){
-					isValid = false;
+				else if(commandAry[0].equals("buy")){
+					CardType cardType = CardType.getCardType(commandAry[1]);
+					Card cardToBuy = null;
+					if(cardType == null){
+						isValid = false;
+					}
+					else{
+						//Verify player has enough money
+						if(player.getTotalCoinsInHand() < cardType.getCost()){
+							isValid = false;
+						}
+						
+						cardToBuy = gameState.getFirstInstanceInDeckByType(cardType);
+						//Verify desired card is available
+						if( cardToBuy == null){
+							isValid = false;
+						}
+					}
+					//Verify player has enough buys
+					if(player.getBuyCount() < 1){
+						isValid = false;
+					}
+					
+					if(isValid){
+						if(!gameProject.buy(player, cardToBuy, gameState)){
+							isValid = false;
+							//TODO: Do I need to do something more drastic here?
+						}
+						//TODO check for game over condition
+						
+					}
+					
+					//Make call
+					
+				}
+				else if(commandAry[0].equals("done")){
+					gameProject.endTurn(player, gameState);
 				}
 				else{
-					//Verify player has enough money
-					if(player.getTotalCoinsInHand() < cardType.getCost()){
-						isValid = false;
-					}
-					
-					cardToBuy = gameState.getFirstInstanceInDeckByType(cardType);
-					//Verify desired card is available
-					if( cardToBuy == null){
-						isValid = false;
-					}
-				}
-				//Verify player has enough buys
-				if(player.getBuyCount() < 1){
 					isValid = false;
 				}
 				
-				if(isValid){
-					if(!gameProject.buy(player, cardToBuy, gameState)){
-						isValid = false;
-						//TODO: Do I need to do something more drastic here?
-					}
-					//TODO check for game over condition
-					
+				if(!isValid){
+					mav.addObject("errorMessage", "Invalid input");
 				}
-				
-				//Make call
-				
-			}
-			else if(commandAry[0].equals("done")){
-				gameProject.endTurn(player, gameState);
 			}
 			else{
-				isValid = false;
-			}
-			
-			if(!isValid){
-				mav.addObject("errorMessage", "Invalid input");
+				if(!isEnoughPlayers){
+					mav.addObject("errorMessage", "Still waiting on another player");
+				}
+				else{
+					mav.addObject("errorMessage", "Not your turn");
+				}
 			}
 			
 		}
