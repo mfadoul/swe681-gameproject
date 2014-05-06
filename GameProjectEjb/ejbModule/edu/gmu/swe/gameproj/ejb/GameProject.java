@@ -269,6 +269,9 @@ public class GameProject implements GameProjectRemote {
 		player.setTurn(gameState.getPlayers().size() + 1);
 		initializePlayer(player, gameState);
 		
+		//Draw 5 cards
+		this.draw(player, 5);
+		
 		
 
 
@@ -487,24 +490,23 @@ public class GameProject implements GameProjectRemote {
 			
 			if(player == null) return null;
 			
-			List<Card> deck = getCardsByPlayerAndLocation(player.getId(), DECK_LOCATION);
+			List<Card> deck = player.getDeck();
 			int i = 0;
-			Random myRandom = new Random();
+//			Random myRandom = new Random();
 			
 			while(i < count){
 				if(deck.size() == 0){
-					shuffle(player.getId());
-					deck = getCardsByPlayerAndLocation(player.getId(), DECK_LOCATION);
+					shuffle(player);
+					deck = player.getDeck();
 				}
-				Card card = deck.get(myRandom.nextInt(deck.size()));
+				Card card = deck.get(randomWithRange(0,deck.size()-1));
 				deck.remove(card);
 				card.setLocation(HAND_LOCATION);
 				
 				i++;
 			}
-			
-			entityManager.merge(deck);
-			return getCardsByPlayerAndLocation(player.getId(), HAND_LOCATION);
+			entityManager.merge(player);
+			return player.getHand();
 		}
 		catch (Exception e) {
 			System.err.println("Exception: " + e);
@@ -854,7 +856,7 @@ public class GameProject implements GameProjectRemote {
 		}
 		
 	}
-	//TODO need to set initial coin, buy, etc.. counts
+
 	private void initializePlayer(Player player, GameState gameState){
 		
 		//Initial values
@@ -869,8 +871,8 @@ public class GameProject implements GameProjectRemote {
 		List<Card> gameCards = gameState.getCards();
 		int maxCopperCount = 7;
 		int maxEstateCount = 3;
-		int currentCopperCount = 0;
-		int currentEstateCount = 0;
+		int currentCopperCount = 1;
+		int currentEstateCount = 1;
 		
 		for(Card c : gameCards){
 			//Get cards in deck owned by gameState
@@ -912,31 +914,31 @@ public class GameProject implements GameProjectRemote {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	private List<Card> getCardsByPlayerAndLocation(long playerId, int locationId){
-		try{
-			final String jpaQlQuery = " from Cards c where c.playerId = :playerId AND c.location = :locationId";
-			
-			Query query = entityManager.createQuery(jpaQlQuery);
-			query.setParameter("playerId", playerId);
-			query.setParameter("locationId", locationId);
-			
-			
-			List<Card> resultList = (List<Card>) query.getResultList();
-			
-			return resultList;
-			
-			
-		}
-		catch (Exception e) {
-			System.err.println("Exception: " + e);
-			return null;
-		}
-	}
+//	@SuppressWarnings("unchecked")
+//	private List<Card> getCardsByPlayerAndLocation(long playerId, int locationId){
+//		try{
+//			final String jpaQlQuery = " from Cards c where c.playerId = :playerId AND c.location = :locationId";
+//			
+//			Query query = entityManager.createQuery(jpaQlQuery);
+//			query.setParameter("playerId", playerId);
+//			query.setParameter("locationId", locationId);
+//			
+//			
+//			List<Card> resultList = (List<Card>) query.getResultList();
+//			
+//			return resultList;
+//			
+//			
+//		}
+//		catch (Exception e) {
+//			System.err.println("Exception: " + e);
+//			return null;
+//		}
+//	}
 	
-    private void shuffle(long playerId)
+    private void shuffle(Player player)
     {
-		List<Card> cards = getCardsByPlayerAndLocation(playerId, DISCARD_LOCATION);
+		List<Card> cards = player.getDiscard();
 		for(Card c : cards){
 			c.setLocation(DECK_LOCATION);
 		}
@@ -948,6 +950,12 @@ public class GameProject implements GameProjectRemote {
 			System.err.println("Exception: " + e);
 		}
     }
+    
+    private int randomWithRange(int min, int max)
+    {
+	   int range = (max - min) + 1;     
+	   return (int)(Math.random() * range) + min;
+	}
 
 	@Override
 	public List<CardEvent> getCardEventsByGameState(GameState gameState) {

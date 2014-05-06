@@ -45,9 +45,9 @@
 					</table>
 					Player State: Hand
 					<table>
-						<c:forEach items="${player.actionsToPlay}" var="entry">
+						<c:forEach items="${player.hand}" var="card">
 							<tr>
-								<td>${entry.key } (${entry.value })</td>
+								<td>${card.type.name } </td>
 							</tr>
 						</c:forEach>
 						

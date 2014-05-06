@@ -138,7 +138,7 @@ public class Player implements Serializable {
 	@Transient
 	public ArrayList<Card> getDeck(){
 		ArrayList<Card> deck = new ArrayList<Card>();
-		for(Card c : cards){
+		for(Card c : getCards()){
 			if(c.getLocation() == DECK_LOCATION) deck.add(c);
 		}
 		
@@ -148,8 +148,11 @@ public class Player implements Serializable {
 	@Transient
 	public ArrayList<Card> getHand(){
 		ArrayList<Card> hand = new ArrayList<Card>();
-		for(Card c : cards){
-			if(c.getLocation() == HAND_LOCATION) hand.add(c);
+		for(Card c : getCards()){
+			if(c.getLocation() == HAND_LOCATION) {
+				hand.add(c);
+			}
+			
 		}
 		return hand;
 	}
@@ -157,7 +160,7 @@ public class Player implements Serializable {
 	@Transient
 	public ArrayList<Card> getDiscard(){
 		ArrayList<Card> discard = new ArrayList<Card>();
-		for(Card c : cards){
+		for(Card c : getCards()){
 			if(c.getLocation() == DISCARD_LOCATION) discard.add(c);
 		}
 		
