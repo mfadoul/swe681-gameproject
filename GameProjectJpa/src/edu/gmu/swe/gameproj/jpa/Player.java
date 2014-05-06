@@ -4,9 +4,10 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
-
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -205,6 +206,39 @@ public class Player implements Serializable {
 		}
 		
 		return totalCoins;
+	}
+	
+	@Transient
+	public HashMap<String,Integer> getActionsToPlay(){
+		HashMap<String,Integer> actions = new HashMap<String, Integer>();
+		for(Card c : this.getHand()){
+			if(this.isAction(c)){
+				String key = c.getType().cardName;
+				Integer tempValue = actions.get(key);
+				if(tempValue == null)
+					tempValue = 0;
+				actions.put(key, tempValue + 1);
+			}
+		}
+		return actions;
+		
+	}
+	
+	@Transient
+	private boolean isAction(Card c){
+		if(c.getType() == CardType.Cellar
+				|| c.getType() == CardType.Market
+				|| c.getType() == CardType.Militia
+				|| c.getType() == CardType.Mine
+				|| c.getType() == CardType.Moat
+				|| c.getType() == CardType.Remodel
+				|| c.getType() == CardType.Smithy
+				|| c.getType() == CardType.Village
+				|| c.getType() == CardType.Woodcutter
+				|| c.getType() == CardType.Workshop)
+			return true;
+		else
+			return false;
 	}
 
 	

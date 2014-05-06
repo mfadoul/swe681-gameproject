@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -18,6 +19,10 @@ import java.util.List;
 @NamedQuery(name="GameState.findAll", query="SELECT g FROM GameState g")
 public class GameState implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	private static final int DECK_LOCATION = 1;
+	private static final int HAND_LOCATION = 2;
+	private static final int DISCARD_LOCATION = 3;
 
 	@Id
     @TableGenerator(name="TABLE_GEN_GAMESTATE", table="SEQUENCE_TABLE", pkColumnName="SEQ_NAME",
@@ -161,6 +166,27 @@ public class GameState implements Serializable {
 		}
 		
 		return null;
+	}
+	
+	@Transient
+	public HashMap<String, Integer> getAvailableCards(){
+		HashMap<String,Integer> cards = new HashMap<String, Integer>();
+		
+		for(Card c : this.getCards()){
+			if(this.isAvaialble(c)){
+				String key = c.getType().cardName;
+				Integer tempValue = cards.get(key);
+				if(tempValue == null)
+					tempValue = 0;
+				cards.put(key, tempValue + 1);
+			}
+		}
+		return cards;
+	}
+	
+	@Transient
+	private boolean isAvaialble(Card c){
+		return (c.getPlayer() == null && c.getLocation() == DECK_LOCATION);
 	}
 
 }
