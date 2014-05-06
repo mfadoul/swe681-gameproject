@@ -148,7 +148,8 @@ public class GameController {
 				//TODO Do I need to do something more serious here?
 			}
 			
-			if(gameState.getPlayers().size() != 2){
+			List<Player> players = gameProject.getPlayersByGameStateId(gameState.getId());
+			if(players.size() != 2){
 				isEnoughPlayers = false;
 			}
 			
@@ -347,6 +348,7 @@ public class GameController {
 			if (player != null) {
 				mav.addObject("infoMessage", "You forfeited the game.");
 				gameProject.forfeitActiveGameByUser(user);
+
 			} else {
 				mav.addObject("errorMessage", "You aren't playing a game!");
 			} 
@@ -374,14 +376,18 @@ public class GameController {
 					SessionBeanHelper.getGameProjectSessionBean();
 			
 			GameState gameState = gameProject.getGameStateById(gameStateId);
+
 			mav.addObject("gameState", gameState);
 			
 			if (gameState != null) {
 				// Must be completed!
-				System.out.println("------ Number of players in game = " + gameState.getPlayers().size());
+				System.out.println("------ Number of cards in game = " + gameState.getCards().size());
+				List<Player> players = gameProject.getPlayersByGameStateId(gameStateId);
+				
 				if (gameState.getCompleted() == 1)  { 
 					List<CardEvent> cardEvents = gameProject.getCardEventsByGameState(gameState);
 					mav.addObject("cardEvents", cardEvents);
+					mav.addObject("players", players);
 				} else {
 					mav.addObject("errorMessage", "Game is in progress.  Report will be available when the game is done.");
 					mav.addObject("cardEvents", null);
@@ -400,5 +406,5 @@ public class GameController {
 		return mav;
 	}
 
-
+	
 }

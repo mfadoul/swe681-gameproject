@@ -176,8 +176,10 @@ public class GameProject implements GameProjectRemote {
 		
 		System.out.println("User " + user.getId() + "(" + user.getEmail() + ") is forfeiting game " + gameState.getId() + ".");
 		
+		//System.out.println("(4) Number of players = " + gameState.getPlayers().size());
 		// Find the winner
-		for (Player player: gameState.getPlayers()) {
+		List<Player> players = this.getPlayersByGameStateId(gameState.getId());
+		for (Player player: players) {
 			if (player.getUser().getId() != user.getId()) {
 				gameState.setWinnerId(player.getId()); // The winner is the person who did not forfeit
 			}
@@ -202,26 +204,188 @@ public class GameProject implements GameProjectRemote {
 			return gameState;
 		}
 		
+		List<Card> cards = new ArrayList<Card>();
+		
 		gameState = new GameState ();
 		gameState.setPhase(1);
 		gameState.setTurn(1);
 		gameState.setBeginDate(new Date());
-		gameState.setCards(new ArrayList<Card>());
+		//gameState.setPlayers(new ArrayList<Player>());
 		gameState.setWinnerId(0);
 
+		//entityManager.persist(gameState);
+		
+		// initializeGameState(gameState);
+		
+		// COPYPASTA BEGIN
+		int counter = 1;
+		
+		//8 of each victory
+		int victoryCount = 8;
+		while(counter <= victoryCount){
+			Card estate = new Card();
+			estate.setCardType(CardType.Estate.cardTypeId);
+			estate.setLocation(DECK_LOCATION);
+			estate.setPlayer(null);
+			estate.setGameState(gameState);
+			cards.add(estate);
+			//entityManager.persist(estate);
+			
+			Card duchy = new Card();
+			duchy.setCardType(CardType.Duchy.cardTypeId);
+			duchy.setLocation(DECK_LOCATION);
+			duchy.setPlayer(null);
+			duchy.setGameState(gameState);
+			cards.add(duchy);
+			//entityManager.persist(duchy);
+			
+			Card province = new Card();
+			province.setCardType(CardType.Province.cardTypeId);
+			province.setLocation(DECK_LOCATION);
+			province.setPlayer(null);
+			province.setGameState(gameState);
+			cards.add(province);
+			//entityManager.persist(province);
+			
+			counter++;
+		}
+
+		//10 of each action
+		int actionCount = 10;
+		counter = 1;
+		while(counter <= actionCount){
+			Card cellar = new Card();
+			cellar.setCardType(CardType.Cellar.cardTypeId);
+			cellar.setLocation(DECK_LOCATION);
+			cellar.setPlayer(null);
+			cellar.setGameState(gameState);
+			cards.add(cellar);
+			//entityManager.persist(cellar);
+
+			Card market = new Card();
+			market.setCardType(CardType.Market.cardTypeId);
+			market.setLocation(DECK_LOCATION);
+			market.setPlayer(null);
+			market.setGameState(gameState);
+			cards.add(market);
+			//entityManager.persist(market);
+			
+			Card militia = new Card();
+			militia.setCardType(CardType.Militia.cardTypeId);
+			militia.setLocation(DECK_LOCATION);
+			militia.setPlayer(null);
+			militia.setGameState(gameState);
+			cards.add(militia);
+			//entityManager.persist(militia);
+			
+			Card mine = new Card();
+			mine.setCardType(CardType.Mine.cardTypeId);
+			mine.setLocation(DECK_LOCATION);
+			mine.setPlayer(null);
+			mine.setGameState(gameState);
+			cards.add(mine);
+			//entityManager.persist(mine);
+			
+			Card moat = new Card();
+			moat.setCardType(CardType.Moat.cardTypeId);
+			moat.setLocation(DECK_LOCATION);
+			moat.setPlayer(null);
+			moat.setGameState(gameState);
+			cards.add(moat);
+			//entityManager.persist(moat);
+			
+			Card remodel = new Card();
+			remodel.setCardType(CardType.Remodel.cardTypeId);
+			remodel.setLocation(DECK_LOCATION);
+			remodel.setPlayer(null);
+			remodel.setGameState(gameState);
+			cards.add(remodel);
+			//entityManager.persist(remodel);
+			
+			Card smithy = new Card();
+			smithy.setCardType(CardType.Smithy.cardTypeId);
+			smithy.setLocation(DECK_LOCATION);
+			smithy.setPlayer(null);
+			smithy.setGameState(gameState);
+			cards.add(smithy);
+			//entityManager.persist(smithy);
+			
+			Card village = new Card();
+			village.setCardType(CardType.Village.cardTypeId);
+			village.setLocation(DECK_LOCATION);
+			village.setPlayer(null);
+			village.setGameState(gameState);
+			cards.add(village);
+			//entityManager.persist(village);
+			
+			Card woodcutter = new Card();
+			woodcutter.setCardType(CardType.Woodcutter.cardTypeId);
+			woodcutter.setLocation(DECK_LOCATION);
+			woodcutter.setPlayer(null);
+			woodcutter.setGameState(gameState);
+			cards.add(woodcutter);
+			//entityManager.persist(woodcutter);
+			
+			Card workshop = new Card();
+			workshop.setCardType(CardType.Workshop.cardTypeId);
+			workshop.setLocation(DECK_LOCATION);
+			workshop.setPlayer(null);
+			workshop.setGameState(gameState);
+			cards.add(workshop);
+			//entityManager.persist(workshop);
+			
+			counter++;
+		}
+		
+		//50 of each treasure
+		int treasureCount = 50;
+		counter = 1;
+		while(counter <= treasureCount){
+			Card copper = new Card();
+			copper.setCardType(CardType.Copper.cardTypeId);
+			copper.setLocation(DECK_LOCATION);
+			copper.setPlayer(null);
+			copper.setGameState(gameState);
+			cards.add(copper);
+			//entityManager.persist(copper);
+			
+			Card silver = new Card();
+			silver.setCardType(CardType.Silver.cardTypeId);
+			silver.setLocation(DECK_LOCATION);
+			silver.setPlayer(null);
+			silver.setGameState(gameState);
+			cards.add(silver);
+			//entityManager.persist(silver);
+			
+			Card gold = new Card();
+			gold.setCardType(CardType.Gold.cardTypeId);
+			gold.setLocation(DECK_LOCATION);
+			gold.setPlayer(null);
+			gold.setGameState(gameState);
+			cards.add(gold);
+			//entityManager.persist(gold);
+			
+			counter++;
+		}
+		//entityManager.merge(gameState);
+		gameState.setCards(cards);
+
+		// COPYPASTA END
 		entityManager.persist(gameState);
-		
-		initializeGameState(gameState);
-		
-		entityManager.merge(gameState);
-		
-		System.out.println ("Created game ID " + gameState.getId());
+		for (Card card: gameState.getCards()) {
+			entityManager.persist(card);
+		}
+		entityManager.flush();
+		System.out.println ("Created game ID " + gameState.getId() + " with " + gameState.getCards().size() + " cards.");
 		return gameState;
 	}
 
 	@Override
 	public GameState getGameStateById(long gameStateId) {
 		try {
+			GameState gameState = entityManager.find(GameState.class, gameStateId);
+			//System.out.println("(11) Number of players = " + gameState.getPlayers().size());
+
 			return entityManager.find(GameState.class, gameStateId);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -249,14 +413,17 @@ public class GameProject implements GameProjectRemote {
 		}
 		
 		// 3. Player already exists in the game
-		for (Player player: gameState.getPlayers()) {
+		List<Player> players = this.getPlayersByGameStateId(gameStateId);
+		
+		for (Player player: players) {
 			if ((player.getUser()!=null) && (player.getUser().getId() == userId)) {
 				System.out.println ("Player " + player.getId() + " is already in game " + gameState.getId());
 				return player;
 			}
 		}
 		
-		if (gameState.getPlayers().size() >= 2) {
+		if (this.getPlayersByGameStateId(gameStateId).size() >= 2) {
+		//if (gameState.getPlayers().size() >= 2) {
 			// Only allow two players.  Fail if there are more.
 			System.out.println ("Two players are already in game " + gameState.getId());
 			return null;
@@ -265,14 +432,19 @@ public class GameProject implements GameProjectRemote {
 		// 5. Create a new Player
 		Player player = new Player();
 		user.addPlayer(player); // Create the connection on both sides.
-		gameState.addPlayer(player);
+		
+		//System.out.println("(1) Player count = " + gameState.getPlayers().size());
+		player.setGameState(gameState);
+		//gameState.addPlayer(player);
+		//System.out.println("(2) Player count = " + gameState.getPlayers().size());
 
 		entityManager.persist(player);
 		entityManager.merge(user);
 		entityManager.merge(gameState);
 		
 		initializePlayer(player, gameState);
-		
+		//System.out.println("(3) Player count = " + gameState.getPlayers().size());
+
 		//Draw 5 cards
 		this.draw(player, 5);
 
@@ -710,128 +882,6 @@ public class GameProject implements GameProjectRemote {
 		
 	}
 	
-	//TODO need to set additional values like turn, phase
-	private void initializeGameState(GameState gameState){
-		int counter = 1;
-		
-		//8 of each victory
-		int victoryCount = 8;
-		while(counter <= victoryCount){
-			Card estate = new Card();
-			estate.setCardType(CardType.Estate.cardTypeId);
-			estate.setLocation(DECK_LOCATION);
-			gameState.addCard(estate);
-			//entityManager.persist(estate);
-			
-			Card duchy = new Card();
-			duchy.setCardType(CardType.Duchy.cardTypeId);
-			duchy.setLocation(DECK_LOCATION);
-			gameState.addCard(duchy);
-			//entityManager.persist(duchy);
-			
-			Card province = new Card();
-			province.setCardType(CardType.Province.cardTypeId);
-			province.setLocation(DECK_LOCATION);
-			gameState.addCard(province);
-			//entityManager.persist(province);
-			
-			counter++;
-		}
-
-		//10 of each action
-		int actionCount = 10;
-		counter = 1;
-		while(counter <= actionCount){
-			Card cellar = new Card();
-			cellar.setCardType(CardType.Cellar.cardTypeId);
-			cellar.setLocation(DECK_LOCATION);
-			gameState.addCard(cellar);
-			//entityManager.persist(cellar);
-
-			Card market = new Card();
-			market.setCardType(CardType.Market.cardTypeId);
-			market.setLocation(DECK_LOCATION);
-			gameState.addCard(market);
-			//entityManager.persist(market);
-			
-			Card militia = new Card();
-			militia.setCardType(CardType.Militia.cardTypeId);
-			militia.setLocation(DECK_LOCATION);
-			gameState.addCard(militia);
-			//entityManager.persist(militia);
-			
-			Card mine = new Card();
-			mine.setCardType(CardType.Mine.cardTypeId);
-			mine.setLocation(DECK_LOCATION);
-			gameState.addCard(mine);
-			//entityManager.persist(mine);
-			
-			Card moat = new Card();
-			moat.setCardType(CardType.Moat.cardTypeId);
-			moat.setLocation(DECK_LOCATION);
-			gameState.addCard(moat);
-			//entityManager.persist(moat);
-			
-			Card remodel = new Card();
-			remodel.setCardType(CardType.Remodel.cardTypeId);
-			remodel.setLocation(DECK_LOCATION);
-			gameState.addCard(remodel);
-			//entityManager.persist(remodel);
-			
-			Card smithy = new Card();
-			smithy.setCardType(CardType.Smithy.cardTypeId);
-			smithy.setLocation(DECK_LOCATION);
-			gameState.addCard(smithy);
-			//entityManager.persist(smithy);
-			
-			Card village = new Card();
-			village.setCardType(CardType.Village.cardTypeId);
-			village.setLocation(DECK_LOCATION);
-			gameState.addCard(village);
-			//entityManager.persist(village);
-			
-			Card woodcutter = new Card();
-			woodcutter.setCardType(CardType.Woodcutter.cardTypeId);
-			woodcutter.setLocation(DECK_LOCATION);
-			gameState.addCard(woodcutter);
-			//entityManager.persist(woodcutter);
-			
-			Card workshop = new Card();
-			workshop.setCardType(CardType.Workshop.cardTypeId);
-			workshop.setLocation(DECK_LOCATION);
-			gameState.addCard(workshop);
-			//entityManager.persist(workshop);
-			
-			counter++;
-		}
-		
-		//50 of each treasure
-		int treasureCount = 50;
-		counter = 1;
-		while(counter <= treasureCount){
-			Card copper = new Card();
-			copper.setCardType(CardType.Copper.cardTypeId);
-			copper.setLocation(DECK_LOCATION);
-			gameState.addCard(copper);
-			//entityManager.persist(copper);
-			
-			Card silver = new Card();
-			silver.setCardType(CardType.Silver.cardTypeId);
-			silver.setLocation(DECK_LOCATION);
-			gameState.addCard(silver);
-			//entityManager.persist(silver);
-			
-			Card gold = new Card();
-			gold.setCardType(CardType.Gold.cardTypeId);
-			gold.setLocation(DECK_LOCATION);
-			gameState.addCard(gold);
-			//entityManager.persist(gold);
-			
-			counter++;
-		}
-		//entityManager.merge(gameState);
-	}
-
 	private void initializePlayer(Player player, GameState gameState){
 		
 		//Initial values
@@ -842,7 +892,7 @@ public class GameProject implements GameProjectRemote {
 
 		//Since player has not already been added to gameState, set their turn value to the current number 
 		// of players
-		player.setTurn(gameState.getPlayers().size());
+		player.setTurn(this.getPlayersByGameStateId(gameState.getId()).size());
 			
 		entityManager.merge(player);
 		
@@ -949,6 +999,18 @@ public class GameProject implements GameProjectRemote {
 			}
 		});
 		
+		return resultList;
+	}
+
+	@Override
+	public List<Player> getPlayersByGameStateId(long gameStateId) {
+		final String jpaQlQuery = " from Player p where p.gameState=:gameState";
+		
+		Query query = entityManager.createQuery(jpaQlQuery);
+		query.setParameter("gameState", this.getGameStateById(gameStateId));
+
+		@SuppressWarnings("unchecked")
+		List<Player> resultList = (List<Player>) query.getResultList();
 		return resultList;
 	}
 
