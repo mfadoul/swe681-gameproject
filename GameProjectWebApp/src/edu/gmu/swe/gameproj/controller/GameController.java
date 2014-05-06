@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import edu.gmu.swe.gameproj.ejb.GameProjectRemote;
 import edu.gmu.swe.gameproj.jpa.Card;
+import edu.gmu.swe.gameproj.jpa.CardEvent;
 import edu.gmu.swe.gameproj.jpa.CardType;
 import edu.gmu.swe.gameproj.jpa.GameState;
 import edu.gmu.swe.gameproj.jpa.Player;
@@ -341,6 +342,46 @@ public class GameController {
 		return mav;
 	}
 
+	// Attempt to join a game.
+	@RequestMapping(value = "report/{gameStateId}", method = RequestMethod.GET)
+	public ModelAndView report (@PathVariable("gameStateId") int gameStateId,
+			HttpSession httpSession) {
+		ModelAndView mav = new ModelAndView();
+		
+		User user = SessionBeanHelper.getLoggedInUser();
+		mav.addObject("user", user);
+		mav.addObject("loggedInUser", SessionBeanHelper.getLoggedInUser());  // Yep, it's the same as user...
+
+		if (user != null) {
+			GameProjectRemote gameProject = 
+					SessionBeanHelper.getGameProjectSessionBean();
+			
+			GameState gameState = gameProject.getGameStateById(gameStateId);
+			mav.addObject("gameState", gameState);
+			
+			if (gameState != null) {
+				// Must be completed!
+				System.out.println("------ Number of players in game = " + gameState.getPlayers().size());
+				if (gameState.getCompleted() == 1)  { 
+					List<CardEvent> cardEvents = gameProject.getCardEventsByGameState(gameState);
+					mav.addObject("cardEvents", cardEvents);
+				} else {
+					mav.addObject("errorMessage", "Game is in progress.  Report will be available when the game is done.");
+					mav.addObject("cardEvents", null);
+				}
+			}
+			
+			if (gameState == null) {
+				mav.addObject("errorMessage", "Game could not be found.");
+			} else {
+				mav.addObject("infoMessage", "Report for game # " + gameState.getId() + ".");
+			}
+		} else {
+			mav.addObject("errorMessage", "Your account could not be found in our database.");
+		}
+		mav.setViewName("Game_Report");
+		return mav;
+	}
 
 
 }

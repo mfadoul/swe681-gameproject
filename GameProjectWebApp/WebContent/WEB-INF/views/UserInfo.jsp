@@ -42,7 +42,7 @@
 						<h4>Wins: <c:out value="${gamesWonCount}" /></h4>
 		        		<c:if test="${gamesWonList ne null}">
 			        		<c:forEach items="${gamesWonList}" var="gameStateWon">
-								<c:url value="/GameProject/game/info/${gameStateLost.id}" var="gameWonInfoLink" />
+								<c:url value="/GameProject/game/report/${gameStateLost.id}" var="gameWonInfoLink" />
 						        <h5><c:out value="${gameStateWon.id}" /></h5>
 								<div>
 									<p>TODO: Display the results of a game.</p>
@@ -54,7 +54,7 @@
 						<h4>Losses: <c:out value="${gamesLostCount}" /></h4>
 		        		<c:if test="${gamesLostList ne null}">
 			        		<c:forEach items="${gamesLostList}" var="gameStateLost">
-								<c:url value="/GameProject/game/info/${gameStateLost.id}" var="gameLostInfoLink" />
+								<c:url value="/GameProject/game/report/${gameStateLost.id}" var="gameLostInfoLink" />
 						        <h5><c:out value="${gameStateLost.id}" /></h5>
 								<div>
 									<p>TODO: Display the results of a game.</p>

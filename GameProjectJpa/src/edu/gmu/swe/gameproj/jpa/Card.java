@@ -16,9 +16,9 @@ public class Card implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-    @TableGenerator(name="TABLE_GEN_XXXX", table="SEQUENCE_TABLE", pkColumnName="SEQ_NAME",
-    valueColumnName="SEQ_COUNT", pkColumnValue="XXXXX_SEQ")
-	@GeneratedValue(strategy=GenerationType.TABLE, generator="TABLE_GEN_XXXX")
+    @TableGenerator(name="TABLE_GEN_CARD", table="SEQUENCE_TABLE", pkColumnName="SEQ_NAME",
+    valueColumnName="SEQ_COUNT", pkColumnValue="CARD_SEQ")
+	@GeneratedValue(strategy=GenerationType.TABLE, generator="TABLE_GEN_CARD")
 	private long id;
 
 	private int cardType;

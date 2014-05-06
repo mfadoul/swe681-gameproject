@@ -4,6 +4,7 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -944,6 +945,27 @@ public class GameProject implements GameProjectRemote {
 			System.err.println("Exception: " + e);
 		}
     }
+
+	@Override
+	public List<CardEvent> getCardEventsByGameState(GameState gameState) {
+		if (gameState == null) {
+			return null;
+		}
+		final String jpaQlQuery = " from CardEvent ce where ce.gameStateId=:gameStateId";
+		Query query = entityManager.createQuery(jpaQlQuery);
+		query.setParameter("gameStateId", gameState.getId());
+		
+		@SuppressWarnings("unchecked")
+		List<CardEvent> resultList = (List<CardEvent>) query.getResultList();
+		Collections.sort(resultList, new Comparator<CardEvent>() {
+			public int compare(CardEvent ce1, CardEvent ce2) {
+				// Sort by date
+				return (ce1.getEventDate().getTime() < ce2.getEventDate().getTime()?-1:1);
+			}
+		});
+		
+		return resultList;
+	}
 	
 
 

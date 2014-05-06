@@ -67,7 +67,9 @@ public interface GameProjectRemote {
 	
 	// Card Events
 	public abstract CardEvent createCardEvent (Card card, GameState gameState, Player player, int location);
+	public abstract List<CardEvent> getCardEventsByGameState (GameState gameState);
 
+	
 	// Failed login attempts
 	public abstract void registerFailedLogin(String email);
 	public abstract FailedLogin getFailedLogin(String email);
