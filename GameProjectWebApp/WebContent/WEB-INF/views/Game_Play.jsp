@@ -10,6 +10,24 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Dominion Game Website - Play a new game</title>
 <jsp:include page="HeadForJQuery.jsp" flush="true" />
+<!-- <script>
+function pollForMyTurn(){
+
+	   $.ajax({
+	     url: "GameProject/game/isMyTurn",
+	     timeout: 3000,
+	     success: function(){
+	       alert("Its My turn")
+	     },
+	     complete: function(){
+	    	 pollForMyTurn();
+	     }
+	   });
+	};
+	$(document).ready(function(){
+		pollForMyTurn();
+	});
+</script> -->
 </head>
 <body>
 	<div id="container">
