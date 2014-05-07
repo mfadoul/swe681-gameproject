@@ -201,7 +201,7 @@ public class GameController {
 					}
 					else{
 						//Verify player has enough money
-						if(player.getTotalCoinsInHand() < cardType.getCost()){
+						if(player.getCoinCount() < cardType.getCost()){
 							isValid = false;
 						}
 						
@@ -254,12 +254,15 @@ public class GameController {
 			mav.addObject("errorMessage", "Invalid input");
 		}
 		
-		gameState = gameProject.getActiveGameStateByUser(user);
-		player = gameProject.getActivePlayerByUser(user);
+
+		//GameProjectRemote gameProject2 = SessionBeanHelper.getGameProjectSessionBean();
+		User user2 = SessionBeanHelper.getLoggedInUser();
+		GameState gameStateUpdated = gameProject.getActiveGameStateByUser(user2);
+		Player playerUpdated = gameProject.getActivePlayerByUser(user2);
 		mav.addObject("user", user);
 		mav.addObject("loggedInUser", user); 
-		mav.addObject("player", player);
-		mav.addObject("gameState", gameState);
+		mav.addObject("player", playerUpdated);
+		mav.addObject("gameState", gameStateUpdated);
 		mav.addObject("actVm", new ActVm());
 		mav.setViewName("Game_Play");
 		return mav;

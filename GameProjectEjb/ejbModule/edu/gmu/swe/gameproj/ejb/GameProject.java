@@ -599,7 +599,7 @@ public class GameProject implements GameProjectRemote {
 			
 			if(gameState == null) return false;
 			
-			player.addCoinCount(card.getCost());
+			player.addCoinCount((card.getCost() * -1));
 			player.addBuyCount(-1);
 			player.addCard(card);
 			card.setLocation(DISCARD_LOCATION);
@@ -608,7 +608,10 @@ public class GameProject implements GameProjectRemote {
 			entityManager.merge(card);
 			entityManager.merge(player);
 			entityManager.merge(gameState);
-			
+//			entityManager.refresh(card);
+//			entityManager.refresh(player);
+//			entityManager.refresh(gameState);
+			//entityManager.flush();
 			return true;
 		}
 		catch (Exception e) {
@@ -668,8 +671,13 @@ public class GameProject implements GameProjectRemote {
 				Card card = deck.get(randomWithRange(0,deck.size()-1));
 				deck.remove(card);
 				card.setLocation(HAND_LOCATION);
+				
+				if(card.getType() == CardType.Copper || card.getType() == CardType.Silver || card.getType() == CardType.Gold){
+					player.addCoinCount(card.getType().cardValue); 
+				}
 
 				entityManager.merge(card);
+				entityManager.merge(player);
 				i++;
 			}
 			return player.getHand();

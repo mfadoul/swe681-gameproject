@@ -44,7 +44,7 @@ public enum CardType {
 	
 	public static CardType getCardType(String cardName) {
 		for (CardType cardType: values()) {
-			if (cardType.cardName == cardName) {
+			if (cardType.cardName.equals(cardName)) {
 				return cardType;
 			}
 		}

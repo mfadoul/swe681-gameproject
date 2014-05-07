@@ -62,7 +62,7 @@ function pollForMyTurn(){
 							</tr>
 							<tr>
 								<td>Treasure:</td>
-								<td><c:out value="${player.totalCoinsInHand }" /></td>
+								<td><c:out value="${player.coinCount }" /></td>
 							</tr>
 						</table>
 						</td>

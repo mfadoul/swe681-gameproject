@@ -43,8 +43,8 @@
 						<c:url value="/GameProject/game/play/${gameState.id}" var="gamePlayLink" />
 				        <h3><c:out value="${gameState.id}" /></h3>
 						<div>
-							<p>TODO: Play a game with a waiting player!</p>
-							<p><a href="<c:out value="${gamePlayLink}" />">Joint game #<c:out value="${gameState.id}" /></a></p>
+							<p>Play a game with a waiting player!</p>
+							<p><a href="<c:out value="${gamePlayLink}" />">Join game #<c:out value="${gameState.id}" /></a></p>
 						</div>
 						</c:forEach>
 					</div>
