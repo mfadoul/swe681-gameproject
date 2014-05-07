@@ -10,6 +10,25 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Dominion Game Website - User Info</title>
 <jsp:include page="HeadForJQuery.jsp" flush="true" />
+<script>
+	$(function() {
+		$("#accordion1").accordion({
+			collapsible : true,
+			heightStyle: "content"
+		});
+	});
+
+	$(function() {
+		$("#accordion2").accordion({
+			collapsible : true,
+			heightStyle: "content"
+		});
+	});
+
+	$(function() {
+		$("#radio").buttonset();
+	});
+</script>
 </head>
 <body>
 
@@ -41,29 +60,31 @@
 						<h3> Statistics</h3>
 						<h4>Wins: <c:out value="${gamesWonCount}" /></h4>
 		        		<c:if test="${gamesWonList ne null}">
+						<div id="accordion1">
 			        		<c:forEach items="${gamesWonList}" var="gameStateWon">
 								<c:url value="/GameProject/game/report/${gameStateLost.id}" var="gameWonInfoLink" />
-						        <h5><c:out value="${gameStateWon.id}" /></h5>
+						        <h5>Game #<c:out value="${gameStateWon.id}" /></h5>
 								<div>
-									<p>TODO: Display the results of a game.</p>
 									<p><a href="<c:out value="${gameWonInfoLink}" />">Results for Game #<c:out value="${gameStateWon.id}" />
 									</a></p>
 								</div>
 							</c:forEach>
+						</div>
 		        	    </c:if>
 						<h4>Losses: <c:out value="${gamesLostCount}" /></h4>
 		        		<c:if test="${gamesLostList ne null}">
+						<div id="accordion2">
 			        		<c:forEach items="${gamesLostList}" var="gameStateLost">
 								<c:url value="/GameProject/game/report/${gameStateLost.id}" var="gameLostInfoLink" />
-						        <h5><c:out value="${gameStateLost.id}" /></h5>
+						        <h5>Game #<c:out value="${gameStateLost.id}" /></h5>
 								<div>
-									<p>TODO: Display the results of a game.</p>
 									<p>
 										<a href="<c:out value="${gameLostInfoLink}" />">Results for Game #<c:out value="${gameStateLost.id}" />
 										</a>
 									</p>
 								</div>
 							</c:forEach>
+						</div>
 		        	    </c:if>
 					</c:if>
     				<c:if test="${user eq null}">
