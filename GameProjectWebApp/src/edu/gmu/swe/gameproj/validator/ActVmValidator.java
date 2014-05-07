@@ -38,11 +38,11 @@ public class ActVmValidator implements Validator{
 		
 		//Command contains illegal characters
 		if(!command.matches(pattern)){
-			errors.rejectValue("command", "Invalid input");
+			errors.rejectValue("command", "Failed Regex");
 		}
 		//Command is too long
 		else if(command.length() > 100){
-			errors.rejectValue("command", "Invalid input");
+			errors.rejectValue("command", "Too Long");
 		}
 		else{
 			//Split the command on spaces

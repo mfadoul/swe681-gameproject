@@ -1020,9 +1020,9 @@ public class GameProject implements GameProjectRemote {
 			if(c.getLocation() == 1 && c.getPlayer() == null){
 				if(c.getType() == cardType) {
 					c.setLocation(locationId);
-					gameState.removeCard(c);
+					//gameState.removeCard(c);
 					player.addCard(c);
-					entityManager.merge(gameState);
+					//entityManager.merge(gameState);
 					entityManager.merge(c);
 					break;
 				}

@@ -20,8 +20,8 @@ public class Mine extends Action {
     public void act(ActionDto dto) throws Exception {
         if(!validate(dto)) throw new InvalidParameterException("dto");
         
-        Card trashCard = dto.player.getFirstInstanceInHandByType(dto.oldCard);
-        Card newCard = null;//TODO Get card from game instance;
+//        Card trashCard = dto.player.getFirstInstanceInHandByType(dto.oldCard);
+//        Card newCard = null;//TODO Get card from game instance;
         
 //        if(!super.gameProject.trash(trashCard)){
 //        	throw new Exception("trash failed");
