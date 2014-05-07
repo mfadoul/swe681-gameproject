@@ -468,7 +468,7 @@ public class GameProject implements GameProjectRemote {
 						filteredGameStateList.add(gs);
 					}
 				}
-				System.out.println("GameProject.getOpenGames(): Found " + gameStateList.size() + " open games.");
+				System.out.println("GameProject.getOpenGames(): Found " + filteredGameStateList.size() + " open games.");
 			} 
 		} catch (Exception e) {
 				System.err.println("Exception: " + e);
@@ -1184,6 +1184,32 @@ public class GameProject implements GameProjectRemote {
 				}
 			}
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Set<GameState> getActiveGames() {
+		List<GameState> gameStateList = null;
+		Set<GameState> filteredGameStateSet = null;
+		// Games that are not completed and have one player waiting to play.
+		final String jpaQlQuery = " from GameState gs where gs.completed=0";
+		Query query = entityManager.createQuery(jpaQlQuery);
+
+		try {
+			gameStateList = query.getResultList();
+			if (gameStateList != null) {
+				filteredGameStateSet = new HashSet<GameState>();
+				for(GameState gs : gameStateList){
+					if(this.getPlayersByGameStateId(gs.getId()).size() == 2) {
+						filteredGameStateSet.add(gs);
+					}
+				}
+				System.out.println("GameProject.getActiveGames(): Found " + filteredGameStateSet.size() + " active games.");
+			} 
+		} catch (Exception e) {
+				System.err.println("Exception: " + e);
+		}
+		return filteredGameStateSet;
 	}
 
 }

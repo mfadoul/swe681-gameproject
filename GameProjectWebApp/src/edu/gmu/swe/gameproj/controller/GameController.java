@@ -3,6 +3,7 @@ package edu.gmu.swe.gameproj.controller;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -331,6 +332,34 @@ public class GameController {
 			mav.addObject("errorMessage", "Your account could not be found in our database.");
 		}
 		mav.setViewName("Game_OpenGames");
+		return mav;
+	}
+	
+	// This allows a user to play a game
+	@RequestMapping(value="activeGames", method=RequestMethod.GET)
+	public ModelAndView activeGames() {
+		ModelAndView mav = new ModelAndView();
+		
+		User user = SessionBeanHelper.getLoggedInUser();
+		mav.addObject("user", user);
+		mav.addObject("loggedInUser", SessionBeanHelper.getLoggedInUser());  // Yep, it's the same as user...
+
+		if (user != null) {
+			GameProjectRemote gameProject = 
+					SessionBeanHelper.getGameProjectSessionBean();
+			
+			Set<GameState> gameStates = gameProject.getActiveGames();
+			mav.addObject("gameStates", gameStates);
+
+			if (gameStates != null) {
+				mav.addObject("infoMessage", "Found " + gameStates.size() + " active games.");
+			} else {
+				mav.addObject("errorMessage", "Failed to query for active games.");
+			}
+		} else {
+			mav.addObject("errorMessage", "Your account could not be found in our database.");
+		}
+		mav.setViewName("Game_ActiveGames");
 		return mav;
 	}
 	

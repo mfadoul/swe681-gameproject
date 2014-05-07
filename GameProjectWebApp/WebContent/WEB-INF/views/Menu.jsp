@@ -20,6 +20,8 @@
       <li></li>
       
       <li><a href="/GameProjectWebApp/GameProject/game/openGames" title="A list of the players waiting to play"><span class="ui-icon ui-icon-link"></span>Open Games</a></li>
+      <li><a href="/GameProjectWebApp/GameProject/game/activeGames" title="A list of games in progress"><span class="ui-icon ui-icon-link"></span>Active Games</a></li>
+      <li></li>
       <li><a href="/GameProjectWebApp/GameProject/user/activeUsers" title="A list of users who are online"><span class="ui-icon ui-icon-note"></span>Players Online</a></li>
 
    </sec:authorize>
