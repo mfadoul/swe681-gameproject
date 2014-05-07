@@ -8,8 +8,10 @@ import org.springframework.validation.Validator;
 import edu.gmu.swe.gameproj.util.ActVm;
 
 public class ActVmValidator implements Validator{
-	
-	private final String pattern = "[a-zA-Z, ]+";
+	private final String pattern = "^([a-zA-Z]{3,4})( [a-zA-Z]{0,10})?( [a-zA-Z,]*)?( [a-zA-Z]{0,10})?$";
+	private final String topPattern = "[a-zA-Z, ]+";
+	private final String tokenPattern = "[a-zA-Z]+";
+	private final String tokenPatternList = "[a-zA-Z,]+";
 	private final String[] validCommands = new String[] {
 		"play", "buy", "done"
 	};
@@ -46,6 +48,7 @@ public class ActVmValidator implements Validator{
 			//Split the command on spaces
 			String[] commandAry = command.split(" ");
 			
+
 			//Command contains too many inputs
 			if(commandAry.length > 4){
 				errors.rejectValue("command", "Invalid input");
@@ -75,6 +78,9 @@ public class ActVmValidator implements Validator{
 	}
 	
 	private void handlePlay(String[] commandAry, Errors errors){
+		if(commandAry.length < 2){
+			errors.rejectValue("command", "Invalid input");
+		}
 		if(!Arrays.asList(actionCardNames).contains(commandAry[1])){
 			errors.rejectValue("command", "Unknown card");
 		}
@@ -86,6 +92,8 @@ public class ActVmValidator implements Validator{
 		if(commandAry.length != 2){
 			errors.rejectValue("command", "Invalid input");
 		}
+
+		
 		//Second token must be one of the known cards
 		if(!Arrays.asList(actionCardNames).contains(commandAry[1])){
 			if(!Arrays.asList(treasureCardNames).contains(commandAry[1])){
@@ -97,7 +105,9 @@ public class ActVmValidator implements Validator{
 	}
 	
 	private void handleDone(String[] commandAry, Errors errors){
-		
+		if(commandAry.length != 1){
+			errors.rejectValue("command", "Invalid input");
+		}
 	}
 	
 
