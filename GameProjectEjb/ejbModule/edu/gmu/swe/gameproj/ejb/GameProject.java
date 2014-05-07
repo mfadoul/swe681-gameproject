@@ -8,8 +8,10 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -680,21 +682,18 @@ public class GameProject implements GameProjectRemote {
 	
 
 	@Override
-	public Player trash(Card card) {
+	public Card trash(Card card) {
+		
 		try{
 			if(card == null) return null;
-			Player response = null;
-			Player player = card.getPlayer();
-
-			if (player != null) {
-				player.removeCard(card);
-			}
+			Card response = null;
+			
+			card.setPlayer(null);
 			
 			card.setLocation(DISCARD_LOCATION);
 			
 			
 			entityManager.merge(card);
-			response = entityManager.merge(player);
 			
 			return response;
 			
@@ -703,6 +702,28 @@ public class GameProject implements GameProjectRemote {
 			System.err.println("Exception: " + e);
 			return null;
 		}
+//		try{
+//			if(card == null) return null;
+//			Player response = null;
+//			Player player = card.getPlayer();
+//
+//			if (player != null) {
+//				player.removeCard(card);
+//			}
+//			
+//			card.setLocation(DISCARD_LOCATION);
+//			
+//			
+//			entityManager.merge(card);
+//			response = entityManager.merge(player);
+//			
+//			return response;
+//			
+//		}
+//		catch (Exception e) {
+//			System.err.println("Exception: " + e);
+//			return null;
+//		}
 	}
 
 	@Override
@@ -751,13 +772,55 @@ public class GameProject implements GameProjectRemote {
 
 	@Override
 	public Player addCardToHandFromGame(Player player, Card card) {
-		return addCard(player, card, HAND_LOCATION);
+		if(player == null) return null;
+		if(card == null) return null;
+
+		//Card needs to be owned by game
+		if(card.getPlayer() != null) return null;
+		if(card.getLocation() != DECK_LOCATION) return null;
+		
+		card.setLocation(HAND_LOCATION);
+		player.addCard(card);
+		
+		
+		try{
+			entityManager.merge(card);
+			Player response = entityManager.merge(player);
+			return response;
+		}
+		catch (Exception e) {
+			System.err.println("Exception: " + e);
+			return null;
+		}
+		
+		//return addCard(player, card, HAND_LOCATION);
 
 	}
 	
 	@Override
 	public Player addCardToDiscardFromGame(Player player, Card card) {
-		return addCard(player, card, DISCARD_LOCATION);
+		
+		if(player == null) return null;
+		if(card == null) return null;
+
+		//Card needs to be owned by game
+		if(card.getPlayer() != null) return null;
+		if(card.getLocation() != DECK_LOCATION) return null;
+		
+		card.setLocation(DISCARD_LOCATION);
+		player.addCard(card);
+		
+		
+		try{
+			entityManager.merge(card);
+			Player response = entityManager.merge(player);
+			return response;
+		}
+		catch (Exception e) {
+			System.err.println("Exception: " + e);
+			return null;
+		}
+		//return addCard(player, card, DISCARD_LOCATION);
 
 	}
 	
@@ -1018,6 +1081,52 @@ public class GameProject implements GameProjectRemote {
 		@SuppressWarnings("unchecked")
 		List<Player> resultList = (List<Player>) query.getResultList();
 		return resultList;
+	}
+
+	@Override
+	public boolean isWinner(GameState gameState) {
+		TreeMap<String, Integer> victoryCards = gameState.getAvailableVictory();
+		
+		if(victoryCards.get(CardType.Province.name()) > 0) return false;
+		else return true;
+	}
+
+	@Override
+	public boolean setWinnerEndGame(GameState gameState) {
+
+		if(gameState == null) return false;
+		
+		// Close out the game:
+		gameState.setCompleted((byte) 1);
+		gameState.setEndDate(new Date());
+		
+		
+		
+		// Find the winner
+		List<Player> players = this.getPlayersByGameStateId(gameState.getId());
+		
+		Player player1 = players.get(0);
+		Player player2 = players.get(1);
+		
+		//Player 1 has more victory points?
+		if(player1.getTotalVictoryPoints() > player2.getTotalVictoryPoints())
+			gameState.setWinnerId(player1.getId());
+		
+		//Player 2 has more victory points?
+		else if(player1.getTotalVictoryPoints() < player2.getTotalVictoryPoints())
+			gameState.setWinnerId(player2.getId());
+		
+		//Same # of Victory points. Tie goes to the person with the higher turn order.
+		else{
+			if(player1.getTurn() > player2.getTurn())
+				gameState.setWinnerId(player1.getId());
+			else
+				gameState.setWinnerId(player2.getId());
+		}
+
+		// Preserve the rest of the game state.
+		entityManager.merge(gameState);
+		return true;
 	}
 
 }

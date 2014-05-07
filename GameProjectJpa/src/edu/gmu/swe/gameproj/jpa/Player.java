@@ -263,6 +263,18 @@ public class Player implements Serializable {
 		//this.buyCount += count;
 	}
 	
+	@Transient
+	public int getTotalVictoryPoints(){
+		int victoryPoints = 0;
+		for(Card c : this.getCards()){
+			if(c.getCardType() > 300){
+				victoryPoints += c.getType().cardValue;
+			}
+		}
+		
+		return victoryPoints;
+	}
+	
 //	@Transient
 //	public void draw(int drawCount){
 //		int i = 0;

@@ -29,13 +29,13 @@ public class Remodel extends Action {
 //        }
 //        super.act(dto);
         
-        Player p1 = super.gameProject.trash(trashCard);
-        if(p1 == null) throw new Exception("trash failed");
+        Card c1 = super.gameProject.trash(trashCard);
+        if(c1 == null) throw new Exception("trash failed");
         
-        Player p2 = super.gameProject.addCardToDiscardFromGame(p1, newCard);
-        if(p2 == null) throw new Exception("discard failed");
+        Player p1 = super.gameProject.addCardToDiscardFromGame(dto.player, newCard);
+        if(p1 == null) throw new Exception("discard failed");
         
-        super.cleanUp(p2);
+        super.cleanUp(p1);
 
     }
 

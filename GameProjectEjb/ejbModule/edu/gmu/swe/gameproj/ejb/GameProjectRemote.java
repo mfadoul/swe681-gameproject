@@ -34,6 +34,8 @@ public interface GameProjectRemote {
 	public abstract GameState getGameStateById(long gameStateId);
 	public abstract Player getActivePlayerByUser(User user);
 	public abstract boolean forfeitActiveGameByUser (User user);
+	public abstract boolean isWinner(GameState gameState);
+	public abstract boolean setWinnerEndGame(GameState gameState);
 
 	public abstract List<GameState> getOpenGames();
 	
@@ -57,7 +59,7 @@ public interface GameProjectRemote {
 
 	public abstract Card discard(Player player, ArrayList<CardType> cards);
 	public abstract Player draw(Player player, int count);
-	public abstract Player trash(Card card);
+	public abstract Card trash(Card card);
 	
 	public abstract Player getPlayerById(long playerId);
 
@@ -66,6 +68,7 @@ public interface GameProjectRemote {
 	
 	//End Turn
 	public abstract boolean endTurn(Player player, GameState gameState);
+
 	
 	// Card Events
 	public abstract CardEvent createCardEvent (Card card, GameState gameState, Player player, int location);

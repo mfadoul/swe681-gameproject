@@ -138,6 +138,7 @@ public class GameController {
 		boolean isValid = true;
 		boolean isTurn = true;
 		boolean isEnoughPlayers = true;
+		boolean isActiveGame = true;
 		GameState gameState = null;
 		Player player = null;
 		User user = SessionBeanHelper.getLoggedInUser();
@@ -155,7 +156,7 @@ public class GameController {
 			//1. Check that it is this person's turn
 			if(player.getTurn() != gameState.getTurn()){
 				isTurn = false;
-				//TODO Do I need to do something more serious here?
+
 			}
 			
 			List<Player> players = gameProject.getPlayersByGameStateId(gameState.getId());
@@ -163,7 +164,11 @@ public class GameController {
 				isEnoughPlayers = false;
 			}
 			
-			if(isTurn && isEnoughPlayers){
+			if(gameState.getCompleted() == 1){
+				isActiveGame = false;
+			}
+			
+			if(isTurn && isEnoughPlayers && isActiveGame){
 			
 			
 				if(commandAry[0].equals("play")){
@@ -255,6 +260,13 @@ public class GameController {
 				}
 			}
 			else{
+				if(!isActiveGame){
+					mav.addObject("user", user);
+					mav.addObject("loggedInUser", user); 
+					mav.setViewName("UserInfo");
+					return mav;
+				}
+				
 				if(!isEnoughPlayers){
 					mav.addObject("errorMessage", "Still waiting on another player");
 				}
@@ -274,6 +286,14 @@ public class GameController {
 		User user2 = SessionBeanHelper.getLoggedInUser();
 		GameState gameStateUpdated = gameProject.getActiveGameStateByUser(user2);
 		Player playerUpdated = gameProject.getActivePlayerByUser(user2);
+		
+		if(gameProject.isWinner(gameStateUpdated)){
+			gameProject.setWinnerEndGame(gameStateUpdated);
+			mav.addObject("user", user);
+			mav.addObject("loggedInUser", user); 
+			mav.setViewName("UserInfo");
+			return mav;
+		}
 		mav.addObject("user", user);
 		mav.addObject("loggedInUser", user); 
 		mav.addObject("player", playerUpdated);
