@@ -54,12 +54,12 @@ public interface GameProjectRemote {
 	public abstract Player addActions(Player player, int count);
 	public abstract Player addBuys(Player player, int count);
 	public abstract Player addCoins(Player player, int count);
-	public abstract Player addCardToHandFromGame(Player player, Card card);
-	public abstract Player addCardToDiscardFromGame(Player player, Card card);
+	public abstract Player addCardToHandFromGame(Player player, CardType cardType);
+	public abstract Player addCardToDiscardFromGame(Player player, CardType cardType);
 
 	public abstract Card discard(Player player, ArrayList<CardType> cards);
 	public abstract Player draw(Player player, int count);
-	public abstract Card trash(Card card);
+	public abstract Player trash(Player player, CardType cardType);
 	
 	public abstract Player getPlayerById(long playerId);
 	public abstract void attack(Player player);

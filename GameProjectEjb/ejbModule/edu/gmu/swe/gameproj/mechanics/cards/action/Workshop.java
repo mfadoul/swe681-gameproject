@@ -19,13 +19,13 @@ public class Workshop extends Action {
     public void act(ActionDto dto) throws Exception {
         if(!validate(dto)) throw new InvalidParameterException("dto");
         
-        Card newCard = null;//TODO get card from gamestate
+        //Card newCard = null;
 //        if(!super.gameProject.addCardToDiscardFromGame(dto.player, newCard)){
 //        	throw new Exception("add card to discard failed");
 //        }
 //        super.act(dto);
 
-        Player p1 = super.gameProject.addCardToDiscardFromGame(dto.player, newCard);
+        Player p1 = super.gameProject.addCardToDiscardFromGame(dto.player, dto.newCard);
         if(p1 == null) throw new Exception("add card to discard failed");
         
         super.cleanUp(p1);

@@ -32,13 +32,13 @@ public class Mine extends Action {
 //        
 //        super.act(dto);
 
-        Card c1 = super.gameProject.trash(trashCard);
-        if(c1 == null) throw new Exception("trash failed");
+        Player p1 = super.gameProject.trash(dto.player, dto.oldCard);
+        if(p1 == null) throw new Exception("trash failed");
         
-        Player p1 = super.gameProject.addCardToHandFromGame(dto.player, newCard);
-        if(p1 == null) throw new Exception("add card to hand failed");
+        Player p2 = super.gameProject.addCardToHandFromGame(dto.player, dto.newCard);
+        if(p2 == null) throw new Exception("add card to hand failed");
         
-        super.cleanUp(p1);
+        super.cleanUp(p2);
 
     }
 

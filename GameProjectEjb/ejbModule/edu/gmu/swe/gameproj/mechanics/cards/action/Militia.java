@@ -21,7 +21,7 @@ public class Militia extends Action {
 //        if(!super.gameProject.addCoins(dto.player, addCoinsCount)){
 //        	throw new Exception("add coins failed");
 //        }
-//      //TODO: Add observer for card draw down
+
 //        
 //        super.act(dto);
         

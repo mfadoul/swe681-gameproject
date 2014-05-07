@@ -684,18 +684,26 @@ public class GameProject implements GameProjectRemote {
 	
 
 	@Override
-	public Card trash(Card card) {
+	public Player trash(Player player, CardType cardType) {
 		
 		try{
-			if(card == null) return null;
-			Card response = null;
+			if(cardType == null) return null;
+			if(player == null) return null;
 			
-			card.setPlayer(null);
+			Player response = null;
 			
-			card.setLocation(DISCARD_LOCATION);
+			for(Card c : player.getHand()){
+				if(c.getType() == cardType) {
+					c.setLocation(DISCARD_LOCATION);
+					player.removeCard(c);
+					//c.setPlayer(null);
+					
+					entityManager.merge(c);
+					break;
+				}
+			}
 			
-			
-			entityManager.merge(card);
+			response = entityManager.merge(player);
 			
 			return response;
 			
@@ -773,56 +781,64 @@ public class GameProject implements GameProjectRemote {
 	}
 
 	@Override
-	public Player addCardToHandFromGame(Player player, Card card) {
-		if(player == null) return null;
-		if(card == null) return null;
-
-		//Card needs to be owned by game
-		if(card.getPlayer() != null) return null;
-		if(card.getLocation() != DECK_LOCATION) return null;
+	public Player addCardToHandFromGame(Player player, CardType cardType) {
+//		if(player == null) return null;
+//		if(cardType == null) return null;
+//		
+//		GameState gameState = player.getGameState();
+//		
+//		for(Card c : gameState.getCards()){
+//			//Get cards owned by GameState that aren't in trash
+//			if(c.getLocation() == 1 && c.getPlayer() == null){
+//				if(c.getType() == cardType) {
+//					c.setLocation(HAND_LOCATION);
+//					gameState.removeCard(c);
+//					player.addCard(c);
+//					entityManager.merge(gameState);
+//					entityManager.merge(c);
+//					break;
+//				}
+//			}
+//		}
+//		
+//		
+//		try{
+//			Player response = entityManager.merge(player);
+//			return response;
+//		}
+//		catch (Exception e) {
+//			System.err.println("Exception: " + e);
+//			return null;
+//		}
 		
-		card.setLocation(HAND_LOCATION);
-		player.addCard(card);
-		
-		
-		try{
-			entityManager.merge(card);
-			Player response = entityManager.merge(player);
-			return response;
-		}
-		catch (Exception e) {
-			System.err.println("Exception: " + e);
-			return null;
-		}
-		
-		//return addCard(player, card, HAND_LOCATION);
+		return addCard(player, cardType, HAND_LOCATION);
 
 	}
 	
 	@Override
-	public Player addCardToDiscardFromGame(Player player, Card card) {
-		
-		if(player == null) return null;
-		if(card == null) return null;
-
-		//Card needs to be owned by game
-		if(card.getPlayer() != null) return null;
-		if(card.getLocation() != DECK_LOCATION) return null;
-		
-		card.setLocation(DISCARD_LOCATION);
-		player.addCard(card);
-		
-		
-		try{
-			entityManager.merge(card);
-			Player response = entityManager.merge(player);
-			return response;
-		}
-		catch (Exception e) {
-			System.err.println("Exception: " + e);
-			return null;
-		}
-		//return addCard(player, card, DISCARD_LOCATION);
+	public Player addCardToDiscardFromGame(Player player, CardType cardType) {
+//		
+//		if(player == null) return null;
+//		if(card == null) return null;
+//
+//		//Card needs to be owned by game
+//		if(card.getPlayer() != null) return null;
+//		if(card.getLocation() != DECK_LOCATION) return null;
+//		
+//		card.setLocation(DISCARD_LOCATION);
+//		player.addCard(card);
+//		
+//		
+//		try{
+//			entityManager.merge(card);
+//			Player response = entityManager.merge(player);
+//			return response;
+//		}
+//		catch (Exception e) {
+//			System.err.println("Exception: " + e);
+//			return null;
+//		}
+		return addCard(player, cardType, DISCARD_LOCATION);
 
 	}
 	
@@ -993,19 +1009,28 @@ public class GameProject implements GameProjectRemote {
 		entityManager.merge(player);
 	}
 	
-	private Player addCard(Player player, Card card, int locationId){
+	private Player addCard(Player player, CardType cardType, int locationId){
 		if(player == null) return null;
-		if(card == null) return null;
-
-		//Card needs to be owned by game
-		if(card.getPlayer() != null) return null;
-		if(card.getLocation() != DECK_LOCATION) return null;
+		if(cardType == null) return null;
 		
-		player.addCard(card);
-		card.setLocation(locationId);
+		GameState gameState = player.getGameState();
+		
+		for(Card c : gameState.getCards()){
+			//Get cards owned by GameState that aren't in trash
+			if(c.getLocation() == 1 && c.getPlayer() == null){
+				if(c.getType() == cardType) {
+					c.setLocation(locationId);
+					gameState.removeCard(c);
+					player.addCard(c);
+					entityManager.merge(gameState);
+					entityManager.merge(c);
+					break;
+				}
+			}
+		}
+		
 		
 		try{
-			entityManager.merge(card);
 			Player response = entityManager.merge(player);
 			return response;
 		}
