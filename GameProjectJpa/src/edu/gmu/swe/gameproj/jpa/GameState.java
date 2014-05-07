@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 
 /**
@@ -171,8 +172,8 @@ public class GameState implements Serializable {
 	}
 	
 	@Transient
-	public HashMap<String, Integer> getAvailableCards(){
-		HashMap<String,Integer> cards = new HashMap<String, Integer>();
+	public TreeMap<String, Integer> getAvailableCards(){
+		TreeMap<String,Integer> cards = new TreeMap<String, Integer>();
 		
 		for(Card c : this.getCards()){
 			if(this.isAvaialble(c)){
@@ -184,6 +185,60 @@ public class GameState implements Serializable {
 			}
 		}
 		return cards;
+	}
+	
+	@Transient 
+	public TreeMap<String, Integer> getAvailableVictory(){
+		TreeMap<String,Integer> cards = new TreeMap<String, Integer>();
+		
+		for(Card c : this.getCards()){
+			if(this.isAvaialble(c)){
+				if(c.getCardType() > 300){
+					String key = c.getType().cardName;
+					Integer tempValue = cards.get(key);
+					if(tempValue == null)
+						tempValue = 0;
+					cards.put(key, tempValue + 1);
+				}
+			}
+		}
+		return cards;	
+	}
+	
+	@Transient 
+	public TreeMap<String, Integer> getAvailableAction(){
+		TreeMap<String,Integer> cards = new TreeMap<String, Integer>();
+		
+		for(Card c : this.getCards()){
+			if(this.isAvaialble(c)){
+				if(c.getCardType() < 200){
+					String key = c.getType().cardName;
+					Integer tempValue = cards.get(key);
+					if(tempValue == null)
+						tempValue = 0;
+					cards.put(key, tempValue + 1);
+				}
+			}
+		}
+		return cards;	
+	}
+	
+	@Transient 
+	public TreeMap<String, Integer> getAvailableTreasure(){
+		TreeMap<String,Integer> cards = new TreeMap<String, Integer>();
+		
+		for(Card c : this.getCards()){
+			if(this.isAvaialble(c)){
+				if(c.getCardType() > 200 && c.getCardType() < 300){
+					String key = c.getType().cardName;
+					Integer tempValue = cards.get(key);
+					if(tempValue == null)
+						tempValue = 0;
+					cards.put(key, tempValue + 1);
+				}
+			}
+		}
+		return cards;	
 	}
 	
 	@Transient

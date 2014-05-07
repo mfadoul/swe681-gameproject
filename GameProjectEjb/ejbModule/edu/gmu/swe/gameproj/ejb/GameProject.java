@@ -937,7 +937,7 @@ public class GameProject implements GameProjectRemote {
 		if(card.getLocation() != DECK_LOCATION) return null;
 		
 		player.addCard(card);
-		card.setLocation(HAND_LOCATION);
+		card.setLocation(locationId);
 		
 		try{
 			entityManager.merge(card);

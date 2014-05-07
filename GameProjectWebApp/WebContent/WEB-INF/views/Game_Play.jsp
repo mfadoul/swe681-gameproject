@@ -46,11 +46,11 @@ function pollForMyTurn(){
 						<form:label for="command" path="command" cssErrorClass="error">Command</form:label>
 						<form:input path="command" size="40" maxlength="100" title="Enter a command" /> <form:errors path="command" />
 					</form:form>
-					<table>
+					<table style="border-spacing:10px;">
 						<tr>
-						<td>
+						<td style="border:2px solid black; vertical-align:top;">
 						
-						Player State: Stats
+						<strong>Player State: Stats</strong>
 						<table>
 							<tr>
 								<td>Buys:</td>
@@ -66,8 +66,8 @@ function pollForMyTurn(){
 							</tr>
 						</table>
 						</td>
-						<td>
-						Player State: Hand
+						<td style="border:2px solid black; vertical-align:top;">
+						<strong>Player State: Hand</strong>
 						<table>
 							<c:forEach items="${player.hand}" var="card">
 								<tr>
@@ -77,15 +77,41 @@ function pollForMyTurn(){
 							
 						</table>
 						</td>
-						<td>
-						Game State: Available Cards
+						<td style="border:2px solid black; vertical-align:top;">
+						<strong>Game State: Available Cards</strong>
 						<table>
-							<c:forEach items="${gameState.availableCards}" var="entry">
-								<tr>
-									<td>${entry.key } (${entry.value })</td>
-								</tr>
-							</c:forEach>
-							
+							<tr>
+								<td style="vertical-align:top;">
+									<strong>Treasure:</strong>
+									<table>
+									<c:forEach items="${gameState.availableTreasure}" var="entry">
+										<tr>
+											<td>${entry.key } (${entry.value })</td>
+										</tr>
+									</c:forEach>
+									</table>
+								</td>
+								<td style="vertical-align:top;">
+									<strong>Victory:</strong>
+									<table>
+									<c:forEach items="${gameState.availableVictory}" var="entry">
+										<tr>
+											<td>${entry.key } (${entry.value })</td>
+										</tr>
+									</c:forEach>
+									</table>
+								</td>
+								<td style="vertical-align:top;">
+									<strong>Action:</strong>
+									<table>
+									<c:forEach items="${gameState.availableAction}" var="entry">
+										<tr>
+											<td>${entry.key } (${entry.value })</td>
+										</tr>
+									</c:forEach>
+									</table>
+								</td>
+							</tr>
 						</table>
 						</td>
 						</tr>
