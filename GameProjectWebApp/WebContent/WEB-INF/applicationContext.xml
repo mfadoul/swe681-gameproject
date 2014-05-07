@@ -14,6 +14,8 @@
 
 		<!-- users -->
 		<intercept-url pattern="/GameProject/user/**"
+			access="permitAll" />
+		<intercept-url pattern="/GameProject/user/info/**"
 			access="isAuthenticated()" />
 
 		<!-- games -->
