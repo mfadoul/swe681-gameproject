@@ -22,7 +22,13 @@
 				</td>
 				<td style="background-color: #DDFFDD;">
 				<!-- ADD CONTENT HERE -->
-				<h2>Game Report</h2>
+				<c:if test="${title ne null}">
+					<h2><c:out value="${title}" /></h2>
+				</c:if>
+				<c:if test="${title eq null}">
+					<h2>Game Report</h2>
+				</c:if>
+				
 				<c:if test="${gameState ne null}">
 					<h3>Time</h3>
 					<p>Game Played from <c:out value="${gameState.beginDate}" /> 

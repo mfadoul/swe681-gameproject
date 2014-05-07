@@ -176,7 +176,6 @@ public class GameProject implements GameProjectRemote {
 		
 		System.out.println("User " + user.getId() + "(" + user.getEmail() + ") is forfeiting game " + gameState.getId() + ".");
 		
-		//System.out.println("(4) Number of players = " + gameState.getPlayers().size());
 		// Find the winner
 		List<Player> players = this.getPlayersByGameStateId(gameState.getId());
 		for (Player player: players) {
@@ -383,9 +382,6 @@ public class GameProject implements GameProjectRemote {
 	@Override
 	public GameState getGameStateById(long gameStateId) {
 		try {
-			GameState gameState = entityManager.find(GameState.class, gameStateId);
-			//System.out.println("(11) Number of players = " + gameState.getPlayers().size());
-
 			return entityManager.find(GameState.class, gameStateId);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -433,17 +429,13 @@ public class GameProject implements GameProjectRemote {
 		Player player = new Player();
 		user.addPlayer(player); // Create the connection on both sides.
 		
-		//System.out.println("(1) Player count = " + gameState.getPlayers().size());
 		player.setGameState(gameState);
-		//gameState.addPlayer(player);
-		//System.out.println("(2) Player count = " + gameState.getPlayers().size());
 
 		entityManager.persist(player);
 		entityManager.merge(user);
 		entityManager.merge(gameState);
 		
 		initializePlayer(player, gameState);
-		//System.out.println("(3) Player count = " + gameState.getPlayers().size());
 
 		//Draw 5 cards
 		this.draw(player, 5);
