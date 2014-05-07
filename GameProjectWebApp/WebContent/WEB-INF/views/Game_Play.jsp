@@ -42,7 +42,7 @@ function pollForMyTurn(){
 				<c:if test="${player ne null}">
 					<h3>In a game.</h3>
 					<!-- ADD CONTENT HERE -->
-					<form:form modelAttribute="actVm" action="play" method="post">
+					<form:form modelAttribute="actVm" action="/GameProjectWebApp/GameProject/game/play" method="post">
 						<form:label for="command" path="command" cssErrorClass="error">Command</form:label>
 						<form:input path="command" size="40" maxlength="100" title="Enter a command" /> <form:errors path="command" />
 					</form:form>

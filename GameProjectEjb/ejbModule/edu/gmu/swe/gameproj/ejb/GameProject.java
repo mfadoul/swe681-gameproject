@@ -952,10 +952,10 @@ public class GameProject implements GameProjectRemote {
 		//Reset GameState phase
 		gameState.setPhase(1);
 		
-		//TODO: Add back in. Removed for testing purposes
-//		//Reset GameState turn
-//		if(gameState.getTurn() == 1) gameState.setTurn(2);
-//		else gameState.setTurn(1);
+		
+		//Reset GameState turn
+		if(gameState.getTurn() == 1) gameState.setTurn(2);
+		else gameState.setTurn(1);
 		
 		try{
 			entityManager.merge(player);
