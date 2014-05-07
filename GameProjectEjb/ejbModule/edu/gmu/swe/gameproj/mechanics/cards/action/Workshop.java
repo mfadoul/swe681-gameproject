@@ -22,6 +22,7 @@ public class Workshop extends Action {
         if(!super.gameProject.addCardToDiscardFromGame(dto.player, newCard)){
         	throw new Exception("add card to discard failed");
         }
+        super.act(dto);
 
 //        ICommand addCard = new AddCardCommand(dto.player, dto.newCard);
 //

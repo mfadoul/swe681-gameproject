@@ -30,7 +30,8 @@ public class Cellar extends Action {
         	throw new Exception("draw failed");
         }
         
-
+        super.act(dto);
+        
 //        ICommand addActions = new AddActionsCommand(dto.player, addActionsCount);
 //        ICommand draw = new DrawCommand(dto.player, dto.discardCards.size());
 //        ICommand discard = new DiscardCommand(dto.player, dto.discardCards);

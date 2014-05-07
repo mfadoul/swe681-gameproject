@@ -20,6 +20,8 @@ public class Moat extends Action {
         if(super.gameProject.draw(dto.player, drawCount) == null){
         	throw new Exception("draw failed");
         }
+        
+        super.act(dto);
 
 //        ICommand draw = new DrawCommand(dto.player, drawCount);
 //        draw.Execute();

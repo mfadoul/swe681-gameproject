@@ -26,6 +26,8 @@ public class Village extends Action {
         	throw new Exception("draw failed");
         }
 
+        super.act(dto);
+        
 //        ICommand addActions = new AddActionsCommand(dto.player, actionCount);
 //        ICommand draw = new DrawCommand(dto.player, drawCount);
 //

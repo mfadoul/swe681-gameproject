@@ -600,10 +600,7 @@ public class GameProject implements GameProjectRemote {
 			entityManager.merge(card);
 			entityManager.merge(player);
 			entityManager.merge(gameState);
-//			entityManager.refresh(card);
-//			entityManager.refresh(player);
-//			entityManager.refresh(gameState);
-			//entityManager.flush();
+
 			return true;
 		}
 		catch (Exception e) {
@@ -872,9 +869,10 @@ public class GameProject implements GameProjectRemote {
 		//Reset GameState phase
 		gameState.setPhase(1);
 		
-		//Reset GameState turn
-		if(gameState.getTurn() == 1) gameState.setTurn(2);
-		else gameState.setTurn(1);
+		//TODO: Add back in. Removed for testing purposes
+//		//Reset GameState turn
+//		if(gameState.getTurn() == 1) gameState.setTurn(2);
+//		else gameState.setTurn(1);
 		
 		try{
 			entityManager.merge(player);

@@ -92,33 +92,43 @@ public class GameController {
 						SessionBeanHelper.getGameProjectSessionBean();
 
 				player = gameProject.getActivePlayerByUser(user);
-				
+				GameState gameState = null;
 				if (player == null) {
 					// 2. Create a game if there is no existing player.
-					GameState gameState = gameProject.createGameStateByUser(user);
+					gameState = gameProject.createGameStateByUser(user);
 					if (gameState != null) {
 						// Now, create an instance of player
 						player = gameProject.joinGameState(gameState.getId(), user.getId());
 						if (player == null) {
 							mav.addObject("errorMessage", "Couldn't create a new Player instance!");	
 						} else {
+							mav.addObject("gameState", gameState);
+							mav.addObject("actVm", new ActVm());
 							mav.addObject("infoMessage", "Created a new Game!");
 						}
 					} else {
 						// Something is busted.
 						mav.addObject("errorMessage", "Couldn't create a new Game!");	
 					}
+					
 				} else {
 					// 3. If the user is already in a game, send the user to their game
 					// Nothing to do...
+					gameState = gameProject.getActiveGameStateByUser(user);
+					mav.addObject("player", player);
+					mav.addObject("gameState", gameState);
+					mav.addObject("actVm", new ActVm());
 					mav.addObject("infoMessage", "Existing game.");
 				}
-				mav.addObject("player", player);
+				
 			} else {
 				mav.addObject("errorMessage", "Your account could not be found in our database.");
 				mav.addObject("player", null);
 			}
-			mav.addObject("actVm", new ActVm());
+
+
+			
+
 			mav.setViewName("Game_Play");
 			return mav;
 		}
@@ -312,11 +322,14 @@ public class GameController {
 					SessionBeanHelper.getGameProjectSessionBean();
 			
 			Player player = gameProject.joinGameState(gameStateId, user.getId());
+			GameState gameState = gameProject.getGameStateById(gameStateId);
 			mav.addObject("player", player);
 
 			if (player == null) {
 				mav.addObject("errorMessage", "Failed to join game.");
 			} else {
+				mav.addObject("gameState", gameState);
+				mav.addObject("actVm", new ActVm());
 				mav.addObject("infoMessage", "Joined game # " + player.getGameState().getId() + ".");
 			}
 		} else {

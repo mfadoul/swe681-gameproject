@@ -26,7 +26,8 @@ public class Remodel extends Action {
         if(!super.gameProject.addCardToDiscardFromGame(dto.player, newCard)){
         	throw new Exception("discard failed");
         }
-
+        super.act(dto);
+        
 //        ICommand trash = new TrashCardCommand(dto.player, dto.oldCard);
 //        ICommand add = new AddCardCommand(dto.player, dto.newCard);
 //

@@ -25,6 +25,8 @@ public class Woodcutter extends Action {
         if(!super.gameProject.addCoins(dto.player, coinCount)){
         	throw new Exception("add coins failed");
         }
+        
+        super.act(dto);
 //
 //        ICommand addBuys = new AddBuysCommand(dto.player, buyCount);
 //        ICommand addCoins = new AddCoinsCommand(dto.player, coinCount);

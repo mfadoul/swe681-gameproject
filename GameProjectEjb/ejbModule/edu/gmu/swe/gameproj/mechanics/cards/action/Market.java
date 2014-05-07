@@ -34,6 +34,8 @@ public class Market extends Action {
         if(super.gameProject.draw(dto.player, drawCount) == null){
         	throw new Exception("draw failed");
         }
+        
+        super.act(dto);
 
 //        ICommand addActions= new AddActionsCommand(dto.player, addActionsCount);
 //        ICommand addBuys = new AddBuysCommand(dto.player, addBuysCount);

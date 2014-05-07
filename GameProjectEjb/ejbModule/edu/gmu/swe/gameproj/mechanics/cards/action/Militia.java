@@ -22,6 +22,8 @@ public class Militia extends Action {
         }
       //TODO: Add observer for card draw down
         
+        super.act(dto);
+        
 //        ICommand addCoins = new AddCoinsCommand(dto.player, addCoinsCount);
 //        addCoins.Execute();
         

@@ -28,6 +28,8 @@ public class Mine extends Action {
         if(!super.gameProject.addCardToHandFromGame(dto.player, newCard)){
         	throw new Exception("add card to hand failed");
         }
+        
+        super.act(dto);
 
 //        ICommand trash =  new TrashCardCommand(dto.player, dto.oldCard);
 //        ICommand add = new AddCardCommand(dto.player, dto.newCard);
