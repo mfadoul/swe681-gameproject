@@ -4,6 +4,7 @@ import java.security.InvalidParameterException;
 
 import edu.gmu.swe.gameproj.ejb.GameProjectRemote;
 import edu.gmu.swe.gameproj.jpa.CardType;
+import edu.gmu.swe.gameproj.jpa.Player;
 
 
 public class Moat extends Action {
@@ -17,14 +18,16 @@ public class Moat extends Action {
     public void act(ActionDto dto) throws Exception {
         if(!validate(dto)) throw new InvalidParameterException("dto");
         
-        if(super.gameProject.draw(dto.player, drawCount) == null){
-        	throw new Exception("draw failed");
-        }
-        
-        super.act(dto);
+//        if(super.gameProject.draw(dto.player, drawCount) == null){
+//        	throw new Exception("draw failed");
+//        }
+//        
+//        super.act(dto);
 
-//        ICommand draw = new DrawCommand(dto.player, drawCount);
-//        draw.Execute();
+        Player p1 = super.gameProject.draw(dto.player, drawCount);
+        if(p1 == null) throw new Exception("draw failed");
+        
+        super.cleanUp(p1);
 
     }
 

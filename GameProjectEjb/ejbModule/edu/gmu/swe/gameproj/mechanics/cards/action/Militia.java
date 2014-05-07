@@ -4,6 +4,7 @@ import java.security.InvalidParameterException;
 
 import edu.gmu.swe.gameproj.ejb.GameProjectRemote;
 import edu.gmu.swe.gameproj.jpa.CardType;
+import edu.gmu.swe.gameproj.jpa.Player;
 
 public class Militia extends Action {
 
@@ -15,17 +16,19 @@ public class Militia extends Action {
 	
     @Override
     public void act(ActionDto dto) throws Exception {
-        if(!validate(dto)) throw new InvalidParameterException("dto");
+//        if(!validate(dto)) throw new InvalidParameterException("dto");
+//        
+//        if(!super.gameProject.addCoins(dto.player, addCoinsCount)){
+//        	throw new Exception("add coins failed");
+//        }
+//      //TODO: Add observer for card draw down
+//        
+//        super.act(dto);
         
-        if(!super.gameProject.addCoins(dto.player, addCoinsCount)){
-        	throw new Exception("add coins failed");
-        }
-      //TODO: Add observer for card draw down
-        
-        super.act(dto);
-        
-//        ICommand addCoins = new AddCoinsCommand(dto.player, addCoinsCount);
-//        addCoins.Execute();
+    	Player p1 = super.gameProject.addCoins(dto.player, addCoinsCount);
+    	if(p1 == null ) throw new Exception("add coins failed");
+    	
+    	super.cleanUp(p1);
         
     }
 

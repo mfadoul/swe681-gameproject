@@ -5,6 +5,7 @@ import java.security.InvalidParameterException;
 import edu.gmu.swe.gameproj.ejb.GameProjectRemote;
 import edu.gmu.swe.gameproj.jpa.Card;
 import edu.gmu.swe.gameproj.jpa.CardType;
+import edu.gmu.swe.gameproj.jpa.Player;
 
 
 public class Remodel extends Action {
@@ -19,20 +20,22 @@ public class Remodel extends Action {
         
         Card trashCard = dto.player.getFirstInstanceInHandByType(dto.oldCard);
         Card newCard = null;//TODO: Retrieve new card from gamestate
-        if(!super.gameProject.trash(trashCard)){
-        	throw new Exception("trash failed");
-        }
-
-        if(!super.gameProject.addCardToDiscardFromGame(dto.player, newCard)){
-        	throw new Exception("discard failed");
-        }
-        super.act(dto);
-        
-//        ICommand trash = new TrashCardCommand(dto.player, dto.oldCard);
-//        ICommand add = new AddCardCommand(dto.player, dto.newCard);
+//        if(!super.gameProject.trash(trashCard)){
+//        	throw new Exception("trash failed");
+//        }
 //
-//        trash.Execute();
-//        add.Execute();
+//        if(!super.gameProject.addCardToDiscardFromGame(dto.player, newCard)){
+//        	throw new Exception("discard failed");
+//        }
+//        super.act(dto);
+        
+        Player p1 = super.gameProject.trash(trashCard);
+        if(p1 == null) throw new Exception("trash failed");
+        
+        Player p2 = super.gameProject.addCardToDiscardFromGame(p1, newCard);
+        if(p2 == null) throw new Exception("discard failed");
+        
+        super.cleanUp(p2);
 
     }
 

@@ -247,17 +247,20 @@ public class Player implements Serializable {
 	
 	@Transient
 	public void addActionCount(int count){
-		this.actionCount += count;
+		this.setActionCount(this.getActionCount() + count);
+		//this.actionCount += count;
 	}
 	
 	@Transient
 	public void addCoinCount(int count){
-		this.coinCount += count;
+		this.setCoinCount(this.getCoinCount() + count);
+		//this.coinCount += count;
 	}
 	
 	@Transient
 	public void addBuyCount(int count){
-		this.buyCount += count;
+		this.setBuyCount(this.getBuyCount() + count);
+		//this.buyCount += count;
 	}
 	
 //	@Transient

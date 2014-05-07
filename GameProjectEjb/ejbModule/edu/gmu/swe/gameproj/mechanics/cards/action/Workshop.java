@@ -5,6 +5,7 @@ import java.security.InvalidParameterException;
 import edu.gmu.swe.gameproj.ejb.GameProjectRemote;
 import edu.gmu.swe.gameproj.jpa.Card;
 import edu.gmu.swe.gameproj.jpa.CardType;
+import edu.gmu.swe.gameproj.jpa.Player;
 
 
 public class Workshop extends Action {
@@ -19,14 +20,16 @@ public class Workshop extends Action {
         if(!validate(dto)) throw new InvalidParameterException("dto");
         
         Card newCard = null;//TODO get card from gamestate
-        if(!super.gameProject.addCardToDiscardFromGame(dto.player, newCard)){
-        	throw new Exception("add card to discard failed");
-        }
-        super.act(dto);
+//        if(!super.gameProject.addCardToDiscardFromGame(dto.player, newCard)){
+//        	throw new Exception("add card to discard failed");
+//        }
+//        super.act(dto);
 
-//        ICommand addCard = new AddCardCommand(dto.player, dto.newCard);
-//
-//        addCard.Execute();
+        Player p1 = super.gameProject.addCardToDiscardFromGame(dto.player, newCard);
+        if(p1 == null) throw new Exception("add card to discard failed");
+        
+        super.cleanUp(p1);
+        
     }
 
     @Override

@@ -4,6 +4,7 @@ import java.security.InvalidParameterException;
 
 import edu.gmu.swe.gameproj.ejb.GameProjectRemote;
 import edu.gmu.swe.gameproj.jpa.CardType;
+import edu.gmu.swe.gameproj.jpa.Player;
 
 
 public class Woodcutter extends Action {
@@ -19,20 +20,22 @@ public class Woodcutter extends Action {
     public void act(ActionDto dto) throws Exception {
         if(!validate(dto)) throw new InvalidParameterException("dto");
         
-        if(!super.gameProject.addBuys(dto.player, buyCount)){
-        	throw new Exception("add buys failed");
-        }
-        if(!super.gameProject.addCoins(dto.player, coinCount)){
-        	throw new Exception("add coins failed");
-        }
+//        if(!super.gameProject.addBuys(dto.player, buyCount)){
+//        	throw new Exception("add buys failed");
+//        }
+//        if(!super.gameProject.addCoins(dto.player, coinCount)){
+//        	throw new Exception("add coins failed");
+//        }
+//        
+//        super.act(dto);
+
+        Player p1 = super.gameProject.addBuys(dto.player, buyCount);
+        if(p1 == null) throw new Exception("add buys failed");
         
-        super.act(dto);
-//
-//        ICommand addBuys = new AddBuysCommand(dto.player, buyCount);
-//        ICommand addCoins = new AddCoinsCommand(dto.player, coinCount);
-//
-//        addBuys.Execute();
-//        addCoins.Execute();
+        Player p2 = super.gameProject.addCoins(p1, coinCount);
+        if(p2 == null) throw new Exception("add coins failed");
+        
+        super.cleanUp(p2);
     }
 
     @Override

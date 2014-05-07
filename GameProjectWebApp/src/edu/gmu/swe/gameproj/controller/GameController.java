@@ -179,8 +179,13 @@ public class GameController {
 							isValid = false;
 						}
 					}
+
 					else{
 						//Not a valid card
+						isValid = false;
+					}
+					
+					if(player.getActionCount() < 1){
 						isValid = false;
 					}
 					

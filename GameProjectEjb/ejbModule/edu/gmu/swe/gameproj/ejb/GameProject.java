@@ -527,56 +527,56 @@ public class GameProject implements GameProjectRemote {
 	}
 
 	@Override
-	public boolean addActions(Player player, int count) {
+	public Player addActions(Player player, int count) {
 		try {
 			
-			if(player == null) return false;
+			if(player == null) return null;
 			
 			player.addActionCount(count);
 			
-			entityManager.merge(player);
+			Player response = entityManager.merge(player);
 			
-			return true;
+			return response;
 		}
 		catch (Exception e) {
 			System.err.println("Exception: " + e);
-			return false;
+			return null;
 		}
 	}
 
 	@Override
-	public boolean addBuys(Player player, int count) {
+	public Player addBuys(Player player, int count) {
 		try {
 
-			if(player == null) return false;
+			if(player == null) return null;
 			
 			player.addBuyCount(count);
 			
-			entityManager.merge(player);
+			Player response = entityManager.merge(player);
 			
-			return true;
+			return response;
 		}
 		catch (Exception e) {
 			System.err.println("Exception: " + e);
-			return false;
+			return null;
 		}
 	}
 
 	@Override
-	public boolean addCoins(Player player, int count) {
+	public Player addCoins(Player player, int count) {
 		try {
 
-			if(player == null) return false;
+			if(player == null) return null;
 			
 			player.addCoinCount(count);
 			
-			entityManager.merge(player);
+			Player response = entityManager.merge(player);
 			
-			return true;
+			return response;
 		}
 		catch (Exception e) {
 			System.err.println("Exception: " + e);
-			return false;
+			return null;
 		}
 	}
 	
@@ -610,38 +610,38 @@ public class GameProject implements GameProjectRemote {
 		
 	}
 
-	@SuppressWarnings("unchecked")
+
 	@Override
-	public boolean discard(Player player, ArrayList<CardType> cards) {
+	public Card discard(Player player, ArrayList<CardType> cards) {
 
 		try {
-			if (cards == null || cards.size() == 0) return false;
-			if(player == null) return false;
+			if (cards == null || cards.size() == 0) return null;
+			if(player == null) return null;
 			
-			
+			Card response = null;
 			for(CardType ct : cards){
 				Card card = player.getFirstInstanceInHandByType(ct);
 				if(card == null){
-					return false;
+					return null;
 				}
 				else{
 					card.setLocation(DISCARD_LOCATION);
-					entityManager.merge(card);
+					response = entityManager.merge(card);
 				}
 			}
 									
-			return true;
+			return response;
 		}
 		catch (Exception e) {
 			System.err.println("Exception: " + e);
-			return false;
+			return null;
 		}
 	}
 
 	@Override
-	public List<Card> draw(Player player, int count) {
+	public Player draw(Player player, int count) {
 		try{
-			
+			Player response = null;
 			//Check to limit potential DOS attack by setting high count value
 			if(count > 10) return null;
 			
@@ -650,7 +650,6 @@ public class GameProject implements GameProjectRemote {
 			
 			List<Card> deck = player.getDeck();
 			int i = 0;
-//			Random myRandom = new Random();
 			
 			while(i < count){
 				if(deck.size() == 0){
@@ -666,10 +665,12 @@ public class GameProject implements GameProjectRemote {
 				}
 
 				entityManager.merge(card);
-				entityManager.merge(player);
+				response = entityManager.merge(player);
 				i++;
+				
+				
 			}
-			return player.getHand();
+			return response;
 		}
 		catch (Exception e) {
 			System.err.println("Exception: " + e);
@@ -679,10 +680,10 @@ public class GameProject implements GameProjectRemote {
 	
 
 	@Override
-	public boolean trash(Card card) {
+	public Player trash(Card card) {
 		try{
-			if(card == null) return false;
-			
+			if(card == null) return null;
+			Player response = null;
 			Player player = card.getPlayer();
 
 			if (player != null) {
@@ -691,15 +692,16 @@ public class GameProject implements GameProjectRemote {
 			
 			card.setLocation(DISCARD_LOCATION);
 			
-			entityManager.merge(player);
-			entityManager.merge(card);
 			
-			return true;
+			entityManager.merge(card);
+			response = entityManager.merge(player);
+			
+			return response;
 			
 		}
 		catch (Exception e) {
 			System.err.println("Exception: " + e);
-			return false;
+			return null;
 		}
 	}
 
@@ -748,13 +750,13 @@ public class GameProject implements GameProjectRemote {
 	}
 
 	@Override
-	public boolean addCardToHandFromGame(Player player, Card card) {
+	public Player addCardToHandFromGame(Player player, Card card) {
 		return addCard(player, card, HAND_LOCATION);
 
 	}
 	
 	@Override
-	public boolean addCardToDiscardFromGame(Player player, Card card) {
+	public Player addCardToDiscardFromGame(Player player, Card card) {
 		return addCard(player, card, DISCARD_LOCATION);
 
 	}
@@ -926,25 +928,25 @@ public class GameProject implements GameProjectRemote {
 		entityManager.merge(player);
 	}
 	
-	private boolean addCard(Player player, Card card, int locationId){
-		if(player == null) return false;
-		if(card == null) return false;
+	private Player addCard(Player player, Card card, int locationId){
+		if(player == null) return null;
+		if(card == null) return null;
 
 		//Card needs to be owned by game
-		if(card.getPlayer() != null) return false;
-		if(card.getLocation() != DECK_LOCATION) return false;
+		if(card.getPlayer() != null) return null;
+		if(card.getLocation() != DECK_LOCATION) return null;
 		
 		player.addCard(card);
 		card.setLocation(HAND_LOCATION);
 		
 		try{
 			entityManager.merge(card);
-			entityManager.merge(player);
-			return true;
+			Player response = entityManager.merge(player);
+			return response;
 		}
 		catch (Exception e) {
 			System.err.println("Exception: " + e);
-			return false;
+			return null;
 		}
 	}
 

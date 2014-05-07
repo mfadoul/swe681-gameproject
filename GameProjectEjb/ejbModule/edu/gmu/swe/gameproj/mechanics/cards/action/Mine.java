@@ -7,6 +7,7 @@ import edu.gmu.swe.gameproj.ejb.GameProject;
 import edu.gmu.swe.gameproj.ejb.GameProjectRemote;
 import edu.gmu.swe.gameproj.jpa.Card;
 import edu.gmu.swe.gameproj.jpa.CardType;
+import edu.gmu.swe.gameproj.jpa.Player;
 
 
 public class Mine extends Action {
@@ -22,20 +23,22 @@ public class Mine extends Action {
         Card trashCard = dto.player.getFirstInstanceInHandByType(dto.oldCard);
         Card newCard = null;//TODO Get card from game instance;
         
-        if(!super.gameProject.trash(trashCard)){
-        	throw new Exception("trash failed");
-        }
-        if(!super.gameProject.addCardToHandFromGame(dto.player, newCard)){
-        	throw new Exception("add card to hand failed");
-        }
-        
-        super.act(dto);
+//        if(!super.gameProject.trash(trashCard)){
+//        	throw new Exception("trash failed");
+//        }
+//        if(!super.gameProject.addCardToHandFromGame(dto.player, newCard)){
+//        	throw new Exception("add card to hand failed");
+//        }
+//        
+//        super.act(dto);
 
-//        ICommand trash =  new TrashCardCommand(dto.player, dto.oldCard);
-//        ICommand add = new AddCardCommand(dto.player, dto.newCard);
-//
-//        trash.Execute();
-//        add.Execute();
+        Player p1 = super.gameProject.trash(trashCard);
+        if(p1 == null) throw new Exception("trash failed");
+        
+        Player p2 = super.gameProject.addCardToHandFromGame(p1, newCard);
+        if(p2 == null) throw new Exception("add card to hand failed");
+        
+        super.cleanUp(p2);
 
     }
 
