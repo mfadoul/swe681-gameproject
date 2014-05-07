@@ -28,6 +28,8 @@ public class Militia extends Action {
     	Player p1 = super.gameProject.addCoins(dto.player, addCoinsCount);
     	if(p1 == null ) throw new Exception("add coins failed");
     	
+    	super.gameProject.attack(p1);
+    	
     	super.cleanUp(p1);
         
     }

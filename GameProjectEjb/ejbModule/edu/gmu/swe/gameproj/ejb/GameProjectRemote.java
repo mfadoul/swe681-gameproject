@@ -62,6 +62,7 @@ public interface GameProjectRemote {
 	public abstract Card trash(Card card);
 	
 	public abstract Player getPlayerById(long playerId);
+	public abstract void attack(Player player);
 
 	//Buy
 	public abstract boolean buy(Player player, Card card, GameState gameState);

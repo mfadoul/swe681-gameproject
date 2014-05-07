@@ -1131,4 +1131,34 @@ public class GameProject implements GameProjectRemote {
 		return true;
 	}
 
+	@Override
+	public void attack(Player player) {
+		List<Player> players = this.getPlayersByGameStateId(player.getGameState().getId());
+		
+		for(Player p : players){
+			boolean isProtected = false;
+			if(p.getId() != player.getId()){
+				List<Card> hand = p.getHand();
+				for(Card c : hand){
+					if(c.getType() == CardType.Moat){
+						isProtected = true;
+					}
+				}
+				
+				if(!isProtected){
+					ArrayList<CardType> discards = new ArrayList<CardType>();
+					int count = 0;
+					for(Card c : hand){
+						if(hand.size() - count <= 3) break;
+						else{
+							discards.add(c.getType());
+							count++;
+						}
+					}
+					this.discard(p, discards);
+				}
+			}
+		}
+	}
+
 }
