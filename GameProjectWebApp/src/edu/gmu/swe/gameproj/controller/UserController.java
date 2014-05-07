@@ -1,8 +1,10 @@
 package edu.gmu.swe.gameproj.controller;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -121,8 +123,8 @@ public class UserController {
 			
 			mav.addObject("user", user);
 			
-			List<GameState> gamesWonList = gameProject.getGamesWonByUser(user);
-			List<GameState> gamesLostList = gameProject.getGamesLostByUser(user);
+			Set<GameState> gamesWonList =  new HashSet<GameState> (gameProject.getGamesWonByUser(user));
+			Set<GameState> gamesLostList = new HashSet<GameState> (gameProject.getGamesLostByUser(user));
 			
 			// Special info for the profile.
 			mav.addObject("gamesWonCount", gamesWonList.size());

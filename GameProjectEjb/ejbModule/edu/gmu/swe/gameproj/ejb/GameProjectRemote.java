@@ -38,6 +38,7 @@ public interface GameProjectRemote {
 	public abstract boolean setWinnerEndGame(GameState gameState);
 
 	public abstract List<GameState> getOpenGames();
+	public abstract Set<GameState> getActiveGames();
 	
 	public abstract List<GameState> getGamesWonByUser(User user);
 	public abstract List<GameState> getGamesLostByUser(User user);
