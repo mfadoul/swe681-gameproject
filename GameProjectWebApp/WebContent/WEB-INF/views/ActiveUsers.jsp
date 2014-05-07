@@ -35,12 +35,13 @@
 				<td style="background-color: #DDFFDD;">
 				<!-- ADD CONTENT HERE -->
 				<h2>Players who are online</h2>
-				<c:if test="${activeUsernames ne null}">
+				<c:if test="${activeUsers ne null}">
 					<div id="accordion">
-						<c:forEach items="${activeUsernames}" var="username">
-				        <h3><c:out value="${username}" /></h3>
+						<c:forEach items="${activeUsers}" var="activeUser">
+						<c:url value="/GameProject/user/info/${activeUser.id}" var="userInfoLink" />
+				        <h3><c:out value="${activeUser.salutation} ${activeUser.firstname} ${activeUser.lastname}" /></h3>
 						<div>
-							<p>TODO: Link to play with this player</p>
+							<p><a href="<c:out value="${userInfoLink}" />">User Info Page</a></p>	
 						</div>
 						</c:forEach>
 					</div>

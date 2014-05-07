@@ -198,6 +198,20 @@ public class UserController {
 		
 		// Find the users who are logged in:
 		List<String> activeUsernames = this.getActiveUsernames();
+		List<User> activeUsers = new ArrayList<User>();
+		
+		GameProjectRemote gameProject = 
+				SessionBeanHelper.getGameProjectSessionBean();
+
+		for (String username: activeUsernames) {
+			User activeUser = gameProject.getUserByEmail(username);
+			if (activeUser != null) {
+				activeUsers.add(activeUser);
+			}
+		}
+		
+		mav.addObject("activeUsers", activeUsers);
+
 		
 //		// Remove the username of the current user.
 //		Iterator<String> it = activeUsernames.iterator();
@@ -209,7 +223,7 @@ public class UserController {
 //			}
 //		}
 
-		mav.addObject("activeUsernames", activeUsernames);
+		//mav.addObject("activeUsernames", activeUsernames);
 		
 		mav.setViewName("ActiveUsers");
 		
