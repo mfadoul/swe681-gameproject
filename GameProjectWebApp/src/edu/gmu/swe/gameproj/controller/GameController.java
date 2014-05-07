@@ -102,6 +102,7 @@ public class GameController {
 						if (player == null) {
 							mav.addObject("errorMessage", "Couldn't create a new Player instance!");	
 						} else {
+							mav.addObject("player", player);
 							mav.addObject("gameState", gameState);
 							mav.addObject("actVm", new ActVm());
 							mav.addObject("infoMessage", "Created a new Game!");
@@ -114,6 +115,7 @@ public class GameController {
 				} else {
 					// 3. If the user is already in a game, send the user to their game
 					// Nothing to do...
+					
 					gameState = gameProject.getActiveGameStateByUser(user);
 					mav.addObject("player", player);
 					mav.addObject("gameState", gameState);

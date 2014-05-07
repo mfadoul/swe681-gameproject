@@ -602,6 +602,8 @@ public class GameProject implements GameProjectRemote {
 			entityManager.merge(card);
 			entityManager.merge(player);
 			entityManager.merge(gameState);
+			
+			this.createCardEvent(card, gameState, player, DISCARD_LOCATION);
 
 			return true;
 		}
